@@ -1,0 +1,95 @@
+/* overlay.css — styles du carrousel OBS
+   ----------------------------------------------------------------
+   Fond transparent, police système. Le carrousel est centré
+   horizontalement, les slots sont positionnés en absolu par
+   rapport au conteneur et animés via transform.
+   ---------------------------------------------------------------- */
+
+:root {
+  --slot-size: 180px;           /* taille de l'icône "actuelle" */
+  --slide-duration: 350ms;
+  --slide-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* distances verticales entre slots (calculées pour éviter les chevauchements) */
+  --gap-0-1: 170px;             /* distance center↔prev1/next1 */
+  --gap-1-2: 110px;             /* distance prev1↔prev2 (et next1↔next2) */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font-family: -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  color: #ffffff;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#carousel {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#champion-name {
+  position: absolute;
+  left: 50%;
+  top: calc(50% - var(--slot-size) / 2 - 60px);
+  transform: translateX(-50%);
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-shadow:
+    0 0 4px rgba(0, 0, 0, 0.9),
+    0 0 10px rgba(0, 0, 0, 0.7),
+    2px 2px 0 rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  transition: opacity var(--slide-duration) var(--slide-ease);
+}
+
+#slots {
+  position: relative;
+  width: var(--slot-size);
+  height: var(--slot-size);
+}
+
+.slot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--slot-size);
+  height: var(--slot-size);
+  transform-origin: center center;
+  will-change: transform, opacity;
+  transition:
+    transform var(--slide-duration) var(--slide-ease),
+    opacity var(--slide-duration) var(--slide-ease);
+}
+
+.slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.6),
+    0 8px 24px rgba(0, 0, 0, 0.6);
+  display: block;
+}
+
+/* Le slot central a une bordure dorée plus marquée */
+.slot.is-current img {
+  border-color: #f0c13c;
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.7),
+    0 0 24px rgba(240, 193, 60, 0.5),
+    0 10px 30px rgba(0, 0, 0, 0.7);
+}
