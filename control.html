@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lolphabet — Panneau de contrôle</title>
+    <link rel="stylesheet" href="css/control.css" />
+  </head>
+  <body>
+    <div class="panel">
+      <h1>🎮 Lolphabet</h1>
+      <p class="tagline">Panneau de contrôle — pilote l'overlay OBS</p>
+
+      <!-- Champion actuel -->
+      <div class="card">
+        <h2>Champion actuel</h2>
+        <div class="current-champion">
+          <img id="currentImg" src="" alt="" />
+          <div class="meta">
+            <div class="name" id="currentName">—</div>
+            <div class="title" id="currentTitle"></div>
+            <div class="progress" id="currentProg">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="card">
+        <h2>Navigation</h2>
+        <div class="nav-buttons">
+          <button id="prevBtn">◀ Précédent</button>
+          <button id="nextBtn" class="primary">Suivant ▶</button>
+          <button id="resetBtn" class="danger wide">🔄 Reset (tri actuel)</button>
+        </div>
+      </div>
+
+      <!-- Mode de tri -->
+      <div class="card">
+        <h2>Mode de tri</h2>
+        <label for="sortSelect">Ordre des champions</label>
+        <select id="sortSelect"></select>
+      </div>
+
+      <!-- Jump to -->
+      <div class="card">
+        <h2>Sauter à un champion</h2>
+        <label for="jumpInput">Tape le début d'un nom</label>
+        <div class="jump-row">
+          <input id="jumpInput" type="text" placeholder="Ex : Ahri, Yas, Zed…" autocomplete="off" />
+        </div>
+        <div class="jump-suggestions" id="jumpList"></div>
+      </div>
+
+      <div class="status" id="status">Chargement…</div>
+    </div>
+
+    <script src="js/data-dragon.js"></script>
+    <script src="js/sort-strategies.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/bus.js"></script>
+    <script src="js/control.js"></script>
+  </body>
+</html>
