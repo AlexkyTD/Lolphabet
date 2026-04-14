@@ -9,10 +9,6 @@
   --slot-size: 180px;           /* taille de l'icône "actuelle" */
   --slide-duration: 350ms;
   --slide-ease: cubic-bezier(0.22, 1, 0.36, 1);
-
-  /* distances verticales entre slots (calculées pour éviter les chevauchements) */
-  --gap-0-1: 170px;             /* distance center↔prev1/next1 */
-  --gap-1-2: 110px;             /* distance prev1↔prev2 (et next1↔next2) */
 }
 
 * {
@@ -38,19 +34,21 @@ html, body {
   justify-content: center;
 }
 
+/* Le nom du champion est positionné juste au-dessus de l'icône
+   centrale (qui elle est au milieu vertical du carrousel). */
 #champion-name {
   position: absolute;
   left: 50%;
-  top: calc(50% - var(--slot-size) / 2 - 60px);
+  top: calc(50% - var(--slot-size) / 2 - 48px);
   transform: translateX(-50%);
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.9rem;
+  font-weight: 800;
   text-shadow:
-    0 0 4px rgba(0, 0, 0, 0.9),
-    0 0 10px rgba(0, 0, 0, 0.7),
-    2px 2px 0 rgba(0, 0, 0, 0.8);
+    0 0 4px rgba(0, 0, 0, 0.95),
+    0 0 12px rgba(0, 0, 0, 0.8),
+    2px 2px 0 rgba(0, 0, 0, 0.9);
   white-space: nowrap;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   transition: opacity var(--slide-duration) var(--slide-ease);
 }
 
@@ -67,10 +65,15 @@ html, body {
   width: var(--slot-size);
   height: var(--slot-size);
   transform-origin: center center;
-  will-change: transform, opacity;
+  will-change: transform, opacity, filter;
+  /* Par défaut, tous les slots sont en niveaux de gris et un peu
+     assombris — seule l'icône centrale reviendra en couleur via
+     la classe .is-current plus bas. */
+  filter: grayscale(1) brightness(0.55);
   transition:
     transform var(--slide-duration) var(--slide-ease),
-    opacity var(--slide-duration) var(--slide-ease);
+    opacity var(--slide-duration) var(--slide-ease),
+    filter var(--slide-duration) var(--slide-ease);
 }
 
 .slot img {
@@ -78,18 +81,22 @@ html, body {
   height: 100%;
   object-fit: cover;
   border-radius: 12px;
-  border: 3px solid rgba(255, 255, 255, 0.85);
+  border: 3px solid rgba(255, 255, 255, 0.7);
   box-shadow:
     0 0 0 2px rgba(0, 0, 0, 0.6),
     0 8px 24px rgba(0, 0, 0, 0.6);
   display: block;
 }
 
-/* Le slot central a une bordure dorée plus marquée */
+/* Le slot central : pleine couleur, bordure dorée, glow. */
+.slot.is-current {
+  filter: none;
+}
+
 .slot.is-current img {
   border-color: #f0c13c;
   box-shadow:
     0 0 0 2px rgba(0, 0, 0, 0.7),
-    0 0 24px rgba(240, 193, 60, 0.5),
-    0 10px 30px rgba(0, 0, 0, 0.7);
+    0 0 28px rgba(240, 193, 60, 0.55),
+    0 12px 36px rgba(0, 0, 0, 0.75);
 }

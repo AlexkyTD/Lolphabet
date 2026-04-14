@@ -16,17 +16,18 @@
 
   const { DataDragon, Sort, State, Bus } = window.Lolphabet;
 
-  // Layout des slots : offset → { translateY (px), scale, opacity }
-  // Les offsets |>2| existent pour que les slots puissent entrer/sortir
-  // du cadre en douceur pendant l'animation.
+  // Layout des slots : offset → { translateX, translateY, scale, opacity }
+  // L'axe X crée l'effet d'arc de cercle : les slots hors-centre
+  // reculent légèrement vers la gauche, comme sur le croquis Paint.
+  // Les offsets |>2| existent pour les entrées/sorties en douceur.
   const LAYOUT = {
-    '-3': { y: -420, scale: 1 / 3, opacity: 0 },
-    '-2': { y: -280, scale: 1 / 3, opacity: 1 },
-    '-1': { y: -170, scale: 2 / 3, opacity: 1 },
-    '0':  { y:    0, scale: 1,     opacity: 1 },
-    '1':  { y:  170, scale: 2 / 3, opacity: 1 },
-    '2':  { y:  280, scale: 1 / 3, opacity: 1 },
-    '3':  { y:  420, scale: 1 / 3, opacity: 0 },
+    '-3': { x: -120, y: -540, scale: 1 / 3, opacity: 0 },
+    '-2': { x:  -80, y: -360, scale: 1 / 3, opacity: 1 },
+    '-1': { x:  -35, y: -210, scale: 2 / 3, opacity: 1 },
+    '0':  { x:    0, y:    0, scale: 1,     opacity: 1 },
+    '1':  { x:  -35, y:  210, scale: 2 / 3, opacity: 1 },
+    '2':  { x:  -80, y:  360, scale: 1 / 3, opacity: 1 },
+    '3':  { x: -120, y:  540, scale: 1 / 3, opacity: 0 },
   };
 
   // Offsets visibles (ceux qu'on rend réellement dans le DOM).
@@ -46,7 +47,8 @@
   function applyLayout(el, offset) {
     const key = String(Math.max(-3, Math.min(3, offset)));
     const l = LAYOUT[key];
-    el.style.transform = `translate(-50%, -50%) translateY(${l.y}px) scale(${l.scale})`;
+    el.style.transform =
+      `translate(-50%, -50%) translate(${l.x}px, ${l.y}px) scale(${l.scale})`;
     el.style.opacity = String(l.opacity);
     el.style.left = '50%';
     el.style.top = '50%';
