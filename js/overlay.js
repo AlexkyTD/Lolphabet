@@ -164,6 +164,7 @@
     render();
 
     Bus.subscribe('state-changed', (payload) => {
+      console.log('[Lolphabet overlay] bus state-changed', payload);
       if (!payload) return;
       State.load(); // re-lecture depuis localStorage (source de vérité)
       if (payload.reason === 'sort-changed') {
@@ -172,6 +173,50 @@
         render();
       }
     });
+
+    // Fallback ultra-fiable pour file:// : on écoute directement
+    // les changements sur la clé d'état du localStorage. Chrome et
+    // Firefox propagent ces events entre les onglets file:// de la
+    // même origine, alors que BroadcastChannel échoue souvent.
+    window.addEventListener('storage', (ev) => {
+      if (ev.key !== 'lolphabet.state.v1' || !ev.newValue) return;
+      console.log('[Lolphabet overlay] storage event on state key');
+      const prevSortMode = State.getSortMode();
+      State.load();
+      if (State.getSortMode() !== prevSortMode) {
+        hardRefresh();
+      } else {
+        render();
+      }
+    });
+
+    // Filet de secours : un polling très léger (toutes les 500 ms)
+    // au cas où ni BroadcastChannel ni storage event ne passeraient
+    // dans l'environnement (ex : OBS CEF en file:// avec certaines
+    // politiques restrictives). Coût : une lecture localStorage +
+    // un compare, quasi nul.
+    let lastSignature = signatureOfState();
+    setInterval(() => {
+      const sig = signatureOfState();
+      if (sig !== lastSignature) {
+        lastSignature = sig;
+        const prevSortMode = State.getSortMode();
+        State.load();
+        if (State.getSortMode() !== prevSortMode) {
+          hardRefresh();
+        } else {
+          render();
+        }
+      }
+    }, 500);
+  }
+
+  function signatureOfState() {
+    try {
+      return localStorage.getItem('lolphabet.state.v1') || '';
+    } catch (_) {
+      return '';
+    }
   }
 
   if (document.readyState === 'loading') {
