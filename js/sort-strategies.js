@@ -25,6 +25,18 @@
 
   window.Lolphabet = window.Lolphabet || {};
 
+  // Ordre d'affichage des rôles Data Dragon dans le tri "role".
+  const ROLE_ORDER = ['Fighter', 'Tank', 'Assassin', 'Mage', 'Marksman', 'Support'];
+
+  const ROLE_LABELS_FR = {
+    Fighter: 'Combattant',
+    Tank: 'Tank',
+    Assassin: 'Assassin',
+    Mage: 'Mage',
+    Marksman: 'Tireur',
+    Support: 'Support',
+  };
+
   /**
    * Tri alphabétique sur le nom localisé, en respectant les accents
    * et la casse française.
@@ -36,30 +48,84 @@
   }
 
   /**
-   * Placeholder : tri par ordre de sortie. Sera implémenté en v0.2
-   * via un fichier de données `data/release-order.json`.
+   * Tri par ordre de sortie.
+   *
+   * On utilise le champ `key` de Data Dragon (l'ID numérique Riot),
+   * qui est attribué de façon croissante avec la sortie des
+   * champions. Ce n'est pas exactement l'ordre de release (certains
+   * IDs ont pu être réservés puis utilisés plus tard), mais c'est
+   * une excellente approximation qui ne requiert aucune donnée
+   * externe.
    */
   function sortRelease(champions) {
-    console.warn('[Lolphabet] Tri "release" non encore implémenté, fallback sur alpha.');
-    return sortAlpha(champions);
+    return champions
+      .slice()
+      .sort((a, b) => parseInt(a.key, 10) - parseInt(b.key, 10));
   }
 
   /**
-   * Placeholder : tri par rôle principal. Sera implémenté en v0.2
-   * en utilisant `champion.tags[0]` puis tri alpha à l'intérieur.
+   * Tri par rôle principal.
+   *
+   * Le rôle principal est le premier tag de `champion.tags` fourni
+   * par Data Dragon. On groupe les champions par rôle en suivant
+   * ROLE_ORDER, puis à l'intérieur de chaque groupe on trie
+   * alphabétiquement.
    */
   function sortRole(champions) {
-    console.warn('[Lolphabet] Tri "role" non encore implémenté, fallback sur alpha.');
-    return sortAlpha(champions);
+    const buckets = new Map(ROLE_ORDER.map((r) => [r, []]));
+    const other = [];
+
+    for (const c of champions) {
+      const role = (c.tags && c.tags[0]) || null;
+      if (role && buckets.has(role)) {
+        buckets.get(role).push(c);
+      } else {
+        other.push(c);
+      }
+    }
+
+    const result = [];
+    for (const role of ROLE_ORDER) {
+      const list = buckets.get(role) || [];
+      list.sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' }));
+      result.push(...list);
+    }
+    other.sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' }));
+    result.push(...other);
+    return result;
   }
 
   /**
-   * Placeholder : tri par poste (top/jungle/mid/adc/support). Sera
-   * implémenté en v0.2 via `data/positions.json` (liste communautaire).
+   * Tri par poste (top/jungle/mid/adc/support).
+   *
+   * Utilise la table `Lolphabet.Positions` chargée depuis
+   * `js/positions-data.js`. Les champions non mappés tombent dans
+   * un bucket "other" à la fin. À l'intérieur de chaque poste, tri
+   * alphabétique.
    */
   function sortPosition(champions) {
-    console.warn('[Lolphabet] Tri "position" non encore implémenté, fallback sur alpha.');
-    return sortAlpha(champions);
+    const Positions = window.Lolphabet.Positions;
+    if (!Positions) {
+      console.warn('[Lolphabet] positions-data.js non chargé, fallback sur alpha.');
+      return sortAlpha(champions);
+    }
+
+    const order = [...Positions.POSITION_ORDER, 'other'];
+    const buckets = new Map(order.map((p) => [p, []]));
+
+    for (const c of champions) {
+      const pos = Positions.get(c.id);
+      const bucket = buckets.has(pos) ? pos : 'other';
+      buckets.get(bucket).push(c);
+    }
+
+    const result = [];
+    for (const pos of order) {
+      const list = buckets.get(pos) || [];
+      list.sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' }));
+      result.push(...list);
+    }
+    return result;
   }
 
   const strategies = {
