@@ -154,33 +154,33 @@ lolphabet/
 
 ## Plan de construction
 
-### MVP (v1) — overlay fonctionnel sur stream
+### ✅ v0.1 — MVP livré
 
-1. Setup projet + mini serveur statique
-2. Module `data-dragon.js` : fetch + cache champions
-3. Module `state.js` : persistance localStorage (multi-instances)
-4. Module `sort-strategies.js` : tri alphabétique (les autres en v1.1)
-5. `overlay.html` + carrousel 5 slots + animation slide CSS
-6. `control.html` + boutons Précédent / Suivant / Reset / Jump
-7. Sync via `BroadcastChannel`
-8. Test dans OBS Browser Source
+1. ✅ Setup projet + fichiers statiques (pas de serveur, ouverture directe `file://`)
+2. ✅ Module `data-dragon.js` : fetch + cache champions avec invalidation par patch
+3. ✅ Module `state.js` : persistance localStorage multi-instances (une progression par mode de tri)
+4. ✅ Module `sort-strategies.js` : tri alphabétique
+5. ✅ `overlay.html` + carrousel 5 slots en arc de cercle, animation slide CSS, grisaille des slots non-centraux
+6. ✅ `control.html` + boutons Précédent / Suivant / Reset / Sauter à + sélecteur de tri + recherche par nom
+7. ✅ Synchro via `BroadcastChannel` + event `storage` + polling léger (triple filet de sécurité)
+8. ✅ Intégration OBS via Browser Source + Custom Browser Dock (même instance CEF = localStorage partagé)
 
-### v1.1 — tris complets
+### ✅ v0.2 — tris complets
 
-- Tri par ordre de sortie
-- Tri par rôle principal
-- Tri par poste (avec `positions.json` à remplir)
-- Sélecteur de tri dans le panneau de contrôle
-- Persistance indépendante par instance de tri
+- ✅ Tri par ordre de sortie (approximation via `key` numérique Data Dragon)
+- ✅ Tri par rôle principal (Combattant / Tank / Assassin / Mage / Tireur / Support)
+- ✅ Tri par poste (Top / Jungle / Mid / ADC / Support) via `js/positions-data.js`
+- ✅ Sélecteur de tri dans le panneau de contrôle
+- ✅ Persistance indépendante par instance de tri
 
-### v2 — confort
+### 🚧 v0.3 — confort (à venir)
 
 - Hotkeys clavier globaux (AutoHotkey ou Node listener) — **à confirmer**
 - Thème / personnalisation visuelle de l'overlay
-- Recherche rapide dans le "jump to"
-- Compteur de progression visible (`42 / 168`)
+- Compteur de progression visible plus proéminent (`42 / 168`)
+- Possibilité de configurer la taille / position / couleurs via URL params
 
-### v3 — nice to have
+### 🚧 v1.0 — nice to have
 
 - Sélection du **skin** par champion (Data Dragon fournit tous les skins)
 - Export / import de la progression

@@ -2,13 +2,13 @@
 
 > 🎮 Un overlay OBS pour streameurs League of Legends qui jouent tous les champions dans un ordre défini (alphabétique, ordre de sortie, rôle, poste…).
 
-**Statut : ✅ v0.1 disponible — tri alphabétique fonctionnel.**
+**Statut : ✅ v0.2 disponible — les 4 modes de tri sont opérationnels.**
 
 ## Le concept
 
-Tu veux jouer tous les champions de League of Legends dans l'ordre alphabétique
-sur ton stream ? Lolphabet t'affiche un carrousel visuel sur ton overlay OBS
-qui montre :
+Tu veux jouer tous les champions de League of Legends dans un ordre défini sur
+ton stream — alphabétique, par ordre de sortie, par rôle, ou par poste ?
+Lolphabet t'affiche un carrousel visuel sur ton overlay OBS qui montre :
 
 - Les **2 champions précédents** que tu as joués (en gris)
 - Le **champion que tu joues actuellement** (en grand, au centre, en couleur, avec son nom)
@@ -20,24 +20,27 @@ ton panneau de contrôle (directement dans OBS) et l'overlay se met à jour.
 
 ## Fonctionnalités
 
-### ✅ Disponibles (v0.1)
+### ✅ Disponibles (v0.2)
 
 - 🎯 **Carrousel vertical en arc** de 5 champions (2 passés, actuel, 2 à venir)
-- 🎨 **Slots non-centraux en niveaux de gris**, seul le champion actuel est en couleur
+- 🎨 **Slots non-centraux en niveaux de gris**, seul le champion actuel est en couleur avec bordure dorée
 - ✨ **Animation de glissement** douce (`cubic-bezier` 350 ms) à chaque navigation
-- 🔤 **Tri alphabétique** de tous les champions LoL
+- 🔀 **4 modes de tri** :
+  - **Ordre alphabétique** (Aatrox → Zyra)
+  - **Ordre de sortie** (du plus ancien au plus récent)
+  - **Rôle principal** (Combattant → Tank → Assassin → Mage → Tireur → Support, alpha à l'intérieur)
+  - **Poste** (Top → Jungle → Mid → ADC → Support, alpha à l'intérieur)
 - 🎮 **Panneau de contrôle** avec Précédent / Suivant / Reset / Sauter à (recherche par nom)
 - ⌨️ **Raccourcis clavier** dans le panneau : `←` `→` et `Espace`
 - 💾 **Progression sauvegardée** — tu reprends exactement où tu en étais après un crash ou un redémarrage
-- 📦 **Progression indépendante par mode de tri** — change de tri et reviens quand tu veux
+- 📦 **Progression indépendante par mode de tri** — change de tri et reviens quand tu veux, chaque mode garde sa propre position
 - 🖼️ **Icônes officielles** via [Data Dragon](https://developer.riotgames.com/docs/lol#data-dragon) (API publique Riot, pas de clé nécessaire)
-- ⚡ **Zéro installation** : double-clic et ça marche
+- ⚡ **Zéro installation, zéro dépendance, zéro serveur** : double-clic et ça marche
 
 ### 🚧 À venir
 
-- **v0.2** : tri par ordre de sortie, par rôle principal, par poste (top/jungle/mid/adc/support)
 - **v0.3** : hotkeys clavier **globaux** (même pendant que LoL est en focus), thèmes visuels personnalisables
-- **v1.0** : sélection du skin par champion, stats de progression
+- **v1.0** : sélection du skin par champion, stats de progression, détection auto du champion en jeu
 
 ## Installation & utilisation
 
@@ -112,6 +115,14 @@ Le cahier des charges complet est dans [`CAHIER_DES_CHARGES.md`](./CAHIER_DES_CH
 
 Le projet est en début de vie — si tu as des idées, bugs, suggestions, ouvre une
 [issue](https://github.com/AlexkyTD/Lolphabet/issues) ou une pull request.
+
+### Corriger un poste mal assigné
+
+Le fichier [`js/positions-data.js`](./js/positions-data.js) contient le mapping
+champion → poste principal utilisé pour le tri "par poste". C'est une liste
+maintenue à la main, basée sur le méta communautaire (u.gg / lolalytics). Si tu
+n'es pas d'accord avec une assignation, ou si un nouveau champion manque, il
+suffit d'éditer ce fichier et d'ouvrir une PR. Aucun code à modifier.
 
 ## Licence
 
