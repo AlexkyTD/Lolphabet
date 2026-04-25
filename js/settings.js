@@ -15,10 +15,11 @@
  *
  * Forme des settings :
  *   {
- *     showPositionNumbers:  boolean,  // affiche #N sur chaque icône
- *     blurUpcoming:         boolean,  // floute les 2 prochains champions
- *     showDirectionalArrows:boolean,  // flèches ▲ ▼ autour du carrousel
- *     showGlobalCounter:    boolean,  // compteur 42 / 168 au-dessus du nom
+ *     showPositionNumbers: boolean,  // affiche #N sur chaque icône
+ *     blurUpcoming:        boolean,  // floute l'image des 2 prochains
+ *     showGlobalCounter:   boolean,  // compteur 42 / 168 en haut à droite
+ *     markPastPlayed:      boolean,  // ✓ vert + cadre vert sur les joués
+ *     markUpcoming:        boolean,  // ⏳ sablier sur les à venir
  *   }
  *
  * API publique :
@@ -40,8 +41,9 @@
   const DEFAULTS = Object.freeze({
     showPositionNumbers: true,
     blurUpcoming: false,
-    showDirectionalArrows: false,
     showGlobalCounter: false,
+    markPastPlayed: false,
+    markUpcoming: false,
   });
 
   let current = { ...DEFAULTS };

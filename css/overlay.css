@@ -3,12 +3,28 @@
    Fond transparent, police système. Le carrousel est centré
    horizontalement, les slots sont positionnés en absolu par
    rapport au conteneur et animés via transform.
+
+   Structure d'un slot :
+     <div class="slot is-past|is-current|is-upcoming">
+       <div class="slot-frame">    <- bordure et ombres
+         <img />                   <- image du champion (la seule
+                                      à recevoir le filtre grayscale
+                                      + le blur, pour que la bordure
+                                      reste nette même floutée)
+       </div>
+       <div class="slot-status"></div>    <- pictogramme ✓ ou ⏳
+       <div class="slot-position">#42</div>
+     </div>
    ---------------------------------------------------------------- */
 
 :root {
   --slot-size: 180px;           /* taille de l'icône "actuelle" */
   --slide-duration: 350ms;
   --slide-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --color-gold: #f0c13c;
+  --color-played: #4ade80;      /* vert pour les champions joués */
+  --color-upcoming-icon: #d8d8d8;
 }
 
 * {
@@ -52,19 +68,18 @@ html, body {
   transition: opacity var(--slide-duration) var(--slide-ease);
 }
 
-/* Compteur global "42 / 168" — petit pavé doré ancré en haut de
-   l'overlay, façon HUD. Position robuste qui ne dépend pas de la
-   hauteur du carrousel et ne risque pas de chevaucher une icône.
-   Caché par défaut, affiché si <body> a la classe .opt-global-counter. */
+/* Compteur global "42 / 168" — petit pavé doré ancré en haut à
+   DROITE de l'overlay (le carrousel étant biaisé sur la gauche
+   par l'arc de cercle, le côté droit est libre). Caché par défaut,
+   affiché si <body> a la classe .opt-global-counter. */
 #global-counter {
   position: absolute;
-  left: 50%;
   top: 14px;
-  transform: translateX(-50%);
+  right: 16px;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.14em;
-  color: #f0c13c;
+  color: var(--color-gold);
   background: rgba(0, 0, 0, 0.82);
   border: 1px solid rgba(240, 193, 60, 0.55);
   padding: 4px 14px;
@@ -77,33 +92,6 @@ html, body {
 }
 
 body.opt-global-counter #global-counter {
-  display: block;
-}
-
-/* Flèches directionnelles ▲ ▼ — placées au-dessus et en-dessous
-   de la zone du carrousel pour rappeler le sens chronologique
-   (en haut = passé, en bas = à venir). Rapprochées des icônes
-   (~20px d'écart) pour rester visibles sur des overlays moyens.
-   Cachées par défaut. */
-#arrow-up, #arrow-down {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.8rem;
-  color: rgba(255, 255, 255, 0.65);
-  text-shadow:
-    0 0 4px rgba(0, 0, 0, 0.95),
-    0 0 10px rgba(0, 0, 0, 0.7);
-  pointer-events: none;
-  display: none;
-  z-index: 5;
-}
-
-#arrow-up   { top: calc(50% - 410px); }
-#arrow-down { top: calc(50% + 405px); }
-
-body.opt-directional-arrows #arrow-up,
-body.opt-directional-arrows #arrow-down {
   display: block;
 }
 
@@ -120,36 +108,49 @@ body.opt-directional-arrows #arrow-down {
   width: var(--slot-size);
   height: var(--slot-size);
   transform-origin: center center;
-  will-change: transform, opacity, filter;
-  /* Par défaut, tous les slots sont en niveaux de gris et un peu
-     assombris — seule l'icône centrale reviendra en couleur via
-     la classe .is-current plus bas. */
-  filter: grayscale(1) brightness(0.55);
+  will-change: transform, opacity;
   transition:
     transform var(--slide-duration) var(--slide-ease),
-    opacity var(--slide-duration) var(--slide-ease),
-    filter var(--slide-duration) var(--slide-ease);
+    opacity var(--slide-duration) var(--slide-ease);
 }
 
-.slot img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+/* Le wrapper qui porte la bordure et les ombres. C'est lui qu'on
+   colore en doré pour le central, en vert pour les joués, etc.
+   La bordure ne sera JAMAIS floutée — c'est l'astuce qui permet
+   au flou de ne s'appliquer qu'à l'image. */
+.slot-frame {
+  position: absolute;
+  inset: 0;
   border-radius: 12px;
   border: 3px solid rgba(255, 255, 255, 0.7);
   box-shadow:
     0 0 0 2px rgba(0, 0, 0, 0.6),
     0 8px 24px rgba(0, 0, 0, 0.6);
-  display: block;
+  overflow: hidden;       /* clip l'image floutée pour qu'elle ne déborde pas */
+  transition:
+    border-color var(--slide-duration) var(--slide-ease),
+    box-shadow var(--slide-duration) var(--slide-ease);
 }
 
-/* Le slot central : pleine couleur, bordure dorée, glow. */
-.slot.is-current {
+.slot-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* Les images des slots non-centraux sont en niveaux de gris et
+     un peu assombries — l'image centrale repassera en couleur via
+     la règle .is-current plus bas. */
+  filter: grayscale(1) brightness(0.55);
+  transition: filter var(--slide-duration) var(--slide-ease);
+}
+
+/* Slot central : image en pleine couleur, cadre doré, glow. */
+.slot.is-current .slot-frame img {
   filter: none;
 }
 
-.slot.is-current img {
-  border-color: #f0c13c;
+.slot.is-current .slot-frame {
+  border-color: var(--color-gold);
   box-shadow:
     0 0 0 2px rgba(0, 0, 0, 0.7),
     0 0 28px rgba(240, 193, 60, 0.55),
@@ -161,9 +162,8 @@ body.opt-directional-arrows #arrow-down {
    (classes posées sur <body> par overlay.js d'après Settings).
    ---------------------------------------------------------------- */
 
-/* Numéro de position sur chaque icône.
-   Caché par défaut, affiché si <body> a la classe .opt-position-numbers.
-   Le badge est posé en bas à droite de l'icône. */
+/* --- Numéros de position ---------------------------------------- */
+
 .slot-position {
   position: absolute;
   bottom: 6px;
@@ -177,18 +177,17 @@ body.opt-directional-arrows #arrow-down {
   border: 1px solid rgba(255, 255, 255, 0.25);
   pointer-events: none;
   letter-spacing: 0.02em;
-  display: none;          /* caché par défaut */
+  display: none;
   white-space: nowrap;
+  z-index: 3;
 }
 
 body.opt-position-numbers .slot-position {
   display: block;
 }
 
-/* Badge plus marqué sur le slot central (doré pour rappeler la
-   bordure de l'icône courante). */
 body.opt-position-numbers .slot.is-current .slot-position {
-  background: #f0c13c;
+  background: var(--color-gold);
   color: #1a1a1a;
   border-color: rgba(0, 0, 0, 0.4);
   font-size: 1.05rem;
@@ -197,23 +196,64 @@ body.opt-position-numbers .slot.is-current .slot-position {
   padding: 3px 10px;
 }
 
-/* Floutage des prochains champions (slots à offset positif). On
-   redéfinit complètement la chaîne `filter` pour pouvoir cumuler
-   grayscale + brightness + blur. */
-body.opt-blur-upcoming .slot.is-upcoming {
+/* --- Flou des prochains ---------------------------------------- */
+/* Appliqué uniquement à l'IMAGE (.slot-frame img), donc la bordure
+   du cadre reste nette. */
+body.opt-blur-upcoming .slot.is-upcoming .slot-frame img {
   filter: grayscale(1) brightness(0.55) blur(8px);
 }
 
-/* Le badge "numéro de position" reste lisible même quand l'icône
-   est floutée — on le sort du flux visuel du filter parent en lui
-   appliquant son propre filter "neutralisant". Astuce : un petit
-   isolation crée un nouveau stacking context et empêche le blur
-   de remonter. */
-body.opt-blur-upcoming .slot.is-upcoming .slot-position {
-  /* Le filter du parent s'applique aux enfants, donc on contrebalance
-     en mettant un blur(0) explicite. Ça ne suffit pas en CSS pur
-     (le filter parent est cumulatif), donc on assombrit/agrandit
-     un peu le badge pour qu'il reste percutant malgré le flou. */
+/* --- Pictogramme de statut (✓ joué / ⏳ à venir) ---------------- */
+
+.slot-status {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 30px;
+  height: 30px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.82);
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  font-size: 1rem;
+  font-weight: 800;
+  pointer-events: none;
+  z-index: 4;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+/* Marquage des champions joués : ✓ vert dans la pastille + cadre vert */
+body.opt-mark-past .slot.is-past .slot-status {
+  display: flex;
+  color: var(--color-played);
+  border-color: var(--color-played);
+}
+
+body.opt-mark-past .slot.is-past .slot-status::before {
+  content: '✓';
+  line-height: 1;
+}
+
+body.opt-mark-past .slot.is-past .slot-frame {
+  border-color: var(--color-played);
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.6),
+    0 0 14px rgba(74, 222, 128, 0.35),
+    0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* Marquage des champions à venir : sablier dans la pastille
+   (cadre laissé en gris standard, comme demandé) */
+body.opt-mark-upcoming .slot.is-upcoming .slot-status {
+  display: flex;
+  color: var(--color-upcoming-icon);
+  border-color: rgba(255, 255, 255, 0.45);
   font-size: 1.05rem;
-  background: rgba(0, 0, 0, 0.95);
+}
+
+body.opt-mark-upcoming .slot.is-upcoming .slot-status::before {
+  content: '⏳';
+  line-height: 1;
 }

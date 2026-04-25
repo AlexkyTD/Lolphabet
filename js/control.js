@@ -33,8 +33,9 @@
     el.sortSelect    = document.getElementById('sortSelect');
     el.optPositionNumbers   = document.getElementById('optPositionNumbers');
     el.optBlurUpcoming      = document.getElementById('optBlurUpcoming');
-    el.optDirectionalArrows = document.getElementById('optDirectionalArrows');
     el.optGlobalCounter     = document.getElementById('optGlobalCounter');
+    el.optMarkPastPlayed    = document.getElementById('optMarkPastPlayed');
+    el.optMarkUpcoming      = document.getElementById('optMarkUpcoming');
     el.jumpInput     = document.getElementById('jumpInput');
     el.jumpList      = document.getElementById('jumpList');
     el.status        = document.getElementById('status');
@@ -127,9 +128,10 @@
   function applySettingsToUI() {
     const s = Settings.get();
     el.optPositionNumbers.checked = s.showPositionNumbers;
-    el.optBlurUpcoming.checked = s.blurUpcoming;
-    el.optDirectionalArrows.checked = s.showDirectionalArrows;
-    el.optGlobalCounter.checked = s.showGlobalCounter;
+    el.optBlurUpcoming.checked    = s.blurUpcoming;
+    el.optGlobalCounter.checked   = s.showGlobalCounter;
+    el.optMarkPastPlayed.checked  = s.markPastPlayed;
+    el.optMarkUpcoming.checked    = s.markUpcoming;
   }
 
   // --- Recherche "sauter à" ------------------------------------------------
@@ -203,10 +205,12 @@
       toggleSetting('showPositionNumbers', e.target.checked));
     el.optBlurUpcoming.addEventListener('change', (e) =>
       toggleSetting('blurUpcoming', e.target.checked));
-    el.optDirectionalArrows.addEventListener('change', (e) =>
-      toggleSetting('showDirectionalArrows', e.target.checked));
     el.optGlobalCounter.addEventListener('change', (e) =>
       toggleSetting('showGlobalCounter', e.target.checked));
+    el.optMarkPastPlayed.addEventListener('change', (e) =>
+      toggleSetting('markPastPlayed', e.target.checked));
+    el.optMarkUpcoming.addEventListener('change', (e) =>
+      toggleSetting('markUpcoming', e.target.checked));
     el.jumpInput.addEventListener('input', (e) => renderJumpSuggestions(e.target.value));
     el.jumpInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {

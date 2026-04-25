@@ -63,14 +63,27 @@
     el.className = 'slot';
     el.dataset.championId = champion.id;
 
+    // Wrapper "cadre" — porte la bordure et les ombres. Sépare le
+    // visuel du cadre (toujours net) de l'image (qui peut être
+    // floutée via Settings.blurUpcoming).
+    const frame = document.createElement('div');
+    frame.className = 'slot-frame';
+
     const img = document.createElement('img');
     img.src = champion.iconUrl;
     img.alt = champion.name;
     img.draggable = false;
-    el.appendChild(img);
+    frame.appendChild(img);
 
-    // Badge "numéro de position" — rendu visible/caché via classe
-    // sur le conteneur racine selon le setting.
+    el.appendChild(frame);
+
+    // Pastille de statut (✓ joué / ⏳ à venir) — contenu posé via
+    // CSS pseudo-element ::before selon les classes settings.
+    const status = document.createElement('div');
+    status.className = 'slot-status';
+    el.appendChild(status);
+
+    // Badge "numéro de position" — visible si Settings.showPositionNumbers.
     const badge = document.createElement('div');
     badge.className = 'slot-position';
     el.appendChild(badge);
@@ -83,11 +96,13 @@
    * racine de l'overlay. Le CSS prend ensuite le relais.
    */
   function applySettingsClasses() {
-    const settings = Settings.get();
-    document.body.classList.toggle('opt-position-numbers', settings.showPositionNumbers);
-    document.body.classList.toggle('opt-blur-upcoming', settings.blurUpcoming);
-    document.body.classList.toggle('opt-directional-arrows', settings.showDirectionalArrows);
-    document.body.classList.toggle('opt-global-counter', settings.showGlobalCounter);
+    const s = Settings.get();
+    const cl = document.body.classList;
+    cl.toggle('opt-position-numbers', s.showPositionNumbers);
+    cl.toggle('opt-blur-upcoming',    s.blurUpcoming);
+    cl.toggle('opt-global-counter',   s.showGlobalCounter);
+    cl.toggle('opt-mark-past',        s.markPastPlayed);
+    cl.toggle('opt-mark-upcoming',    s.markUpcoming);
   }
 
   /**

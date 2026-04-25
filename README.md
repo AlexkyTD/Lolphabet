@@ -2,7 +2,7 @@
 
 > 🎮 Un overlay OBS pour streameurs League of Legends qui jouent tous les champions dans un ordre défini (alphabétique, ordre de sortie, rôle, poste…).
 
-**Statut : ✅ v0.4 disponible — overlay personnalisable avec 4 options d'affichage.**
+**Statut : ✅ v0.5 disponible — overlay enrichi avec marquage des champions joués / à venir.**
 
 ## Le concept
 
@@ -20,7 +20,7 @@ ton panneau de contrôle (directement dans OBS) et l'overlay se met à jour.
 
 ## Fonctionnalités
 
-### ✅ Disponibles (v0.4)
+### ✅ Disponibles (v0.5)
 
 - 🎯 **Carrousel vertical en arc** de 5 champions (2 passés, actuel, 2 à venir)
 - 🎨 **Slots non-centraux en niveaux de gris**, seul le champion actuel est en couleur avec bordure dorée
@@ -32,9 +32,10 @@ ton panneau de contrôle (directement dans OBS) et l'overlay se met à jour.
   - **Poste** (Top → Jungle → Mid → ADC → Support, alpha à l'intérieur)
 - 🎛️ **Options d'affichage personnalisables** depuis le panneau de contrôle :
   - **Numéros de position** sur chaque icône (ex. `#42`) pour que les spectateurs voient instantanément où on en est dans le challenge
-  - **Flou des prochains champions** pour garder le suspense sur ce qui arrive (sans révéler les 2 prochains)
-  - **Flèches directionnelles** ▲ ▼ autour du carrousel pour rappeler le sens chronologique
-  - **Compteur global** "42 / 168" en pavé doré au-dessus du nom du champion, pour visualiser la progression totale
+  - **Flou des prochains champions** pour garder le suspense (l'image est floutée, mais le cadre reste net pour ne pas casser la lisibilité)
+  - **Compteur global** "42 / 168" en pavé doré en haut à droite de l'overlay
+  - **Marquage des champions joués** : pastille verte ✓ et cadre vert sur les champions déjà joués
+  - **Marquage des champions à venir** : pastille avec sablier ⏳ sur les prochains champions
 - 🎮 **Panneau de contrôle** avec Précédent / Suivant / Reset / Sauter à (recherche par nom)
 - ⌨️ **Raccourcis clavier** dans le panneau : `←` `→` et `Espace`
 - 💾 **Progression sauvegardée** — tu reprends exactement où tu en étais après un crash ou un redémarrage
@@ -44,7 +45,7 @@ ton panneau de contrôle (directement dans OBS) et l'overlay se met à jour.
 
 ### 🚧 À venir
 
-- **v0.4** : plus d'options d'affichage (thèmes visuels, taille du carrousel, intensité du flou…), hotkeys clavier globaux
+- **v0.6** : thèmes de couleur, intensité du flou réglable, taille du carrousel personnalisable, hotkeys clavier globaux
 - **v1.0** : sélection du skin par champion, stats de progression, détection auto du champion en jeu
 
 ## Installation & utilisation
