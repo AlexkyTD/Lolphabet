@@ -15,8 +15,10 @@
  *
  * Forme des settings :
  *   {
- *     showPositionNumbers: boolean,  // affiche #N sur chaque icône
- *     blurUpcoming:        boolean,  // floute les 2 prochains champions
+ *     showPositionNumbers:  boolean,  // affiche #N sur chaque icône
+ *     blurUpcoming:         boolean,  // floute les 2 prochains champions
+ *     showDirectionalArrows:boolean,  // flèches ▲ ▼ autour du carrousel
+ *     showGlobalCounter:    boolean,  // compteur 42 / 168 au-dessus du nom
  *   }
  *
  * API publique :
@@ -38,6 +40,8 @@
   const DEFAULTS = Object.freeze({
     showPositionNumbers: true,
     blurUpcoming: false,
+    showDirectionalArrows: false,
+    showGlobalCounter: false,
   });
 
   let current = { ...DEFAULTS };

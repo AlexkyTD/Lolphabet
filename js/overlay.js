@@ -41,6 +41,7 @@
   let champions = [];        // liste triée selon le mode courant
   let slotsEl = null;
   let nameEl = null;
+  let counterEl = null;
 
   // Map championId -> { element, offset, badgeEl, championIndex }
   const slotPool = new Map();
@@ -85,6 +86,8 @@
     const settings = Settings.get();
     document.body.classList.toggle('opt-position-numbers', settings.showPositionNumbers);
     document.body.classList.toggle('opt-blur-upcoming', settings.blurUpcoming);
+    document.body.classList.toggle('opt-directional-arrows', settings.showDirectionalArrows);
+    document.body.classList.toggle('opt-global-counter', settings.showGlobalCounter);
   }
 
   /**
@@ -99,6 +102,7 @@
     const currentIndex = State.getIndex() % total;
     const current = champions[currentIndex];
     nameEl.textContent = current ? current.name : '';
+    counterEl.textContent = `${currentIndex + 1} / ${total}`;
 
     // Pour chaque offset visible, on s'assure qu'un slot existe
     // pour le champion correspondant.
@@ -181,6 +185,7 @@
   async function init() {
     slotsEl = document.getElementById('slots');
     nameEl = document.getElementById('champion-name');
+    counterEl = document.getElementById('global-counter');
 
     State.load();
     Settings.load();

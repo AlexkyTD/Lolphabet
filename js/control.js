@@ -31,8 +31,10 @@
     el.nextBtn       = document.getElementById('nextBtn');
     el.resetBtn      = document.getElementById('resetBtn');
     el.sortSelect    = document.getElementById('sortSelect');
-    el.optPositionNumbers = document.getElementById('optPositionNumbers');
-    el.optBlurUpcoming    = document.getElementById('optBlurUpcoming');
+    el.optPositionNumbers   = document.getElementById('optPositionNumbers');
+    el.optBlurUpcoming      = document.getElementById('optBlurUpcoming');
+    el.optDirectionalArrows = document.getElementById('optDirectionalArrows');
+    el.optGlobalCounter     = document.getElementById('optGlobalCounter');
     el.jumpInput     = document.getElementById('jumpInput');
     el.jumpList      = document.getElementById('jumpList');
     el.status        = document.getElementById('status');
@@ -126,6 +128,8 @@
     const s = Settings.get();
     el.optPositionNumbers.checked = s.showPositionNumbers;
     el.optBlurUpcoming.checked = s.blurUpcoming;
+    el.optDirectionalArrows.checked = s.showDirectionalArrows;
+    el.optGlobalCounter.checked = s.showGlobalCounter;
   }
 
   // --- Recherche "sauter à" ------------------------------------------------
@@ -199,6 +203,10 @@
       toggleSetting('showPositionNumbers', e.target.checked));
     el.optBlurUpcoming.addEventListener('change', (e) =>
       toggleSetting('blurUpcoming', e.target.checked));
+    el.optDirectionalArrows.addEventListener('change', (e) =>
+      toggleSetting('showDirectionalArrows', e.target.checked));
+    el.optGlobalCounter.addEventListener('change', (e) =>
+      toggleSetting('showGlobalCounter', e.target.checked));
     el.jumpInput.addEventListener('input', (e) => renderJumpSuggestions(e.target.value));
     el.jumpInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {

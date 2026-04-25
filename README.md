@@ -2,7 +2,7 @@
 
 > 🎮 Un overlay OBS pour streameurs League of Legends qui jouent tous les champions dans un ordre défini (alphabétique, ordre de sortie, rôle, poste…).
 
-**Statut : ✅ v0.3 disponible — overlay personnalisable pour les spectateurs.**
+**Statut : ✅ v0.4 disponible — overlay personnalisable avec 4 options d'affichage.**
 
 ## Le concept
 
@@ -20,7 +20,7 @@ ton panneau de contrôle (directement dans OBS) et l'overlay se met à jour.
 
 ## Fonctionnalités
 
-### ✅ Disponibles (v0.3)
+### ✅ Disponibles (v0.4)
 
 - 🎯 **Carrousel vertical en arc** de 5 champions (2 passés, actuel, 2 à venir)
 - 🎨 **Slots non-centraux en niveaux de gris**, seul le champion actuel est en couleur avec bordure dorée
@@ -33,6 +33,8 @@ ton panneau de contrôle (directement dans OBS) et l'overlay se met à jour.
 - 🎛️ **Options d'affichage personnalisables** depuis le panneau de contrôle :
   - **Numéros de position** sur chaque icône (ex. `#42`) pour que les spectateurs voient instantanément où on en est dans le challenge
   - **Flou des prochains champions** pour garder le suspense sur ce qui arrive (sans révéler les 2 prochains)
+  - **Flèches directionnelles** ▲ ▼ autour du carrousel pour rappeler le sens chronologique
+  - **Compteur global** "42 / 168" en pavé doré au-dessus du nom du champion, pour visualiser la progression totale
 - 🎮 **Panneau de contrôle** avec Précédent / Suivant / Reset / Sauter à (recherche par nom)
 - ⌨️ **Raccourcis clavier** dans le panneau : `←` `→` et `Espace`
 - 💾 **Progression sauvegardée** — tu reprends exactement où tu en étais après un crash ou un redémarrage

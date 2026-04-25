@@ -52,6 +52,55 @@ html, body {
   transition: opacity var(--slide-duration) var(--slide-ease);
 }
 
+/* Compteur global "42 / 168" — petit pavé doré juste au-dessus
+   du nom du champion. Caché par défaut, affiché si <body> a la
+   classe .opt-global-counter. */
+#global-counter {
+  position: absolute;
+  left: 50%;
+  top: calc(50% - var(--slot-size) / 2 - 95px);
+  transform: translateX(-50%);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #f0c13c;
+  background: rgba(0, 0, 0, 0.78);
+  border: 1px solid rgba(240, 193, 60, 0.5);
+  padding: 3px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  display: none;
+}
+
+body.opt-global-counter #global-counter {
+  display: block;
+}
+
+/* Flèches directionnelles ▲ ▼ — placées au-dessus et en-dessous
+   de la zone du carrousel pour rappeler le sens chronologique
+   (en haut = passé, en bas = à venir). Cachées par défaut. */
+#arrow-up, #arrow-down {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.6rem;
+  color: rgba(255, 255, 255, 0.55);
+  text-shadow:
+    0 0 4px rgba(0, 0, 0, 0.95),
+    0 0 10px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  display: none;
+}
+
+#arrow-up   { top: calc(50% - 470px); }
+#arrow-down { top: calc(50% + 440px); }
+
+body.opt-directional-arrows #arrow-up,
+body.opt-directional-arrows #arrow-down {
+  display: block;
+}
+
 #slots {
   position: relative;
   width: var(--slot-size);
