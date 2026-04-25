@@ -40,6 +40,30 @@
         <select id="sortSelect"></select>
       </div>
 
+      <!-- Options d'affichage -->
+      <div class="card">
+        <h2>Options d'affichage</h2>
+        <p class="card-hint">
+          Personnalise l'overlay pour rendre la lecture plus claire
+          pour tes spectateurs. Les changements sont appliqués en
+          temps réel et sauvegardés.
+        </p>
+        <label class="toggle">
+          <input type="checkbox" id="optPositionNumbers" />
+          <span class="toggle-label">
+            <strong>Afficher les numéros</strong>
+            <em>Chaque champion a son numéro dans le challenge (ex. #42)</em>
+          </span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="optBlurUpcoming" />
+          <span class="toggle-label">
+            <strong>Flouter les prochains champions</strong>
+            <em>Cache les 2 prochains champions pour garder le suspense</em>
+          </span>
+        </label>
+      </div>
+
       <!-- Jump to -->
       <div class="card">
         <h2>Sauter à un champion</h2>
@@ -57,6 +81,7 @@
     <script src="js/positions-data.js"></script>
     <script src="js/sort-strategies.js"></script>
     <script src="js/state.js"></script>
+    <script src="js/settings.js"></script>
     <script src="js/bus.js"></script>
     <script src="js/control.js"></script>
   </body>

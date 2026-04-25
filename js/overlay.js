@@ -9,12 +9,15 @@
  * L'overlay écoute le bus pour réagir aux changements envoyés
  * depuis le panneau de contrôle, et se ré-initialise depuis le
  * localStorage au chargement.
+ *
+ * Réagit aussi aux changements de préférences d'affichage
+ * (Settings) : numéros de position, flou des prochains champions.
  * -----------------------------------------------------------------
  */
 (function () {
   'use strict';
 
-  const { DataDragon, Sort, State, Bus } = window.Lolphabet;
+  const { DataDragon, Sort, State, Settings, Bus } = window.Lolphabet;
 
   // Layout des slots : offset → { translateX, translateY, scale, opacity }
   // L'axe X crée l'effet d'arc de cercle : les slots hors-centre
@@ -39,7 +42,7 @@
   let slotsEl = null;
   let nameEl = null;
 
-  // Map championId -> { element, offset }
+  // Map championId -> { element, offset, badgeEl, championIndex }
   const slotPool = new Map();
 
   // --- Helpers -------------------------------------------------------------
@@ -65,7 +68,23 @@
     img.draggable = false;
     el.appendChild(img);
 
+    // Badge "numéro de position" — rendu visible/caché via classe
+    // sur le conteneur racine selon le setting.
+    const badge = document.createElement('div');
+    badge.className = 'slot-position';
+    el.appendChild(badge);
+
     return el;
+  }
+
+  /**
+   * Applique les classes liées aux préférences d'affichage sur la
+   * racine de l'overlay. Le CSS prend ensuite le relais.
+   */
+  function applySettingsClasses() {
+    const settings = Settings.get();
+    document.body.classList.toggle('opt-position-numbers', settings.showPositionNumbers);
+    document.body.classList.toggle('opt-blur-upcoming', settings.blurUpcoming);
   }
 
   /**
@@ -76,7 +95,8 @@
   function render() {
     if (!champions.length) return;
 
-    const currentIndex = State.getIndex() % champions.length;
+    const total = champions.length;
+    const currentIndex = State.getIndex() % total;
     const current = champions[currentIndex];
     nameEl.textContent = current ? current.name : '';
 
@@ -85,7 +105,7 @@
     const keepIds = new Set();
 
     for (const offset of VISIBLE_RANGE) {
-      const i = ((currentIndex + offset) % champions.length + champions.length) % champions.length;
+      const i = ((currentIndex + offset) % total + total) % total;
       const champ = champions[i];
       keepIds.add(champ.id);
 
@@ -100,14 +120,25 @@
         // Force un reflow, puis réactive la transition.
         void el.offsetWidth;
         el.style.transition = '';
-        entry = { element: el, offset };
+        const badgeEl = el.querySelector('.slot-position');
+        entry = { element: el, offset, badgeEl };
         slotPool.set(champ.id, entry);
       } else {
         entry.offset = offset;
         applyLayout(entry.element, offset);
       }
 
-      entry.element.classList.toggle('is-current', offset === 0);
+      // Numéro de position dans la liste triée (1-based).
+      entry.badgeEl.textContent = `#${i + 1}`;
+
+      // Classes sémantiques pour le CSS :
+      //   .is-current   → slot central (offset 0)
+      //   .is-past      → champions déjà joués (offset négatif)
+      //   .is-upcoming  → champions à venir (offset positif)
+      const cl = entry.element.classList;
+      cl.toggle('is-current', offset === 0);
+      cl.toggle('is-past', offset < 0);
+      cl.toggle('is-upcoming', offset > 0);
     }
 
     // Nettoyage : les slots plus affichés sont retirés (après un
@@ -152,6 +183,8 @@
     nameEl = document.getElementById('champion-name');
 
     State.load();
+    Settings.load();
+    applySettingsClasses();
 
     try {
       const all = await DataDragon.load();
@@ -166,9 +199,8 @@
     render();
 
     Bus.subscribe('state-changed', (payload) => {
-      console.log('[Lolphabet overlay] bus state-changed', payload);
       if (!payload) return;
-      State.load(); // re-lecture depuis localStorage (source de vérité)
+      State.load();
       if (payload.reason === 'sort-changed') {
         hardRefresh();
       } else {
@@ -176,46 +208,57 @@
       }
     });
 
+    Bus.subscribe('settings-changed', () => {
+      Settings.load();
+      applySettingsClasses();
+    });
+
     // Fallback ultra-fiable pour file:// : on écoute directement
-    // les changements sur la clé d'état du localStorage. Chrome et
-    // Firefox propagent ces events entre les onglets file:// de la
-    // même origine, alors que BroadcastChannel échoue souvent.
+    // les changements de localStorage sur les clés d'état et de
+    // settings. Chrome et Firefox propagent ces events entre les
+    // onglets file:// de la même origine, alors que BroadcastChannel
+    // échoue souvent.
     window.addEventListener('storage', (ev) => {
-      if (ev.key !== 'lolphabet.state.v1' || !ev.newValue) return;
-      console.log('[Lolphabet overlay] storage event on state key');
-      const prevSortMode = State.getSortMode();
-      State.load();
-      if (State.getSortMode() !== prevSortMode) {
-        hardRefresh();
-      } else {
-        render();
+      if (!ev.key) return;
+      if (ev.key === 'lolphabet.state.v1' && ev.newValue) {
+        const prevSortMode = State.getSortMode();
+        State.load();
+        if (State.getSortMode() !== prevSortMode) hardRefresh();
+        else render();
+      } else if (ev.key === Settings.STORAGE_KEY && ev.newValue) {
+        Settings.load();
+        applySettingsClasses();
       }
     });
 
     // Filet de secours : un polling très léger (toutes les 500 ms)
     // au cas où ni BroadcastChannel ni storage event ne passeraient
     // dans l'environnement (ex : OBS CEF en file:// avec certaines
-    // politiques restrictives). Coût : une lecture localStorage +
+    // politiques restrictives). Coût : deux lectures localStorage +
     // un compare, quasi nul.
-    let lastSignature = signatureOfState();
+    let lastStateSig = signatureOfKey('lolphabet.state.v1');
+    let lastSettingsSig = signatureOfKey(Settings.STORAGE_KEY);
     setInterval(() => {
-      const sig = signatureOfState();
-      if (sig !== lastSignature) {
-        lastSignature = sig;
+      const stateSig = signatureOfKey('lolphabet.state.v1');
+      if (stateSig !== lastStateSig) {
+        lastStateSig = stateSig;
         const prevSortMode = State.getSortMode();
         State.load();
-        if (State.getSortMode() !== prevSortMode) {
-          hardRefresh();
-        } else {
-          render();
-        }
+        if (State.getSortMode() !== prevSortMode) hardRefresh();
+        else render();
+      }
+      const settingsSig = signatureOfKey(Settings.STORAGE_KEY);
+      if (settingsSig !== lastSettingsSig) {
+        lastSettingsSig = settingsSig;
+        Settings.load();
+        applySettingsClasses();
       }
     }, 500);
   }
 
-  function signatureOfState() {
+  function signatureOfKey(key) {
     try {
-      return localStorage.getItem('lolphabet.state.v1') || '';
+      return localStorage.getItem(key) || '';
     } catch (_) {
       return '';
     }

@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  const { DataDragon, Sort, State, Bus } = window.Lolphabet;
+  const { DataDragon, Sort, State, Settings, Bus } = window.Lolphabet;
 
   // --- État interne --------------------------------------------------------
 
@@ -31,6 +31,8 @@
     el.nextBtn       = document.getElementById('nextBtn');
     el.resetBtn      = document.getElementById('resetBtn');
     el.sortSelect    = document.getElementById('sortSelect');
+    el.optPositionNumbers = document.getElementById('optPositionNumbers');
+    el.optBlurUpcoming    = document.getElementById('optBlurUpcoming');
     el.jumpInput     = document.getElementById('jumpInput');
     el.jumpList      = document.getElementById('jumpList');
     el.status        = document.getElementById('status');
@@ -113,6 +115,19 @@
     publishChange('sort-changed');
   }
 
+  // --- Settings (options d'affichage) -------------------------------------
+
+  function toggleSetting(key, value) {
+    Settings.set(key, value);
+    Bus.publish('settings-changed', { key, value });
+  }
+
+  function applySettingsToUI() {
+    const s = Settings.get();
+    el.optPositionNumbers.checked = s.showPositionNumbers;
+    el.optBlurUpcoming.checked = s.blurUpcoming;
+  }
+
   // --- Recherche "sauter à" ------------------------------------------------
 
   function renderJumpSuggestions(query) {
@@ -150,6 +165,8 @@
   async function init() {
     cacheDom();
     State.load();
+    Settings.load();
+    applySettingsToUI();
 
     // Sort mode select : on remplit avec les labels
     for (const mode of State.SORT_MODES) {
@@ -178,6 +195,10 @@
     el.prevBtn.addEventListener('click', prev);
     el.resetBtn.addEventListener('click', reset);
     el.sortSelect.addEventListener('change', (e) => changeSort(e.target.value));
+    el.optPositionNumbers.addEventListener('change', (e) =>
+      toggleSetting('showPositionNumbers', e.target.checked));
+    el.optBlurUpcoming.addEventListener('change', (e) =>
+      toggleSetting('blurUpcoming', e.target.checked));
     el.jumpInput.addEventListener('input', (e) => renderJumpSuggestions(e.target.value));
     el.jumpInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {

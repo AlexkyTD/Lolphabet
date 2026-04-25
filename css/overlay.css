@@ -100,3 +100,65 @@ html, body {
     0 0 28px rgba(240, 193, 60, 0.55),
     0 12px 36px rgba(0, 0, 0, 0.75);
 }
+
+/* ----------------------------------------------------------------
+   Préférences d'affichage activables depuis le panneau de contrôle
+   (classes posées sur <body> par overlay.js d'après Settings).
+   ---------------------------------------------------------------- */
+
+/* Numéro de position sur chaque icône.
+   Caché par défaut, affiché si <body> a la classe .opt-position-numbers.
+   Le badge est posé en bas à droite de l'icône. */
+.slot-position {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  padding: 2px 8px;
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+  letter-spacing: 0.02em;
+  display: none;          /* caché par défaut */
+  white-space: nowrap;
+}
+
+body.opt-position-numbers .slot-position {
+  display: block;
+}
+
+/* Badge plus marqué sur le slot central (doré pour rappeler la
+   bordure de l'icône courante). */
+body.opt-position-numbers .slot.is-current .slot-position {
+  background: #f0c13c;
+  color: #1a1a1a;
+  border-color: rgba(0, 0, 0, 0.4);
+  font-size: 1.05rem;
+  bottom: 8px;
+  right: 8px;
+  padding: 3px 10px;
+}
+
+/* Floutage des prochains champions (slots à offset positif). On
+   redéfinit complètement la chaîne `filter` pour pouvoir cumuler
+   grayscale + brightness + blur. */
+body.opt-blur-upcoming .slot.is-upcoming {
+  filter: grayscale(1) brightness(0.55) blur(8px);
+}
+
+/* Le badge "numéro de position" reste lisible même quand l'icône
+   est floutée — on le sort du flux visuel du filter parent en lui
+   appliquant son propre filter "neutralisant". Astuce : un petit
+   isolation crée un nouveau stacking context et empêche le blur
+   de remonter. */
+body.opt-blur-upcoming .slot.is-upcoming .slot-position {
+  /* Le filter du parent s'applique aux enfants, donc on contrebalance
+     en mettant un blur(0) explicite. Ça ne suffit pas en CSS pur
+     (le filter parent est cumulatif), donc on assombrit/agrandit
+     un peu le badge pour qu'il reste percutant malgré le flou. */
+  font-size: 1.05rem;
+  background: rgba(0, 0, 0, 0.95);
+}

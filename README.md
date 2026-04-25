@@ -2,7 +2,7 @@
 
 > 🎮 Un overlay OBS pour streameurs League of Legends qui jouent tous les champions dans un ordre défini (alphabétique, ordre de sortie, rôle, poste…).
 
-**Statut : ✅ v0.2 disponible — les 4 modes de tri sont opérationnels.**
+**Statut : ✅ v0.3 disponible — overlay personnalisable pour les spectateurs.**
 
 ## Le concept
 
@@ -20,7 +20,7 @@ ton panneau de contrôle (directement dans OBS) et l'overlay se met à jour.
 
 ## Fonctionnalités
 
-### ✅ Disponibles (v0.2)
+### ✅ Disponibles (v0.3)
 
 - 🎯 **Carrousel vertical en arc** de 5 champions (2 passés, actuel, 2 à venir)
 - 🎨 **Slots non-centraux en niveaux de gris**, seul le champion actuel est en couleur avec bordure dorée
@@ -30,6 +30,9 @@ ton panneau de contrôle (directement dans OBS) et l'overlay se met à jour.
   - **Ordre de sortie** (du plus ancien au plus récent)
   - **Rôle principal** (Combattant → Tank → Assassin → Mage → Tireur → Support, alpha à l'intérieur)
   - **Poste** (Top → Jungle → Mid → ADC → Support, alpha à l'intérieur)
+- 🎛️ **Options d'affichage personnalisables** depuis le panneau de contrôle :
+  - **Numéros de position** sur chaque icône (ex. `#42`) pour que les spectateurs voient instantanément où on en est dans le challenge
+  - **Flou des prochains champions** pour garder le suspense sur ce qui arrive (sans révéler les 2 prochains)
 - 🎮 **Panneau de contrôle** avec Précédent / Suivant / Reset / Sauter à (recherche par nom)
 - ⌨️ **Raccourcis clavier** dans le panneau : `←` `→` et `Espace`
 - 💾 **Progression sauvegardée** — tu reprends exactement où tu en étais après un crash ou un redémarrage
@@ -39,7 +42,7 @@ ton panneau de contrôle (directement dans OBS) et l'overlay se met à jour.
 
 ### 🚧 À venir
 
-- **v0.3** : hotkeys clavier **globaux** (même pendant que LoL est en focus), thèmes visuels personnalisables
+- **v0.4** : plus d'options d'affichage (thèmes visuels, taille du carrousel, intensité du flou…), hotkeys clavier globaux
 - **v1.0** : sélection du skin par champion, stats de progression, détection auto du champion en jeu
 
 ## Installation & utilisation
