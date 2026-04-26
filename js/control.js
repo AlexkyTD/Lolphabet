@@ -33,6 +33,8 @@
     el.sortSelect    = document.getElementById('sortSelect');
     el.optPositionNumbers   = document.getElementById('optPositionNumbers');
     el.optBlurUpcoming      = document.getElementById('optBlurUpcoming');
+    el.optBlurIntensity     = document.getElementById('optBlurIntensity');
+    el.blurIntensityValue   = document.getElementById('blurIntensityValue');
     el.optGlobalCounter     = document.getElementById('optGlobalCounter');
     el.optMarkPastPlayed    = document.getElementById('optMarkPastPlayed');
     el.optMarkUpcoming      = document.getElementById('optMarkUpcoming');
@@ -129,6 +131,8 @@
     const s = Settings.get();
     el.optPositionNumbers.checked = s.showPositionNumbers;
     el.optBlurUpcoming.checked    = s.blurUpcoming;
+    el.optBlurIntensity.value     = s.blurIntensity;
+    el.blurIntensityValue.textContent = s.blurIntensity;
     el.optGlobalCounter.checked   = s.showGlobalCounter;
     el.optMarkPastPlayed.checked  = s.markPastPlayed;
     el.optMarkUpcoming.checked    = s.markUpcoming;
@@ -205,6 +209,12 @@
       toggleSetting('showPositionNumbers', e.target.checked));
     el.optBlurUpcoming.addEventListener('change', (e) =>
       toggleSetting('blurUpcoming', e.target.checked));
+    // 'input' fire pendant le drag → preview en temps réel sur l'overlay.
+    el.optBlurIntensity.addEventListener('input', (e) => {
+      const v = parseInt(e.target.value, 10);
+      el.blurIntensityValue.textContent = v;
+      toggleSetting('blurIntensity', v);
+    });
     el.optGlobalCounter.addEventListener('change', (e) =>
       toggleSetting('showGlobalCounter', e.target.checked));
     el.optMarkPastPlayed.addEventListener('change', (e) =>

@@ -25,6 +25,10 @@
   --color-gold: #f0c13c;
   --color-played: #4ade80;      /* vert pour les champions joués */
   --color-upcoming-icon: #d8d8d8;
+
+  /* Intensité du flou des prochains champions, surchargée en JS
+     d'après Settings.blurIntensity (px). Valeur par défaut = 8. */
+  --blur-intensity: 8px;
 }
 
 * {
@@ -198,9 +202,10 @@ body.opt-position-numbers .slot.is-current .slot-position {
 
 /* --- Flou des prochains ---------------------------------------- */
 /* Appliqué uniquement à l'IMAGE (.slot-frame img), donc la bordure
-   du cadre reste nette. */
+   du cadre reste nette. L'intensité du flou est pilotée par la
+   variable CSS --blur-intensity (réglable depuis le panneau). */
 body.opt-blur-upcoming .slot.is-upcoming .slot-frame img {
-  filter: grayscale(1) brightness(0.55) blur(8px);
+  filter: grayscale(1) brightness(0.55) blur(var(--blur-intensity));
 }
 
 /* --- Pictogramme de statut (✓ joué / ⏳ à venir) ---------------- */

@@ -17,6 +17,7 @@
  *   {
  *     showPositionNumbers: boolean,  // affiche #N sur chaque icône
  *     blurUpcoming:        boolean,  // floute l'image des 2 prochains
+ *     blurIntensity:       number,   // intensité du flou en px (1..20)
  *     showGlobalCounter:   boolean,  // compteur 42 / 168 en haut à droite
  *     markPastPlayed:      boolean,  // ✓ vert + cadre vert sur les joués
  *     markUpcoming:        boolean,  // ⏳ sablier sur les à venir
@@ -41,10 +42,16 @@
   const DEFAULTS = Object.freeze({
     showPositionNumbers: true,
     blurUpcoming: false,
+    blurIntensity: 8,
     showGlobalCounter: false,
     markPastPlayed: false,
     markUpcoming: false,
   });
+
+  // Bornes de validation pour les settings numériques.
+  const NUMERIC_RANGES = {
+    blurIntensity: { min: 1, max: 20 },
+  };
 
   let current = { ...DEFAULTS };
 
@@ -59,6 +66,12 @@
     for (const key of Object.keys(DEFAULTS)) {
       if (typeof raw[key] === typeof DEFAULTS[key]) {
         out[key] = raw[key];
+      }
+    }
+    // Clamp les valeurs numériques dans leurs bornes valides.
+    for (const [key, range] of Object.entries(NUMERIC_RANGES)) {
+      if (typeof out[key] === 'number') {
+        out[key] = Math.max(range.min, Math.min(range.max, out[key]));
       }
     }
     return out;
@@ -93,6 +106,10 @@
     }
     if (typeof value !== typeof DEFAULTS[key]) {
       throw new Error(`Type invalide pour ${key} (attendu ${typeof DEFAULTS[key]})`);
+    }
+    if (NUMERIC_RANGES[key]) {
+      const r = NUMERIC_RANGES[key];
+      value = Math.max(r.min, Math.min(r.max, value));
     }
     current[key] = value;
     save();

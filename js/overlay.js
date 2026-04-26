@@ -103,6 +103,8 @@
     cl.toggle('opt-global-counter',   s.showGlobalCounter);
     cl.toggle('opt-mark-past',        s.markPastPlayed);
     cl.toggle('opt-mark-upcoming',    s.markUpcoming);
+    // Variable CSS pilotant l'intensité du flou (cf. overlay.css).
+    document.body.style.setProperty('--blur-intensity', `${s.blurIntensity}px`);
   }
 
   /**
