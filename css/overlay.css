@@ -210,6 +210,9 @@ body.opt-blur-upcoming .slot.is-upcoming .slot-frame img {
 
 /* --- Pictogramme de statut (✓ joué / ⏳ à venir) ---------------- */
 
+/* Pictogramme de statut (✓ vert / ⏳ sablier) — pas de fond, juste
+   le caractère, avec une ombre portée marquée pour rester lisible
+   par-dessus l'icône du champion. */
 .slot-status {
   position: absolute;
   top: 8px;
@@ -219,21 +222,20 @@ body.opt-blur-upcoming .slot.is-upcoming .slot-frame img {
   display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.82);
-  border-radius: 999px;
-  border: 2.5px solid rgba(255, 255, 255, 0.3);
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 800;
   pointer-events: none;
   z-index: 4;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  text-shadow:
+    0 0 4px rgba(0, 0, 0, 0.95),
+    0 0 10px rgba(0, 0, 0, 0.85),
+    2px 2px 0 rgba(0, 0, 0, 0.9);
 }
 
-/* Marquage des champions joués : ✓ vert dans la pastille + cadre vert */
+/* Marquage des champions joués : ✓ vert (en plein) + cadre vert */
 body.opt-mark-past .slot.is-past .slot-status {
   display: flex;
   color: var(--color-played);
-  border-color: var(--color-played);
 }
 
 body.opt-mark-past .slot.is-past .slot-status::before {
@@ -249,13 +251,11 @@ body.opt-mark-past .slot.is-past .slot-frame {
     0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
-/* Marquage des champions à venir : sablier dans la pastille
-   (cadre laissé en gris standard, comme demandé) */
+/* Marquage des champions à venir : sablier ⏳ (cadre laissé gris) */
 body.opt-mark-upcoming .slot.is-upcoming .slot-status {
   display: flex;
   color: var(--color-upcoming-icon);
-  border-color: rgba(255, 255, 255, 0.45);
-  font-size: 2.1rem;
+  font-size: 2.5rem;
 }
 
 body.opt-mark-upcoming .slot.is-upcoming .slot-status::before {
