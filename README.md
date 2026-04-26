@@ -40,7 +40,7 @@ Dans OBS, sur la scène où tu veux afficher l'overlay :
 
 1. Cliquer sur `+` dans **Sources** → **Browser**
 2. Donner-lui un nom (par ex. `Lolphabet overlay`) et valide
-3. Mettre dans l'URL le chemin complet vers `overlay.html` du dossier dézippé
+3. **URL** : mettre le chemin complet vers `overlay.html`
 4. Règler la taille : **Largeur : 300 ; Hauteur : 1080** est un bon départ pour un overlay vertical
 5. Cocher éventuellement **"Refresh browser when scene becomes active"** (utile en cas de plantage)
 6. Valider
@@ -59,8 +59,7 @@ Dans OBS, menu **View → Docks → Custom Browser Docks…**
 2. Configure :
    - **Dock Name** : `Lolphabet Contrôle` (ou ce que tu veux)
    - **URL** : chemin complet vers `control.html` au format URL
-     - Format Windows : `file:///C:/OBS/Lolphabet/control.html`
-     - ⚠️ Attention : slashs `/` (pas antislashs `\`) et préfixe `file:///`
+
 3. Clique **Apply**, puis **Close**
 4. Le dock apparaît en flottant. Tu peux :
    - Le **docker** dans l'interface d'OBS (à côté de tes scènes par exemple)
