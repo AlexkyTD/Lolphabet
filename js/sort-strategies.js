@@ -14,10 +14,15 @@
  *   Sort.labels                 -> { mode: "Nom affiché" }
  *
  * Modes supportés :
- *   - "alpha"    : ordre alphabétique du nom localisé (MVP v0.1)
- *   - "release"  : ordre de sortie (v0.2 — non implémenté)
- *   - "role"     : par rôle principal puis alpha (v0.2 — non implémenté)
- *   - "position" : par poste (top/jungle/mid/adc/support) puis alpha (v0.2 — non implémenté)
+ *   - "alpha"    : ordre alphabétique du nom localisé (fr)
+ *   - "release"  : ordre de sortie (basé sur l'ID numérique Data Dragon,
+ *                  qui est attribué de façon croissante avec la sortie
+ *                  des champions)
+ *   - "role"     : groupé par tags[0] dans l'ordre Fighter/Tank/Assassin/
+ *                  Mage/Marksman/Support, alpha à l'intérieur de chaque rôle
+ *   - "position" : groupé par poste via Lolphabet.Positions (top/jungle/mid/
+ *                  adc/support), alpha à l'intérieur. Champions non mappés
+ *                  → bucket "other" en fin de liste.
  * -----------------------------------------------------------------
  */
 (function () {
