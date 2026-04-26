@@ -41,7 +41,7 @@ Dans OBS, sur la scène où tu veux afficher l'overlay :
 1. Cliquer sur `+` dans **Sources** → **Browser**
 2. Donner-lui un nom (par ex. `Lolphabet overlay`) et valide
 3. **URL** : mettre le chemin complet vers `overlay.html`
-4. Règler la taille : **Largeur : 300 ; Hauteur : 1080** est un bon départ pour un overlay vertical
+4. Règler la taille : **__Largeur__ : 300** & **__Hauteur__ : 1080** est un bon départ pour un overlay vertical
 5. Cocher éventuellement **"Refresh browser when scene becomes active"** (utile en cas de plantage)
 6. Valider
 
