@@ -1,0 +1,82 @@
+name: 🐛 Signaler un bug
+description: Quelque chose ne fonctionne pas comme prévu
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps de signaler ce bug !
+        Plus tu donnes de détails, plus c'est facile à corriger.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description du bug
+      description: Décris clairement ce qui ne va pas
+      placeholder: Ex. Quand je clique sur "Suivant", l'overlay ne change pas dans OBS…
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Étapes pour reproduire
+      description: Liste précise des étapes pour faire apparaître le bug
+      placeholder: |
+        1. Ouvrir OBS
+        2. Ajouter une Browser Source pointant vers overlay.html
+        3. Cliquer sur Suivant dans le dock
+        4. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportement attendu
+      description: Ce qui aurait dû se passer
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Version de Lolphabet
+      placeholder: ex. v1.0.0
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Système d'exploitation
+      placeholder: ex. Windows 11
+    validations:
+      required: true
+
+  - type: input
+    id: obs
+    attributes:
+      label: Version d'OBS Studio
+      placeholder: ex. 30.2.3
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Captures d'écran
+      description: Glisse / dépose tes images ici si tu en as
+    validations:
+      required: false
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Erreurs dans la console
+      description: |
+        Si tu peux ouvrir la DevTools (F12 dans Chrome/Edge, ou clic droit sur la Browser Source dans OBS → "Inspect"),
+        copie ici les erreurs en rouge dans l'onglet Console.
+      render: shell
+    validations:
+      required: false

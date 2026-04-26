@@ -1,138 +1,209 @@
-# Lolphabet
+# Lolphabet 🎮
 
-> 🎮 Un overlay OBS pour streameurs League of Legends qui jouent tous les champions dans un ordre défini (alphabétique, ordre de sortie, rôle, poste…).
+> **Un overlay OBS pour streameurs League of Legends qui jouent tous les champions dans un ordre défini** (alphabétique, par sortie, par rôle, par poste). Fait spécialement pour les défis longue durée façon "tout l'alphabet en stream".
 
-**Statut : ✅ v0.5 disponible — overlay enrichi avec marquage des champions joués / à venir.**
+[![Version](https://img.shields.io/github/v/release/AlexkyTD/Lolphabet?label=version)](https://github.com/AlexkyTD/Lolphabet/releases)
+[![Licence MIT](https://img.shields.io/badge/licence-MIT-green.svg)](./LICENSE)
+[![OBS](https://img.shields.io/badge/OBS-Browser%20Source-302E31?logo=obsstudio)](https://obsproject.com/)
 
-## Le concept
+---
 
-Tu veux jouer tous les champions de League of Legends dans un ordre défini sur
-ton stream — alphabétique, par ordre de sortie, par rôle, ou par poste ?
-Lolphabet t'affiche un carrousel visuel sur ton overlay OBS qui montre :
+## ✨ Aperçu
 
-- Les **2 champions précédents** que tu as joués (en gris)
-- Le **champion que tu joues actuellement** (en grand, au centre, en couleur, avec son nom)
-- Les **2 prochains champions** à venir (en gris)
+<!--
+  📸 À AJOUTER : un screenshot ou GIF du carrousel en action.
+  Mets l'image dans docs/images/ et décommente la ligne ci-dessous.
+-->
+<!-- ![Aperçu de l'overlay Lolphabet](docs/images/overlay-preview.png) -->
 
-Le carrousel est disposé en **arc de cercle vertical**, avec une animation de
-glissement douce à chaque changement. À chaque partie, tu cliques "Suivant" depuis
-ton panneau de contrôle (directement dans OBS) et l'overlay se met à jour.
+L'overlay affiche un **carrousel vertical en arc de cercle** sur ta scène OBS :
 
-## Fonctionnalités
+- Les **2 champions précédents** (en haut, en gris)
+- Le **champion en cours** (au centre, en couleur, avec son nom)
+- Les **2 prochains champions** (en bas, en gris)
 
-### ✅ Disponibles (v0.5)
+À chaque partie, tu cliques **"Suivant"** dans un panneau de contrôle intégré dans OBS, et l'overlay se met à jour avec une animation de glissement fluide.
 
-- 🎯 **Carrousel vertical en arc** de 5 champions (2 passés, actuel, 2 à venir)
-- 🎨 **Slots non-centraux en niveaux de gris**, seul le champion actuel est en couleur avec bordure dorée
-- ✨ **Animation de glissement** douce (`cubic-bezier` 350 ms) à chaque navigation
-- 🔀 **4 modes de tri** :
-  - **Ordre alphabétique** (Aatrox → Zyra)
-  - **Ordre de sortie** (du plus ancien au plus récent)
-  - **Rôle principal** (Combattant → Tank → Assassin → Mage → Tireur → Support, alpha à l'intérieur)
-  - **Poste** (Top → Jungle → Mid → ADC → Support, alpha à l'intérieur)
-- 🎛️ **Options d'affichage personnalisables** depuis le panneau de contrôle :
-  - **Numéros de position** sur chaque icône (ex. `#42`) pour que les spectateurs voient instantanément où on en est dans le challenge
-  - **Flou des prochains champions** pour garder le suspense (l'image est floutée, mais le cadre reste net pour ne pas casser la lisibilité)
-  - **Compteur global** "42 / 168" en pavé doré en haut à droite de l'overlay
-  - **Marquage des champions joués** : pastille verte ✓ et cadre vert sur les champions déjà joués
-  - **Marquage des champions à venir** : pastille avec sablier ⏳ sur les prochains champions
-- 🎮 **Panneau de contrôle** avec Précédent / Suivant / Reset / Sauter à (recherche par nom)
-- ⌨️ **Raccourcis clavier** dans le panneau : `←` `→` et `Espace`
-- 💾 **Progression sauvegardée** — tu reprends exactement où tu en étais après un crash ou un redémarrage
-- 📦 **Progression indépendante par mode de tri** — change de tri et reviens quand tu veux, chaque mode garde sa propre position
-- 🖼️ **Icônes officielles** via [Data Dragon](https://developer.riotgames.com/docs/lol#data-dragon) (API publique Riot, pas de clé nécessaire)
-- ⚡ **Zéro installation, zéro dépendance, zéro serveur** : double-clic et ça marche
+---
 
-### 🚧 À venir
+## 🚀 Installation rapide
 
-- **v0.6** : thèmes de couleur, intensité du flou réglable, taille du carrousel personnalisable, hotkeys clavier globaux
-- **v1.0** : sélection du skin par champion, stats de progression, détection auto du champion en jeu
+### Étape 1 — Télécharger
 
-## Installation & utilisation
+Va sur la page [**Releases**](https://github.com/AlexkyTD/Lolphabet/releases) et télécharge le `Source code (zip)` de la dernière version.
 
-### 1. Télécharger
+Dézippe le dossier où tu veux (par exemple `C:\OBS\Lolphabet\`).
 
-Télécharge le `.zip` depuis la page [Releases](https://github.com/AlexkyTD/Lolphabet/releases),
-ou clone le repo directement.
+### Étape 2 — Ajouter l'overlay dans OBS
 
-Dézippe où tu veux (ex. `C:\OBS\Lolphabet\`).
+Dans OBS, sur la scène où tu veux afficher l'overlay :
 
-### 2. Configurer OBS
+1. Clique sur `+` dans **Sources** → **Browser**
+2. Donne-lui un nom (par ex. `Lolphabet overlay`) et valide
+3. Coche **"Local file"** et navigue vers le fichier `overlay.html` du dossier dézippé
+4. Règle la taille : **800 × 1080** est un bon départ pour un overlay vertical
+5. Coche éventuellement **"Refresh browser when scene becomes active"** (utile en cas de plantage)
+6. Valide
 
-> ⚠️ **Important** : le panneau de contrôle et l'overlay doivent tourner dans
-> **la même instance de navigateur** pour pouvoir se synchroniser. Dans le cadre
-> d'OBS, on utilise le navigateur interne d'OBS (CEF) pour les deux. Il ne faut
-> **pas** ouvrir le panneau de contrôle dans Chrome/Firefox/Edge à côté — ça ne
-> communiquera pas avec OBS.
+L'overlay devrait apparaître avec le carrousel des champions.
 
-**A. Ajouter l'overlay (Browser Source)**
+<!-- ![Configuration Browser Source dans OBS](docs/images/obs-browser-source.png) -->
 
-1. Dans OBS, sur ta scène, clique sur `+` dans "Sources" → **Browser**
-2. Donne-lui un nom, par exemple `Lolphabet overlay`
-3. Coche **"Local file"** et pointe vers `overlay.html` du dossier dézippé
-4. Largeur / hauteur : ce que tu veux (800×1080 est un bon départ pour un overlay vertical)
-5. Valide
+### Étape 3 — Ajouter le panneau de contrôle dans OBS
 
-**B. Ajouter le panneau de contrôle (Custom Browser Dock)**
+> ⚠️ **Étape critique.** Le panneau de contrôle **doit** être ouvert **à l'intérieur d'OBS** pour pouvoir communiquer avec l'overlay. Si tu l'ouvres dans Chrome / Firefox / Edge à côté, **rien ne se synchronisera** (c'est une limite technique d'OBS, pas un bug).
 
-1. Dans OBS, menu **View → Docks → Custom Browser Docks…**
-2. Clique sur `+` et configure :
-   - **Dock Name** : `Lolphabet Contrôle`
-   - **URL** : `file:///C:/chemin/complet/vers/control.html`
-     (attention aux slashes `/`, pas aux antislashes `\`)
-3. Clique **Apply** et ferme
-4. Le dock apparaît flottant — tu peux le poser dans l'interface d'OBS,
-   ou le détacher comme fenêtre flottante sur ton 2e écran
+Dans OBS, menu **View → Docks → Custom Browser Docks…**
 
-### 3. Utiliser
+1. Clique sur `+`
+2. Configure :
+   - **Dock Name** : `Lolphabet Contrôle` (ou ce que tu veux)
+   - **URL** : chemin complet vers `control.html` au format URL
+     - Format Windows : `file:///C:/OBS/Lolphabet/control.html`
+     - ⚠️ Attention : slashs `/` (pas antislashs `\`) et préfixe `file:///`
+3. Clique **Apply**, puis **Close**
+4. Le dock apparaît en flottant. Tu peux :
+   - Le **docker** dans l'interface d'OBS (à côté de tes scènes par exemple)
+   - Le **détacher** comme fenêtre flottante sur ton 2e écran
 
-Dans le dock Lolphabet Contrôle, clique **"Suivant ▶"** à chaque nouveau champion.
-L'overlay bouge en direct dans ta prévisualisation OBS. Tu peux aussi :
+<!-- ![Configuration Custom Browser Dock](docs/images/obs-custom-dock.png) -->
 
-- **Précédent** : reculer d'un cran (si tu as cliqué trop vite)
-- **Reset** : revenir au premier champion du tri courant
-- **Sauter à** : recherche rapide par nom
-- **Changer de mode de tri** : chaque mode garde sa propre progression
+### Étape 4 — Tester
 
-Raccourcis clavier dans le dock :
-- `→` ou `Espace` : suivant
-- `←` : précédent
+Dans le dock Lolphabet Contrôle, clique **"Suivant ▶"**. Le carrousel doit glisser dans la prévisualisation OBS, et le nom du champion change. **Si ça marche, tu es prêt à streamer.** 🎉
 
-## Stack technique
+---
+
+## 🎮 Utilisation pendant le stream
+
+### Navigation
+
+| Action | Bouton | Raccourci |
+|---|---|---|
+| Champion suivant | **Suivant ▶** | `→` ou `Espace` |
+| Champion précédent | **◀ Précédent** | `←` |
+| Sauter à un champion précis | **Sauter à…** + recherche par nom | — |
+| Reset au début du tri courant | **🔄 Reset (tri actuel)** | — |
+
+### Modes de tri
+
+Lolphabet propose **4 manières** d'ordonner les champions, sélectionnables dans la carte **"Mode de tri"** du panneau :
+
+| Mode | Description |
+|---|---|
+| 🔤 **Ordre alphabétique** | Aatrox → Zyra |
+| 📅 **Ordre de sortie** | Du champion le plus ancien au plus récent (basé sur l'ID Riot) |
+| ⚔️ **Rôle principal** | Combattant → Tank → Assassin → Mage → Tireur → Support, alpha à l'intérieur |
+| 🗺️ **Poste** | Top → Jungle → Mid → ADC → Support, alpha à l'intérieur |
+
+> 💾 **Bonus** : chaque mode garde sa **propre progression**. Tu peux commencer le défi en alphabétique, basculer en mode "par poste" pour varier, puis revenir en alpha — tu reprendras exactement où tu en étais dans chaque mode.
+
+---
+
+## 🎛️ Options d'affichage
+
+Toutes les options se trouvent dans la carte **"Options d'affichage"** du panneau. Elles s'appliquent **en temps réel** sur l'overlay et sont **sauvegardées entre les sessions**.
+
+| Option | Défaut | Description | Quand l'utiliser |
+|---|---|---|---|
+| **Afficher les numéros** | ✅ activé | Badge `#42` sur chaque icône (doré sur le champion actuel) | Toujours — c'est le repère temporel le plus clair pour les spectateurs |
+| **Flouter les prochains champions** | ❌ désactivé | Floute uniquement l'**image** des +1/+2 (le cadre reste net) | Pour créer du suspense, des paris dans le chat |
+| **Intensité du flou** | 8 px | Slider 1-20 px qui contrôle la force du flou | Selon que tu veux deviner les silhouettes (faible) ou cacher complètement (fort) |
+| **Compteur global** | ❌ désactivé | Petit pavé doré "42 / 168" en haut à droite | Pour montrer la progression globale du défi en un coup d'œil |
+| **Marquer les champions joués** | ❌ désactivé | ✓ vert sur les champions passés + cadre vert | Pour valoriser ce qui a déjà été accompli |
+| **Marquer les champions à venir** | ❌ désactivé | ⏳ sablier sur les prochains champions | Pour signaler clairement "ce n'est pas encore fait" |
+
+### Combos recommandés
+
+**Setup "minimaliste"** (par défaut) : numéros activés, le reste off → propre, pas chargé.
+
+**Setup "spectateur clair"** : numéros + marquer joués + marquer à venir → triple signal visuel, idéal pour les nouveaux viewers.
+
+**Setup "suspense maximum"** : numéros + flouter les prochains (intensité 14+) → on devine que quelque chose vient mais on ne sait pas quoi.
+
+**Setup "challenge épique"** : compteur global + marquer joués + marquer à venir → met en valeur le défi sur la durée.
+
+---
+
+## ❓ FAQ / Dépannage
+
+### "Je clique Suivant mais l'overlay dans OBS ne bouge pas"
+
+C'est presque toujours parce que le panneau de contrôle est ouvert **dans un navigateur externe** (Chrome / Firefox / Edge) au lieu d'être dans OBS. Le panneau et l'overlay doivent partager le même environnement. Solution :
+
+- Va dans OBS → **View → Docks → Custom Browser Docks**
+- Vérifie que `control.html` est bien configuré comme dock
+- Ferme le panneau dans Chrome/Firefox
+
+### "Je ne vois rien dans la Browser Source d'OBS"
+
+- Vérifie que le **chemin du fichier** dans la Browser Source pointe bien vers `overlay.html` (pas `control.html`)
+- Clique droit sur la Browser Source → **Refresh / Recharger**
+- Vérifie que la **largeur / hauteur** ne sont pas trop petites (essaie 800×1080)
+- Ouvre `overlay.html` dans Chrome ou Edge en double-cliquant pour vérifier que ça marche tout seul
+
+### "Le compteur ou un picto chevauche une icône"
+
+Cela peut arriver si ta Browser Source est très petite verticalement. Augmente la **hauteur** dans OBS (essaie 1080 px) et l'overlay s'aérera.
+
+### "Comment je remets toute la progression à zéro ?"
+
+Dans le panneau, clique le bouton rouge **🔄 Reset (tri actuel)**. Cela ne remet à zéro **que le mode de tri actuel** — les autres modes gardent leur progression. Pour tout remettre à zéro, fais un Reset dans chaque mode.
+
+### "Je ne suis pas d'accord avec le poste assigné à un champion"
+
+Le mapping champion → poste est dans le fichier [`js/positions-data.js`](./js/positions-data.js). Il est basé sur le méta communautaire (u.gg / lolalytics). Tu peux :
+- L'éditer toi-même (changer une ligne, recharger l'overlay)
+- Proposer une PR sur GitHub pour aider la communauté
+
+### "Comment je change la taille / les couleurs de l'overlay ?"
+
+Pour la **taille du carrousel**, ouvre `css/overlay.css` et modifie la variable `--slot-size` (par défaut `180px`).
+
+Pour les **couleurs principales** (or, vert des champions joués), modifie les variables `--color-gold`, `--color-played` au début du même fichier.
+
+Pour des modifications plus poussées, le code est entièrement commenté en français.
+
+### "Mon nouveau champion fraîchement sorti par Riot n'apparaît pas dans le tri par poste"
+
+L'app détecte automatiquement les nouveaux champions via Data Dragon. Mais si le champion n'est pas listé dans `js/positions-data.js`, il ira dans un bucket "Autre" en fin de liste pour le tri par poste. Une PR pour ajouter son poste serait la bienvenue !
+
+---
+
+## 🤝 Contribuer
+
+Le projet est ouvert à la contribution ! Voir [CONTRIBUTING.md](./CONTRIBUTING.md) pour le détail.
+
+**Cas d'usage typiques :**
+- Corriger un poste mal assigné dans `js/positions-data.js`
+- Proposer une nouvelle option d'affichage
+- Améliorer la traduction ou la doc
+- Signaler un bug
+
+**Pour signaler un bug ou proposer une feature**, ouvre une [issue](https://github.com/AlexkyTD/Lolphabet/issues).
+
+---
+
+## 🛠️ Stack technique
 
 - **HTML / CSS / JavaScript vanilla** — aucune dépendance, aucun build, aucun serveur
-- [Data Dragon](https://developer.riotgames.com/docs/lol#data-dragon) pour les données des champions (cache localStorage avec invalidation par patch)
-- `BroadcastChannel` + `storage` event + polling léger pour la synchro overlay ↔ contrôle
+- [Data Dragon](https://developer.riotgames.com/docs/lol#data-dragon) (API publique Riot) pour les données et icônes des champions
+- `localStorage` pour la persistance + `BroadcastChannel` + `storage` event + polling 500 ms (triple filet de synchro)
+- Architecture modulaire en ~10 fichiers JS / CSS, tous commentés
 
 Le cahier des charges complet est dans [`CAHIER_DES_CHARGES.md`](./CAHIER_DES_CHARGES.md).
 
-## Limitations connues
+---
 
-- **Navigateurs séparés** : si tu ouvres l'overlay dans OBS et le contrôle dans
-  Chrome/Firefox/Edge à côté, ils **ne pourront pas communiquer**. Chaque
-  application a son propre stockage isolé. Utilise le **Custom Browser Dock d'OBS**
-  pour le panneau de contrôle (voir ci-dessus).
-- **Firefox en file://** : Firefox isole chaque fichier `file://` dans sa propre
-  origine, donc même entre deux onglets Firefox, la synchro ne passe pas. Utilise
-  Edge ou Chrome si tu veux tester hors d'OBS.
-- **Tri par rôle / poste / sortie** : pas encore implémentés (v0.2).
+## 📜 Historique des versions
 
-## Contribuer
+Voir [CHANGELOG.md](./CHANGELOG.md) pour la liste détaillée des changements de chaque version.
 
-Le projet est en début de vie — si tu as des idées, bugs, suggestions, ouvre une
-[issue](https://github.com/AlexkyTD/Lolphabet/issues) ou une pull request.
+---
 
-### Corriger un poste mal assigné
+## 📄 Licence
 
-Le fichier [`js/positions-data.js`](./js/positions-data.js) contient le mapping
-champion → poste principal utilisé pour le tri "par poste". C'est une liste
-maintenue à la main, basée sur le méta communautaire (u.gg / lolalytics). Si tu
-n'es pas d'accord avec une assignation, ou si un nouveau champion manque, il
-suffit d'éditer ce fichier et d'ouvrir une PR. Aucun code à modifier.
-
-## Licence
-
-[MIT](./LICENSE) — fais-en ce que tu veux.
+[MIT](./LICENSE) — utilise, modifie, partage librement. Tu n'as qu'à garder l'attribution.
 
 ---
 

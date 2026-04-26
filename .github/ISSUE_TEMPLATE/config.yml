@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Lire la documentation
+    url: https://github.com/AlexkyTD/Lolphabet#readme
+    about: La FAQ couvre la plupart des questions courantes (synchro OBS, taille, couleurs, reset, etc.)
+  - name: 📝 Voir le CHANGELOG
+    url: https://github.com/AlexkyTD/Lolphabet/blob/main/CHANGELOG.md
+    about: Liste détaillée des changements de chaque version
