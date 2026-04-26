@@ -138,7 +138,7 @@ C'est presque toujours parce que le panneau de contrôle est ouvert **dans un na
 
 - Vérifie que le **chemin du fichier** dans la Browser Source pointe bien vers `overlay.html` (pas `control.html`)
 - Clique droit sur la Browser Source → **Refresh / Recharger**
-- Vérifie que la **largeur / hauteur** ne sont pas trop petites (essaie 800×1080)
+- Vérifie que la **largeur / hauteur** ne sont pas trop petites (essaie 300×1080, comme à l'installation)
 - Ouvre `overlay.html` dans Chrome ou Edge en double-cliquant pour vérifier que ça marche tout seul
 
 ### "Le compteur ou un picto chevauche une icône"
