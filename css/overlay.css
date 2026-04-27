@@ -87,10 +87,10 @@ html, body {
 
 /* Le compteur global est aligné horizontalement avec le slot le plus
    haut (prev2, à -80px de translateX du centre dans l'arc) et placé
-   juste au-dessus de lui. Cohérent avec la composition du carrousel. */
+   au-dessus de lui avec assez d'espace pour ne pas chevaucher. */
 #global-counter {
   position: absolute;
-  top: calc(50% - 410px);
+  top: calc(50% - 450px);
   left: calc(50% - 80px);
   transform: translateX(-50%);
   font-size: 1rem;
