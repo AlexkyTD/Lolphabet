@@ -92,6 +92,8 @@ appliquées en temps réel sur l'overlay et persistées dans `localStorage`.
 | `showGlobalCounter`       | boolean | `false` | Pavé doré "42 / 168" en haut à droite de l'overlay |
 | `markPastPlayed`          | boolean | `false` | ✓ vert posé sur les slots `−1` et `−2` + cadre vert |
 | `markUpcoming`            | boolean | `false` | ⏳ posé sur les slots `+1` et `+2` (cadre laissé en gris) |
+| `theme`                   | enum: `default` \| `hextech` | `default` | Ambiance globale (palette, glow, typo) |
+| `slotShape`               | enum: `rounded` \| `hexagonal` | `rounded` | Forme du cadre des icônes |
 
 Les options se cumulent librement.
 
@@ -184,8 +186,10 @@ lolphabet/
 ├── overlay.html              ← chargé par OBS Browser Source
 ├── control.html              ← chargé par OBS Custom Browser Dock
 ├── css/
-│   ├── overlay.css           ← styles du carrousel + options
-│   └── control.css           ← styles du panneau (cards, toggles, slider)
+│   ├── overlay.css           ← styles du carrousel + options + formes
+│   ├── control.css           ← styles du panneau (cards, toggles, slider)
+│   └── themes/               ← un fichier CSS par thème visuel
+│       └── hextech.css       ← thème Hextech / Piltover (or, aura, Cinzel)
 ├── js/
 │   ├── data-dragon.js        ← fetch + cache champions Data Dragon
 │   ├── positions-data.js     ← mapping champion → poste
@@ -209,8 +213,9 @@ lolphabet/
 
 ```html
 <div class="slot is-past|is-current|is-upcoming">
-  <div class="slot-frame">      <!-- bordure et ombres (TOUJOURS net) -->
-    <img />                     <!-- seul élément qui reçoit grayscale + blur -->
+  <div class="slot-aura"></div>      <!-- aura magique réservée aux thèmes (Hextech) -->
+  <div class="slot-frame">           <!-- bordure et ombres (TOUJOURS net) -->
+    <img />                          <!-- seul élément qui reçoit grayscale + blur -->
   </div>
   <div class="slot-status"></div>    <!-- pictogramme ✓ ou ⏳ via ::before -->
   <div class="slot-position">#42</div>
@@ -220,6 +225,31 @@ lolphabet/
 La séparation `.slot-frame` (cadre) / `<img>` (image) permet de **flouter
 uniquement l'image** sans dégrader la lisibilité du cadre — point critique pour
 la qualité visuelle de l'option `blurUpcoming`.
+
+`.slot-aura` est rendue invisible par défaut (`opacity: 0`) ; les thèmes
+décoratifs (ex : `theme-hextech`) l'activent uniquement sur le slot central
+pour y appliquer une aura conique animée derrière l'icône.
+
+### Système de thèmes visuels
+
+Chaque thème = un fichier CSS dédié dans `css/themes/<nom>.css`, auto-contenu
+avec ses variables, ses effets et ses animations. Tous les thèmes sont chargés
+dans `overlay.html`, mais leurs règles sont préfixées par `body.theme-<nom>` →
+seul le thème actif s'applique réellement.
+
+Cette architecture permet d'ajouter de nouveaux thèmes (Zaun, Summoner's Rift…)
+en créant un fichier CSS et en l'ajoutant à `Settings.ENUM_VALUES.theme` —
+aucune modification du code existant.
+
+### Forme des cadres
+
+Indépendante du thème, gérée par la classe `body.shape-<rounded|hexagonal>` :
+- `rounded` : `border-radius: 12px` (forme par défaut depuis v0.1)
+- `hexagonal` : `clip-path: polygon(...)` hexagone "vertical" (pointe haut/bas)
+
+En forme hexagonale, les badges (`#N` et pastille de statut) sont
+automatiquement recentrés horizontalement par CSS pour rester sur la zone
+visible (les coins du carré sont clippés).
 
 ### Format de l'état persisté
 
@@ -244,7 +274,9 @@ la qualité visuelle de l'option `blurUpcoming`.
   "blurIntensity": 8,
   "showGlobalCounter": false,
   "markPastPlayed": false,
-  "markUpcoming": false
+  "markUpcoming": false,
+  "theme": "default",
+  "slotShape": "rounded"
 }
 ```
 
@@ -285,7 +317,8 @@ la qualité visuelle de l'option `blurUpcoming`.
 ### v1.x — confort
 - **Hotkeys clavier globaux** (AutoHotkey ou Node listener) pour pouvoir avancer
   le carrousel sans alt-tab depuis LoL.
-- **Thèmes de couleur** prédéfinis (or / argent / arc-en-ciel / personnalisé).
+- **Thèmes additionnels** : `Zaun / Shimmer` (sombre, néon vert/violet), 
+  `Summoner's Rift` (fantasy noble), thème personnalisable via couleurs CSS.
 - **Taille du carrousel** réglable depuis le panneau.
 - **Position du compteur global** configurable (haut-gauche / haut-droit / bas).
 

@@ -6,6 +6,35 @@ Le projet suit (à peu près) le [versioning sémantique](https://semver.org/lan
 
 ---
 
+## [1.1.0] — 2026-04-27
+
+### 🎨 Refonte visuelle : système de thèmes + forme hexagonale
+
+Première grosse mise à jour visuelle depuis la v1.0. L'overlay passe d'un look "fonctionnel" à un look "spectaculaire" inspiré de l'univers League of Legends / Arcane.
+
+### Ajouté
+- **Système de thèmes** scalable : un fichier CSS par thème dans `css/themes/`. Active via la classe `theme-X` posée sur `<body>`. Conçu pour permettre l'ajout facile de nouveaux thèmes (Zaun, Summoner's Rift…) en PR.
+- **Thème Hextech / Piltover** (premier thème non-default) :
+  - Aura conique dorée animée (rotation 9 s) derrière le slot central, avec fade radial pour se fondre dans le décor
+  - Glow doré pulsant (cycle 2.6 s) via `filter: drop-shadow` (suit la forme exacte du cadre, y compris en hexagonal)
+  - Vignettage radial bleu nuit en arrière-plan
+  - Double bordure dorée façon ouvrage Piltover sur le slot central
+  - Nom du champion en typo **Cinzel** (Google Fonts) avec effet métal embouti via `background-clip: text`
+  - Compteur global stylisé en cohérence (typo Cinzel, bordure dorée)
+- **Forme hexagonale** des cadres (option indépendante du thème). Implémentée via `clip-path: polygon(...)`. Compatible avec les icônes Data Dragon (symétrique).
+- **Carte "Apparence"** dans le panneau de contrôle, avec deux dropdowns indépendants (thème + forme).
+- **`Settings.ENUM_VALUES`** : nouveau mécanisme de validation pour les settings énumérés (chaînes), avec fallback automatique sur la valeur par défaut si la valeur stockée est invalide.
+
+### Modifié
+- `overlay.html` charge désormais Cinzel via Google Fonts (`<link>` avec preconnect) et le CSS du thème Hextech. Aucun impact pour le thème classique (lazy par activation de classe).
+- Nouveau div `.slot-aura` ajouté dans la structure DOM des slots (hidden par défaut, utilisé uniquement par les thèmes qui le souhaitent).
+- En forme hexagonale, le badge `#N` et la pastille de statut sont automatiquement recentrés horizontalement pour rester sur la zone visible (les coins du carré sont clippés par l'hexagone).
+
+### Aucune cassure
+Toutes les options et progressions existantes sont conservées. Les nouveaux settings (`theme: 'default'` et `slotShape: 'rounded'`) ont des valeurs par défaut qui reproduisent à l'identique le rendu antérieur. Aucune action requise pour les utilisateurs existants.
+
+---
+
 ## [1.0.0] — 2026-04-15
 
 ### 🎉 Première release stable, prête pour la production
@@ -95,6 +124,7 @@ Toutes les fonctionnalités des versions antérieures sont conservées sans chan
 - Synchro overlay ↔ contrôle via triple mécanisme (BroadcastChannel + storage event + polling 500 ms) pour garantir que ça marche dans tous les contextes (file://, OBS CEF, etc.).
 - README, LICENSE (MIT), .gitignore, CAHIER_DES_CHARGES.
 
+[1.1.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.1.0
 [1.0.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.0.0
 [0.5.1]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v0.5.1
 [0.5.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v0.5.0

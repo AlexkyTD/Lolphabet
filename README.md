@@ -99,6 +99,29 @@ Lolphabet propose **4 manières** d'ordonner les champions, sélectionnables dan
 
 ---
 
+## 🎨 Apparence (thèmes & forme des cadres)
+
+Carte **"Apparence"** du panneau de contrôle, deux choix indépendants :
+
+| Réglage | Choix disponibles | Effet |
+|---|---|---|
+| **Thème visuel** | `Classique` (défaut) · `Hextech / Piltover ✨` | Ambiance globale : couleurs, glows, typo, effets magiques |
+| **Forme des cadres** | `Carré arrondi` (défaut) · `Hexagonal ⬡` | Forme des icônes du carrousel |
+
+Les deux options se combinent librement (ex. Hextech + Hexagonal pour un look pile inspiré d'Arcane, ou Classique + Hexagonal pour un look LoL plus sobre).
+
+### Le thème **Hextech / Piltover**
+Inspiré directement de l'univers visuel de la série Arcane : or chaud, cuivre, bleu nuit, magie hextech. Au programme :
+- 🌟 Aura conique dorée qui tourne lentement derrière le champion en cours
+- 💛 Glow doré pulsant sur l'icône centrale (effet "vivant")
+- 🖼️ Vignettage radial sombre en arrière-plan pour donner du poids
+- ✨ Cadre central avec double bordure dorée façon ouvrage Piltover
+- 📜 Nom du champion en typo **Cinzel** avec effet métal embouti doré
+
+> 💡 D'autres thèmes (Zaun / Shimmer, Summoner's Rift) arriveront dans les prochaines versions. Si tu as une idée de thème, ouvre une issue !
+
+---
+
 ## 🎛️ Options d'affichage
 
 Toutes les options se trouvent dans la carte **"Options d'affichage"** du panneau. Elles s'appliquent **en temps réel** sur l'overlay et sont **sauvegardées entre les sessions**.

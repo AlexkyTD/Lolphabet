@@ -125,7 +125,6 @@ body.opt-global-counter #global-counter {
 .slot-frame {
   position: absolute;
   inset: 0;
-  border-radius: 12px;
   border: 3px solid rgba(255, 255, 255, 0.7);
   box-shadow:
     0 0 0 2px rgba(0, 0, 0, 0.6),
@@ -134,6 +133,41 @@ body.opt-global-counter #global-counter {
   transition:
     border-color var(--slide-duration) var(--slide-ease),
     box-shadow var(--slide-duration) var(--slide-ease);
+}
+
+/* Forme du slot : par défaut carré arrondi. La classe shape-* est
+   posée sur <body> par overlay.js d'après Settings.slotShape. */
+body.shape-rounded .slot-frame {
+  border-radius: 12px;
+}
+
+body.shape-hexagonal .slot-frame {
+  border-radius: 0;
+  /* Hexagone "plat dessus / plat dessous", clip-path inclut la bordure.
+     Marche très bien avec les icônes carrées de Data Dragon : symétrie
+     horizontale, verticale et diagonale → coupe les 4 coins de manière
+     équilibrée. */
+  clip-path: polygon(
+    50% 0%,
+    100% 25%,
+    100% 75%,
+    50% 100%,
+    0% 75%,
+    0% 25%
+  );
+  /* Note : box-shadow ne traverse pas clip-path. En forme hexagonale,
+     les ombres et glow sont gérés par filter: drop-shadow() dans les
+     fichiers de thème (qui suit la forme réelle, y compris clip-path). */
+}
+
+/* L'aura magique posée derrière le cadre. Caché par défaut, n'est
+   visible que dans certains thèmes (ex : Hextech) sur le slot central. */
+.slot-aura {
+  position: absolute;
+  inset: -30px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
 .slot-frame img {
@@ -200,6 +234,23 @@ body.opt-position-numbers .slot.is-current .slot-position {
   padding: 3px 10px;
 }
 
+/* Recentrage des badges en forme hexagonale : les coins sont
+   clippés, donc on remonte le badge au centre horizontal pour
+   qu'il reste sur l'image visible. */
+body.shape-hexagonal .slot-position {
+  bottom: 9%;
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+body.shape-hexagonal .slot.is-current .slot-position {
+  bottom: 9%;
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 /* --- Flou des prochains ---------------------------------------- */
 /* Appliqué uniquement à l'IMAGE (.slot-frame img), donc la bordure
    du cadre reste nette. L'intensité du flou est pilotée par la
@@ -230,6 +281,14 @@ body.opt-blur-upcoming .slot.is-upcoming .slot-frame img {
     0 0 4px rgba(0, 0, 0, 0.95),
     0 0 10px rgba(0, 0, 0, 0.85),
     2px 2px 0 rgba(0, 0, 0, 0.9);
+}
+
+/* En forme hexagonale, on recentre le picto au sommet pour qu'il
+   reste sur la zone visible (les coins sont clippés). */
+body.shape-hexagonal .slot-status {
+  top: 4%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* Marquage des champions joués : ✓ vert (en plein) + cadre vert */

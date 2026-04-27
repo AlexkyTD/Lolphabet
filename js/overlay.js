@@ -63,6 +63,13 @@
     el.className = 'slot';
     el.dataset.championId = champion.id;
 
+    // Aura magique posée derrière le cadre — utilisée uniquement par
+    // certains thèmes (ex : Hextech) sur le slot central. Cachée par
+    // défaut via le CSS de base, activée par le CSS du thème.
+    const aura = document.createElement('div');
+    aura.className = 'slot-aura';
+    el.appendChild(aura);
+
     // Wrapper "cadre" — porte la bordure et les ombres. Sépare le
     // visuel du cadre (toujours net) de l'image (qui peut être
     // floutée via Settings.blurUpcoming).
@@ -103,6 +110,16 @@
     cl.toggle('opt-global-counter',   s.showGlobalCounter);
     cl.toggle('opt-mark-past',        s.markPastPlayed);
     cl.toggle('opt-mark-upcoming',    s.markUpcoming);
+
+    // --- Apparence : thème + forme des slots ---
+    // On retire d'abord toute classe theme-* / shape-* pour pouvoir
+    // basculer proprement entre valeurs.
+    Array.from(cl).forEach((c) => {
+      if (c.startsWith('theme-') || c.startsWith('shape-')) cl.remove(c);
+    });
+    cl.add(`theme-${s.theme}`);
+    cl.add(`shape-${s.slotShape}`);
+
     // Variable CSS pilotant l'intensité du flou (cf. overlay.css).
     document.body.style.setProperty('--blur-intensity', `${s.blurIntensity}px`);
   }

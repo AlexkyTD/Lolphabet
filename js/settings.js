@@ -21,6 +21,8 @@
  *     showGlobalCounter:   boolean,  // compteur 42 / 168 en haut à droite
  *     markPastPlayed:      boolean,  // ✓ vert + cadre vert sur les joués
  *     markUpcoming:        boolean,  // ⏳ sablier sur les à venir
+ *     theme:               string,   // 'default' | 'hextech'
+ *     slotShape:           string,   // 'rounded'  | 'hexagonal'
  *   }
  *
  * API publique :
@@ -46,11 +48,20 @@
     showGlobalCounter: false,
     markPastPlayed: false,
     markUpcoming: false,
+    theme: 'default',
+    slotShape: 'rounded',
   });
 
   // Bornes de validation pour les settings numériques.
   const NUMERIC_RANGES = {
     blurIntensity: { min: 1, max: 20 },
+  };
+
+  // Valeurs autorisées pour les settings énumérés (chaînes).
+  // Toute valeur hors-liste est ignorée et retombe sur le défaut.
+  const ENUM_VALUES = {
+    theme: ['default', 'hextech'],
+    slotShape: ['rounded', 'hexagonal'],
   };
 
   let current = { ...DEFAULTS };
@@ -72,6 +83,12 @@
     for (const [key, range] of Object.entries(NUMERIC_RANGES)) {
       if (typeof out[key] === 'number') {
         out[key] = Math.max(range.min, Math.min(range.max, out[key]));
+      }
+    }
+    // Vérifie que les valeurs énumérées sont autorisées.
+    for (const [key, allowed] of Object.entries(ENUM_VALUES)) {
+      if (!allowed.includes(out[key])) {
+        out[key] = DEFAULTS[key];
       }
     }
     return out;
@@ -111,6 +128,11 @@
       const r = NUMERIC_RANGES[key];
       value = Math.max(r.min, Math.min(r.max, value));
     }
+    if (ENUM_VALUES[key] && !ENUM_VALUES[key].includes(value)) {
+      throw new Error(
+        `Valeur invalide pour ${key} : "${value}". Autorisées : ${ENUM_VALUES[key].join(', ')}`
+      );
+    }
     current[key] = value;
     save();
   }
@@ -118,6 +140,7 @@
   window.Lolphabet.Settings = {
     STORAGE_KEY,
     DEFAULTS,
+    ENUM_VALUES,
     load,
     save,
     get,

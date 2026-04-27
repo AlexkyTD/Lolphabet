@@ -31,6 +31,8 @@
     el.nextBtn       = document.getElementById('nextBtn');
     el.resetBtn      = document.getElementById('resetBtn');
     el.sortSelect    = document.getElementById('sortSelect');
+    el.themeSelect   = document.getElementById('themeSelect');
+    el.shapeSelect   = document.getElementById('shapeSelect');
     el.optPositionNumbers   = document.getElementById('optPositionNumbers');
     el.optBlurUpcoming      = document.getElementById('optBlurUpcoming');
     el.optBlurIntensity     = document.getElementById('optBlurIntensity');
@@ -136,6 +138,8 @@
     el.optGlobalCounter.checked   = s.showGlobalCounter;
     el.optMarkPastPlayed.checked  = s.markPastPlayed;
     el.optMarkUpcoming.checked    = s.markUpcoming;
+    el.themeSelect.value          = s.theme;
+    el.shapeSelect.value          = s.slotShape;
   }
 
   // --- Recherche "sauter à" ------------------------------------------------
@@ -221,6 +225,10 @@
       toggleSetting('markPastPlayed', e.target.checked));
     el.optMarkUpcoming.addEventListener('change', (e) =>
       toggleSetting('markUpcoming', e.target.checked));
+    el.themeSelect.addEventListener('change', (e) =>
+      toggleSetting('theme', e.target.value));
+    el.shapeSelect.addEventListener('change', (e) =>
+      toggleSetting('slotShape', e.target.value));
     el.jumpInput.addEventListener('input', (e) => renderJumpSuggestions(e.target.value));
     el.jumpInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
