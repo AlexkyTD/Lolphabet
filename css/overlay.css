@@ -133,10 +133,12 @@ body.opt-global-counter #global-counter {
 }
 
 /* Aura placée derrière le cadre. Caché par défaut, n'est visible
-   que dans certains thèmes (Hextech) sur le slot central. */
+   que dans certains thèmes (Hextech) sur le slot central. La taille
+   est volontairement modeste : on veut un halo qui se devine, pas
+   un projecteur qui domine l'overlay. */
 .slot-aura {
   position: absolute;
-  inset: -40px;
+  inset: -18px;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.5s ease;
