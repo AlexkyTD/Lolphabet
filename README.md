@@ -118,11 +118,16 @@ Inspiré directement de l'univers visuel de la série Arcane : or chaud, cadres 
 - 🪙 **Hexstream** : filament doré qui parcourt l'arc du carrousel, avec 3 particules qui dérivent de bas en haut
 
 ### Le thème **Zaun / Shimmer ☣**
-Les bas-fonds chimiques de Piltover, façon Singed / Twitch / Zac / Shimmer dans Arcane. Une vraie ambiance toxique et industrielle :
-- ☣ Cadre central en dégradé toxique (vert acide → vert profond)
+Les bas-fonds chimiques de Piltover, façon Singed / Twitch / Zac / Shimmer dans Arcane. Une vraie ambiance toxique et industrielle vivante :
+- ☣ Cadre central en dégradé toxique (vert acide → vert profond) avec **vignettage interne** simulant le résidu chimique sur le verre
+- 💧 **Goutte qui tombe** sous le slot central — formation, dangle, chute, dispersion (cycle 5 s)
 - 🧪 Pulse instable avec **shift chromatique** vers le jaune-acide au pic (réaction chimique)
-- 💨 **Smogstream** : pipe industrielle dashée qui s'écoule, avec des **bulles toxiques qui remontent** (vapeurs chimiques)
-- 💜 Champions joués marqués en **magenta Shimmer** (référence à la drogue d'Arcane qui transforme les corps)
+- 💨 **Smogstream multi-couches** :
+  - Nappes de smog qui dérivent vers le haut (3 grosses radial gradients)
+  - Pipe industrielle qui fuit (dasharray irrégulier)
+  - 5 bulles avec **vrai relief 3D** (highlight interne via radial gradient), wobble organique (mouvement chaotique non périodique)
+  - 1 rare bulle **Shimmer magenta** qui passe toutes les ~17 s (événement visuel)
+- 💜 Champions joués marqués en **magenta Shimmer** (référence à la drogue d'Arcane)
 - 🔆 Nom du champion en vert acide avec un **flicker très rare** type enseigne néon défectueuse
 
 > 💡 D'autres thèmes (Summoner's Rift) arriveront dans les prochaines versions. Si tu as une idée de thème, ouvre une issue !

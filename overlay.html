@@ -102,37 +102,81 @@
         </circle>
       </svg>
 
-      <!-- Smogstream : équivalent Zaun du Hexstream. Pipe industrielle
-           dashée (cassée) qui dégouline le long du carrousel, et bulles
-           toxiques qui REMONTENT (vapeurs chimiques qui s'élèvent).
-           Cachée par défaut, visible uniquement sur le thème Zaun.
-           Couleurs : vert chimique (Shimmer), jaune acide. -->
+      <!-- Smogstream — Refonte v1.3 (vraiment Zaun, pas Hextech-en-vert).
+           ============================================================
+           3 couches superposées :
+             1. Nappes de smog environnemental (3 grosses radial
+                gradients diffuses qui montent lentement, dérivent
+                horizontalement, grossissent). Imprègne l'overlay
+                sans le saturer.
+             2. Pipe industrielle erratique (stroke-dasharray
+                irrégulier, flow inversé pour suivre la direction
+                des bulles).
+             3. Bulles avec relief 3D (radialGradient interne
+                simulant un point de lumière en haut-gauche), tailles
+                variées, wobble indépendant du chemin (cx animé en
+                parallèle du déplacement le long du path), breath
+                respiration sur le rayon. 4 bulles vertes + 1 rare
+                bulle Shimmer magenta qui passe toutes les ~17s.
+
+           Cachée par défaut, visible uniquement sur le thème Zaun. -->
       <svg id="smog-stream" viewBox="-110 -450 220 900"
            preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         <defs>
-          <!-- Dégradé toxique le long de la pipe : vert chimique avec
-               un pic jaune-acide au milieu. Fondu aux extrémités. -->
+          <!-- Bulle verte avec highlight interne en haut-gauche.
+               cx/cy à 35%/30% = point lumineux décalé → relief
+               simulé en CSS pur, pas de SVG en couches superposées. -->
+          <radialGradient id="bubble-green-grad" cx="35%" cy="30%">
+            <stop offset="0%"   stop-color="rgba(255, 255, 255, 0.85)"/>
+            <stop offset="22%"  stop-color="rgba(217, 255, 158, 0.55)"/>
+            <stop offset="100%" stop-color="rgba(95, 196, 110, 0.25)"/>
+          </radialGradient>
+
+          <!-- Bulle Shimmer magenta avec le même principe de highlight. -->
+          <radialGradient id="bubble-shimmer-grad" cx="35%" cy="30%">
+            <stop offset="0%"   stop-color="rgba(255, 255, 255, 0.85)"/>
+            <stop offset="22%"  stop-color="rgba(237, 148, 212, 0.60)"/>
+            <stop offset="100%" stop-color="rgba(217, 67, 196, 0.30)"/>
+          </radialGradient>
+
+          <!-- Nappe de smog : très diffuse, fade aux bords. -->
+          <radialGradient id="smoke-cloud-grad">
+            <stop offset="0%"   stop-color="rgba(95, 196, 110, 0.40)"/>
+            <stop offset="50%"  stop-color="rgba(95, 196, 110, 0.18)"/>
+            <stop offset="100%" stop-color="rgba(95, 196, 110, 0)"/>
+          </radialGradient>
+
+          <!-- Nappe Shimmer occasionnelle pour la touche violacée. -->
+          <radialGradient id="shimmer-cloud-grad">
+            <stop offset="0%"   stop-color="rgba(217, 67, 196, 0.30)"/>
+            <stop offset="50%"  stop-color="rgba(217, 67, 196, 0.12)"/>
+            <stop offset="100%" stop-color="rgba(217, 67, 196, 0)"/>
+          </radialGradient>
+
+          <!-- Dégradé de la pipe (kept). -->
           <linearGradient id="smog-spine-grad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%"   stop-color="#5fc46e" stop-opacity="0"/>
-            <stop offset="15%"  stop-color="#5fc46e" stop-opacity="0.20"/>
-            <stop offset="50%"  stop-color="#9eff5f" stop-opacity="0.45"/>
-            <stop offset="85%"  stop-color="#5fc46e" stop-opacity="0.20"/>
+            <stop offset="15%"  stop-color="#5fc46e" stop-opacity="0.18"/>
+            <stop offset="50%"  stop-color="#9eff5f" stop-opacity="0.40"/>
+            <stop offset="85%"  stop-color="#5fc46e" stop-opacity="0.18"/>
             <stop offset="100%" stop-color="#5fc46e" stop-opacity="0"/>
           </linearGradient>
 
-          <!-- Glow plus large que Hextech : la vapeur toxique est diffuse,
-               pas nette comme la lumière hextech. -->
-          <filter id="smog-glow" x="-150%" y="-150%" width="400%" height="400%">
-            <feGaussianBlur stdDeviation="2.2" result="b"/>
+          <!-- Blur très large pour les nappes de smog : effet "brume". -->
+          <filter id="smoke-heavy-blur" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="6"/>
+          </filter>
+
+          <!-- Blur subtil pour les bulles : juste un poil de glow,
+               on garde la netteté du highlight. -->
+          <filter id="bubble-glow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="0.7" result="b"/>
             <feMerge>
               <feMergeNode in="b"/>
               <feMergeNode in="SourceGraphic"/>
             </feMerge>
           </filter>
 
-          <!-- Path identique à Hextech (cohérence structurelle), mais
-               on l'utilisera EN SENS INVERSE pour les particules
-               (montée des vapeurs toxiques). -->
           <path id="smog-spine"
                 d="M -80,-420
                    Q -80,-385 -80,-360
@@ -144,82 +188,131 @@
                 fill="none"/>
         </defs>
 
-        <!-- Pipe dashée : "tuyau cassé" industriel, pas un filament
-             magique poli. stroke-dasharray créé un pointillé, et
-             stroke-dashoffset animé fait défiler la chaîne vers le
-             haut comme un flux qui s'évacue. -->
+        <!-- ======================================================
+             COUCHE 1 — Nappes de smog environnemental
+             ======================================================
+             3 grosses radial gradients qui dérivent du bas vers le
+             haut, en grossissant et en dérivant légèrement
+             horizontalement (la fumée disperse en montant). Toutes
+             passent par le filtre heavy-blur pour un effet de brume
+             diffuse, pas de "balle". Une des nappes est en
+             magenta Shimmer pour imprégner discrètement le décor. -->
+        <g filter="url(#smoke-heavy-blur)">
+          <circle cx="-65" cy="380" r="22" fill="url(#smoke-cloud-grad)">
+            <animate attributeName="cy" values="380; -420" dur="22s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="-65; -82; -70; -90" dur="22s" repeatCount="indefinite"/>
+            <animate attributeName="r"  values="20; 26; 32; 28" dur="22s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.55; 0.40; 0" keyTimes="0; 0.25; 0.75; 1" dur="22s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="-95" cy="200" r="18" fill="url(#smoke-cloud-grad)">
+            <animate attributeName="cy" values="200; -420" dur="29s" begin="6s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="-95; -75; -98; -65" dur="29s" begin="6s" repeatCount="indefinite"/>
+            <animate attributeName="r"  values="16; 22; 28" dur="29s" begin="6s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.50; 0.35; 0" keyTimes="0; 0.25; 0.75; 1" dur="29s" begin="6s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="-50" cy="0" r="20" fill="url(#shimmer-cloud-grad)">
+            <animate attributeName="cy" values="0; -420" dur="35s" begin="13s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="-50; -70; -55; -80" dur="35s" begin="13s" repeatCount="indefinite"/>
+            <animate attributeName="r"  values="18; 24; 30" dur="35s" begin="13s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.40; 0.25; 0" keyTimes="0; 0.25; 0.75; 1" dur="35s" begin="13s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+
+        <!-- ======================================================
+             COUCHE 2 — Pipe industrielle qui s'écoule vers le haut
+             ======================================================
+             Dasharray irrégulier "2 4 5 3" pour un effet "tuyau qui
+             fuit" plutôt qu'un pointillé propre. Le offset est animé
+             POSITIVEMENT (et non négativement) pour que les segments
+             remontent — cohérent avec la direction des bulles. -->
         <use href="#smog-spine"
              stroke="url(#smog-spine-grad)"
              stroke-width="1.4"
              stroke-linecap="round"
-             stroke-dasharray="3 5"
-             fill="none"
-             filter="url(#smog-glow)">
+             stroke-dasharray="2 4 5 3"
+             fill="none">
           <animate attributeName="stroke-dashoffset"
-                   values="0; 16"
-                   dur="4s"
+                   values="0; 14"
+                   dur="3.5s"
                    repeatCount="indefinite"/>
         </use>
 
-        <!-- Bulles toxiques qui REMONTENT (keyPoints="1;0" inverse la
-             direction du chemin → particules vont de bas en haut).
-             Trois bulles avec tailles, durées et délais différents.
-             Le radius est animé pour un effet "bulle qui respire" en
-             plus du déplacement → vivantes, pas mécaniques.
-             Stroke + fill semi-transparent → vraies bulles, pas points. -->
+        <!-- ======================================================
+             COUCHE 3 — Bulles avec relief 3D + wobble organique
+             ======================================================
+             Chaque bulle :
+               - fill = radialGradient avec highlight haut-gauche
+                 (effet "savon de chimie", pas un point lumineux)
+               - stroke = bordure plus contrastée
+               - animateMotion = parcours le chemin (de bas en haut)
+               - animate cx = wobble horizontal indépendant
+                 (déplace la bulle en LOCAL avant le transform de
+                 motion → on perçoit une dérive autour du chemin)
+               - animate r = breath (la bulle respire en taille)
+               - animate opacity = fade in/out aux extrémités
+             Tous les timings sont en nombres premiers entre eux
+             (2.7s vs 1.9s vs 2.3s vs 11s vs 7s vs 9s) pour qu'aucune
+             périodicité ne se synchronise → mouvement chaotique réel. -->
 
-        <circle r="2.8"
-                fill="rgba(158, 255, 95, 0.55)"
-                stroke="rgba(158, 255, 95, 0.95)"
-                stroke-width="0.4"
-                filter="url(#smog-glow)">
-          <animateMotion dur="11s" repeatCount="indefinite"
-                         keyPoints="1;0" keyTimes="0;1">
+        <!-- Bulle 1 : medium green -->
+        <circle r="2.8" fill="url(#bubble-green-grad)"
+                stroke="rgba(158, 255, 95, 0.85)" stroke-width="0.4"
+                filter="url(#bubble-glow)">
+          <animateMotion dur="11s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
             <mpath href="#smog-spine"/>
           </animateMotion>
-          <animate attributeName="opacity"
-                   values="0; 0.85; 0.85; 0"
-                   keyTimes="0; 0.15; 0.85; 1"
-                   dur="11s" repeatCount="indefinite"/>
-          <animate attributeName="r"
-                   values="2.5; 3.2; 2.5"
-                   dur="2.8s" repeatCount="indefinite"/>
+          <animate attributeName="cx" values="0; 2.5; -1.5; 1.8; 0" dur="2.7s" repeatCount="indefinite"/>
+          <animate attributeName="r"  values="2.6; 3.1; 2.6; 2.9; 2.6" dur="3.1s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="11s" repeatCount="indefinite"/>
         </circle>
 
-        <circle r="1.9"
-                fill="rgba(95, 196, 110, 0.50)"
-                stroke="rgba(95, 196, 110, 0.85)"
-                stroke-width="0.3"
-                filter="url(#smog-glow)">
-          <animateMotion dur="9s" begin="3s" repeatCount="indefinite"
-                         keyPoints="1;0" keyTimes="0;1">
+        <!-- Bulle 2 : small green -->
+        <circle r="1.6" fill="url(#bubble-green-grad)"
+                stroke="rgba(158, 255, 95, 0.75)" stroke-width="0.3"
+                filter="url(#bubble-glow)">
+          <animateMotion dur="7s" begin="2s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
             <mpath href="#smog-spine"/>
           </animateMotion>
-          <animate attributeName="opacity"
-                   values="0; 0.75; 0.75; 0"
-                   keyTimes="0; 0.15; 0.85; 1"
-                   dur="9s" begin="3s" repeatCount="indefinite"/>
-          <animate attributeName="r"
-                   values="1.7; 2.2; 1.7"
-                   dur="2.2s" begin="3s" repeatCount="indefinite"/>
+          <animate attributeName="cx" values="0; -1.6; 2; -1; 0" dur="1.9s" begin="2s" repeatCount="indefinite"/>
+          <animate attributeName="r"  values="1.4; 1.9; 1.4" dur="2.3s" begin="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.78; 0.78; 0" keyTimes="0; 0.15; 0.85; 1" dur="7s" begin="2s" repeatCount="indefinite"/>
         </circle>
 
-        <circle r="1.4"
-                fill="rgba(217, 255, 158, 0.7)"
-                stroke="rgba(158, 255, 95, 0.6)"
-                stroke-width="0.25"
-                filter="url(#smog-glow)">
-          <animateMotion dur="13s" begin="6s" repeatCount="indefinite"
-                         keyPoints="1;0" keyTimes="0;1">
+        <!-- Bulle 3 : tiny green -->
+        <circle r="1.0" fill="url(#bubble-green-grad)"
+                stroke="rgba(158, 255, 95, 0.6)" stroke-width="0.2"
+                filter="url(#bubble-glow)">
+          <animateMotion dur="6s" begin="4s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
             <mpath href="#smog-spine"/>
           </animateMotion>
-          <animate attributeName="opacity"
-                   values="0; 0.85; 0.85; 0"
-                   keyTimes="0; 0.15; 0.85; 1"
-                   dur="13s" begin="6s" repeatCount="indefinite"/>
-          <animate attributeName="r"
-                   values="1.2; 1.7; 1.2"
-                   dur="3s" begin="6s" repeatCount="indefinite"/>
+          <animate attributeName="cx" values="0; 2; -1; 1.5; 0" dur="1.7s" begin="4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="6s" begin="4s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Bulle 4 : medium green -->
+        <circle r="2.2" fill="url(#bubble-green-grad)"
+                stroke="rgba(158, 255, 95, 0.85)" stroke-width="0.35"
+                filter="url(#bubble-glow)">
+          <animateMotion dur="9s" begin="3.5s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
+            <mpath href="#smog-spine"/>
+          </animateMotion>
+          <animate attributeName="cx" values="0; -2.2; 1.2; -1.5; 0" dur="2.3s" begin="3.5s" repeatCount="indefinite"/>
+          <animate attributeName="r"  values="2.0; 2.5; 2.0" dur="2.6s" begin="3.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.80; 0.80; 0" keyTimes="0; 0.15; 0.85; 1" dur="9s" begin="3.5s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Bulle 5 : RARE Shimmer magenta — la signature visuelle de
+             Zaun qui passe environ une fois sur 4 cycles, créant un
+             "événement" visuel qui récompense l'attention. -->
+        <circle r="2.0" fill="url(#bubble-shimmer-grad)"
+                stroke="rgba(237, 148, 212, 0.85)" stroke-width="0.4"
+                filter="url(#bubble-glow)">
+          <animateMotion dur="17s" begin="9s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
+            <mpath href="#smog-spine"/>
+          </animateMotion>
+          <animate attributeName="cx" values="0; 1.8; -2; 0.8; 0" dur="2.5s" begin="9s" repeatCount="indefinite"/>
+          <animate attributeName="r"  values="1.8; 2.4; 1.8" dur="2.9s" begin="9s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.18; 0.82; 1" dur="17s" begin="9s" repeatCount="indefinite"/>
         </circle>
       </svg>
 

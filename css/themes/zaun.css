@@ -50,6 +50,15 @@ body.theme-zaun .slot.is-current .slot-frame {
   );
 }
 
+/* Vignettage interne : résidu chimique accumulé sur les bords du
+   "verre" de la fiole. Subtil mais ajoute du grain au look "fiole
+   sale" qui distingue Zaun d'un cadre propre. */
+body.theme-zaun .slot.is-current .slot-frame-inner {
+  box-shadow:
+    inset 0 0 12px rgba(20, 50, 25, 0.65),
+    inset 0 -6px 14px rgba(15, 40, 20, 0.45);
+}
+
 /* Pile de drop-shadow pour un glow chimique. Même technique que
    Hextech mais avec un SHIFT CHROMATIQUE au peak : les couches
    internes virent au jaune-acide (#9eff5f) à 50% du cycle, simulant
@@ -202,7 +211,7 @@ body.theme-zaun #global-counter {
 }
 
 /* ----------------------------------------------------------------
-   Smogstream — pipe industrielle + bulles toxiques montantes
+   Smogstream — nappes de smog + pipe + bulles 3D
    ----------------------------------------------------------------
    Le SVG #smog-stream est statique dans overlay.html, on bascule
    son opacity pour un fade-in propre au changement de thème.
@@ -210,4 +219,73 @@ body.theme-zaun #global-counter {
 
 body.theme-zaun #smog-stream {
   opacity: 1;
+}
+
+/* ----------------------------------------------------------------
+   Goutte qui tombe sous le slot central
+   ----------------------------------------------------------------
+   Détail signature des labos chimiques d'Arcane / Zaun. Une petite
+   goutte verte se forme en bas du cadre, dangle, allonge, tombe et
+   se disperse, en cycle de 5s. Posée via ::after sur #slots
+   (élément stable du DOM, contrairement à .slot.is-current qui est
+   recréé à chaque navigation → l'animation aurait des restarts
+   visibles).
+
+   La goutte tombe entre le bord bas du slot central (y = +90 du
+   centre du carrousel) et le bord haut du slot next1 (y = +150) —
+   il y a 60 px de gap, on l'occupe sur ~30 px max.
+
+   Cachée par défaut, n'apparaît que sur le thème Zaun. */
+#slots::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  width: 5px;
+  height: 9px;
+  bottom: -2px;
+  left: calc(50% - 2.5px);
+  border-radius: 50% 50% 60% 60%;
+  background: radial-gradient(
+    ellipse at 35% 30%,
+    rgba(255, 255, 255, 0.85) 0%,
+    #c8ff7f 18%,
+    #5fc46e 55%,
+    #2d8f3f 100%
+  );
+  filter: drop-shadow(0 0 4px rgba(95, 196, 110, 0.65));
+  opacity: 0;
+  z-index: 5;
+}
+
+body.theme-zaun #slots::after {
+  animation: zaun-drip 5s ease-in infinite;
+}
+
+@keyframes zaun-drip {
+  /* Phase 1 (0-50%) : invisible, attente. Donne du rythme — la
+     goutte n'est pas en flux continu, elle se forme par moments. */
+  0%, 50% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.3, 0.5);
+  }
+  /* Phase 2 (60%) : la goutte se forme à la base du cadre. */
+  60% {
+    opacity: 0.85;
+    transform: translateY(0) scale(0.85, 1);
+  }
+  /* Phase 3 (75%) : la goutte dangle et s'allonge sous son poids. */
+  75% {
+    opacity: 1;
+    transform: translateY(8px) scale(1, 1.5);
+  }
+  /* Phase 4 (90%) : la goutte tombe, déformée par la chute. */
+  90% {
+    opacity: 0.55;
+    transform: translateY(26px) scale(1.4, 0.7);
+  }
+  /* Phase 5 (100%) : dispersion. */
+  100% {
+    opacity: 0;
+    transform: translateY(38px) scale(1.7, 0.4);
+  }
 }

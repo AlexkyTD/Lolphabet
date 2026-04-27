@@ -6,6 +6,28 @@ Le projet suit (à peu près) le [versioning sémantique](https://semver.org/lan
 
 ---
 
+## [1.3.0] — 2026-04-27
+
+### ☣ Refonte en profondeur du thème Zaun
+
+La v1.2 livrait un Zaun "Hextech-en-vert", trop paresseux. Cette version refait le thème pour qu'il dégage une vraie ambiance Zaun — chaotique, chimique, vivante.
+
+### Modifié — Smogstream entièrement refait
+- **Couche 1 ajoutée — Nappes de smog environnemental** : 3 grosses radial gradients très diffuses qui montent du bas vers le haut en grossissant et en dérivant horizontalement (la fumée disperse en s'élevant). Une nappe est en magenta Shimmer pour imprégner discrètement le décor. Filtrées par un `feGaussianBlur stdDeviation="6"` pour un effet de brume, pas des balles colorées.
+- **Couche 2 — Pipe industrielle plus erratique** : `stroke-dasharray="2 4 5 3"` (au lieu de `3 5`) pour un effet "tuyau qui fuit" plutôt qu'un pointillé propre.
+- **Couche 3 — Bulles avec relief 3D** :
+  - Chaque bulle utilise un `radialGradient` avec `cx="35%" cy="30%"` simulant un point lumineux en haut-gauche → effet "savon de chimie", relief 3D pur CSS, pas de couches superposées.
+  - 5 bulles au total (4 vertes de tailles 1.0 → 2.8 + 1 rare bulle Shimmer magenta qui passe toutes les ~17 s) au lieu de 3 bulles uniformes.
+  - **Wobble organique** : animation `cx` indépendante du chemin, avec valeurs en nombres premiers entre eux (2.7s, 1.9s, 1.7s, 2.3s, 2.5s) → aucune périodicité ne se synchronise, mouvement réellement chaotique.
+
+### Ajouté — Goutte qui tombe sous le slot central
+Détail signature des labos chimiques d'Arcane. Une goutte verte se forme à la base du cadre, dangle, s'allonge sous son poids, tombe, et se disperse en cycle de 5 s. 5 phases distinctes de keyframes (formation, dangle, élongation, chute, dispersion). Posée via `::after` sur `#slots` (élément stable du DOM) plutôt que sur `.slot.is-current` qui est recréé à chaque navigation.
+
+### Ajouté — Vignettage interne du cadre
+Inset shadow vert sombre sur `.slot-frame-inner` du slot central → simule le résidu chimique accumulé sur les bords du "verre" de la fiole. Subtil mais ajoute du grain au look "fiole sale" qui distingue Zaun d'un cadre propre.
+
+---
+
 ## [1.2.1] — 2026-04-27
 
 ### Ajouté
@@ -184,6 +206,7 @@ Toutes les fonctionnalités des versions antérieures sont conservées sans chan
 - Synchro overlay ↔ contrôle via triple mécanisme (BroadcastChannel + storage event + polling 500 ms) pour garantir que ça marche dans tous les contextes (file://, OBS CEF, etc.).
 - README, LICENSE (MIT), .gitignore, CAHIER_DES_CHARGES.
 
+[1.3.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.3.0
 [1.2.1]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.2.1
 [1.2.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.2.0
 [1.1.1]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.1.1
