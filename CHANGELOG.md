@@ -6,6 +6,33 @@ Le projet suit (à peu près) le [versioning sémantique](https://semver.org/lan
 
 ---
 
+## [1.2.0] — 2026-04-27
+
+### ☣ Nouveau thème : **Zaun / Shimmer**
+
+Les bas-fonds chimiques de Piltover. Pas un "Hextech en vert" — une vraie identité visuelle distincte, fidèle à l'univers de Singed, Twitch, Zac, Warwick, et de la série Arcane.
+
+### Ajouté
+- **Thème `zaun`** dans `css/themes/zaun.css` (~170 lignes), activable depuis le panneau `Apparence`.
+  - Palette : vert chimique (`#5fc46e`), jaune-acide (`#9eff5f`), vert sombre industriel (`#1a4a25`), magenta Shimmer (`#d943c4`).
+  - Cadre central en dégradé toxique (vert clair en haut → vert sombre en bas).
+  - **Pulse plus rapide** que Hextech (3.8s vs 4.5s) avec **shift chromatique** vers jaune-acide au peak → effet "réaction chimique instable".
+  - **Champions joués marqués en magenta Shimmer** au lieu de vert (vu que vert est la couleur dominante du thème) → contraste fort + référence à la drogue d'Arcane.
+  - Nom du champion en vert acide avec **flicker très rare** (~70 ms toutes les 7 s) → ambiance enseigne néon défectueuse.
+  - Compteur global en vert toxique sur fond noir-vert.
+- **Smogstream** (`#smog-stream` dans `overlay.html`) : équivalent Zaun du Hexstream, avec une identité visuelle distincte :
+  - Filament en **pipe industrielle dashée** (`stroke-dasharray="3 5"`) qui s'écoule en continu (`stroke-dashoffset` animé) — pas un filament magique poli.
+  - Particules en forme de **bulles** (cercles avec `stroke` + `fill` semi-transparent) qui **remontent** le long du chemin (`keyPoints="1;0"` inverse la direction) — vapeurs toxiques qui s'élèvent au lieu de magie qui dérive.
+  - Le radius des bulles est **animé** indépendamment du déplacement → effet "bulle qui respire" en plus du mouvement, plus organique.
+  - Glow plus diffus que Hextech (`feGaussianBlur stdDeviation="2.2"` vs `1.6`) → vapeur diffuse plutôt que lumière nette.
+- `Settings.ENUM_VALUES.theme` étendu à `['default', 'hextech', 'zaun']`.
+- Option Zaun ajoutée dans le dropdown du panneau de contrôle.
+
+### Sous le capot
+- Le `#smog-stream` réutilise la même viewBox et la même structure de path que le `#hex-stream` pour cohérence structurelle, mais avec ses propres particules (timings, couleurs, formes, sens) → l'architecture des thèmes facilite la duplication tout en permettant une vraie différenciation.
+
+---
+
 ## [1.1.1] — 2026-04-27
 
 ### 🎨 Polissage visuel — qualité Riot Games
@@ -147,6 +174,8 @@ Toutes les fonctionnalités des versions antérieures sont conservées sans chan
 - Synchro overlay ↔ contrôle via triple mécanisme (BroadcastChannel + storage event + polling 500 ms) pour garantir que ça marche dans tous les contextes (file://, OBS CEF, etc.).
 - README, LICENSE (MIT), .gitignore, CAHIER_DES_CHARGES.
 
+[1.2.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.2.0
+[1.1.1]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.1.1
 [1.1.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.1.0
 [1.0.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.0.0
 [0.5.1]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v0.5.1

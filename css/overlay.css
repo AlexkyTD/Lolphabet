@@ -121,8 +121,10 @@ body.opt-global-counter #global-counter {
 /* Hexstream — SVG décoratif positionné par-dessus le centre du
    carrousel. Sa viewBox (-110 -450 220 900) reproduit le système
    de coords des slots (origine au centre, mêmes pixels). Caché par
-   défaut, montré uniquement par le thème Hextech. */
-#hex-stream {
+   défaut, montré uniquement par le thème correspondant. Le
+   Smogstream (Zaun) suit la même structure. */
+#hex-stream,
+#smog-stream {
   position: absolute;
   top: 50%;
   left: 50%;

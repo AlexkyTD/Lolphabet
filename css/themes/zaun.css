@@ -1,0 +1,213 @@
+/* themes/zaun.css — thème "Zaun / Shimmer"
+   ----------------------------------------------------------------
+   Inspiré de l'univers visuel de Zaun dans League of Legends et
+   la série Arcane : les bas-fonds chimiques de Piltover, les
+   chem-barons, Singed, Twitch, Zac, le Shimmer.
+
+   On ne fait PAS un "Hextech en vert" : Zaun a sa propre âme
+   visuelle, plus toxique, plus instable, plus industrielle.
+
+   Choix de design pour faire RESSENTIR Zaun :
+     - Vert chimique dominant (#5fc46e), avec pic jaune-acide
+       (#9eff5f) au peak du pulse → instabilité chimique
+     - Magenta Shimmer (#d943c4) sur les champions joués →
+       contraste fort, signature reconnaissable
+     - Pulse plus rapide (3.8s vs 4.5s pour Hextech) → moins
+       posé, plus "vivant" / agressif
+     - Filament en pipe industrielle dashée qui s'écoule, pas
+       un filament magique poli
+     - Bulles toxiques qui REMONTENT (vapeurs qui s'élèvent) au
+       lieu de particules qui dérivent
+     - Flicker très rare sur le nom (~70ms toutes les 7s) → effet
+       néon défectueux, ambiance underground
+   ---------------------------------------------------------------- */
+
+/* --- Palette --- */
+body.theme-zaun {
+  --color-toxic:        #5fc46e;   /* vert chimique principal */
+  --color-toxic-bright: #9eff5f;   /* jaune-acide pour les pics */
+  --color-toxic-dark:   #1a4a25;   /* vert sombre industriel */
+  --color-shimmer:      #d943c4;   /* magenta Shimmer */
+  --color-shimmer-soft: #ed94d4;   /* magenta clair */
+  --color-rust:         #7a4520;   /* cuivre sale (accent industriel) */
+}
+
+/* ----------------------------------------------------------------
+   Slot central — bordure toxique + glow chimique pulsant
+   ----------------------------------------------------------------
+   Au lieu d'un dégradé doré "métal poli", on simule une bordure
+   chimique : vert clair en haut (chimique frais), vert profond
+   au milieu, sombre en bas (résidus). Comme si la bordure baignait
+   dans une substance toxique.
+   ---------------------------------------------------------------- */
+
+body.theme-zaun .slot.is-current .slot-frame {
+  background: linear-gradient(
+    180deg,
+    var(--color-toxic-bright) 0%,
+    var(--color-toxic) 40%,
+    var(--color-toxic-dark) 100%
+  );
+}
+
+/* Pile de drop-shadow pour un glow chimique. Même technique que
+   Hextech mais avec un SHIFT CHROMATIQUE au peak : les couches
+   internes virent au jaune-acide (#9eff5f) à 50% du cycle, simulant
+   une réaction chimique instable qui s'emballe. */
+body.theme-zaun .slot.is-current {
+  filter:
+    drop-shadow(0 0 1px rgba(95, 196, 110, 0.95))
+    drop-shadow(0 0 4px rgba(95, 196, 110, 0.45))
+    drop-shadow(0 0 12px rgba(95, 196, 110, 0.22))
+    drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
+  animation: zaun-pulse 3.8s ease-in-out infinite;
+}
+
+@keyframes zaun-pulse {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 1px rgba(95, 196, 110, 0.95))
+      drop-shadow(0 0 3px rgba(95, 196, 110, 0.40))
+      drop-shadow(0 0 10px rgba(95, 196, 110, 0.20))
+      drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
+  }
+  50% {
+    /* Pic : shift vers jaune-acide. Réaction chimique instable. */
+    filter:
+      drop-shadow(0 0 1px rgba(158, 255, 95, 0.95))
+      drop-shadow(0 0 7px rgba(158, 255, 95, 0.60))
+      drop-shadow(0 0 16px rgba(95, 196, 110, 0.32))
+      drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
+  }
+}
+
+/* ----------------------------------------------------------------
+   Aura chimique — vapeur toxique pulsante
+   ----------------------------------------------------------------
+   Halo radial en deux couches. Cœur jaune-vert très clair (le
+   "noyau réactif"), puis halo vert principal. mix-blend-mode:
+   screen pour l'effet émissif. Respiration plus rapide qu'Hextech
+   (3.8s) pour le côté instable.
+   ---------------------------------------------------------------- */
+
+body.theme-zaun .slot.is-current .slot-aura {
+  opacity: 1;
+  background:
+    /* Cœur jaune-vert chimique */
+    radial-gradient(
+      circle at center,
+      rgba(217, 255, 158, 0.40) 0%,
+      rgba(158, 255, 95, 0.22) 12%,
+      transparent 32%
+    ),
+    /* Halo vert principal, resserré */
+    radial-gradient(
+      circle at center,
+      rgba(95, 196, 110, 0.28) 25%,
+      rgba(95, 196, 110, 0.10) 45%,
+      transparent 65%
+    );
+  animation: zaun-breath 3.8s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes zaun-breath {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.07);
+    opacity: 1;
+  }
+}
+
+/* ----------------------------------------------------------------
+   Slots non-centraux — vert sale industriel
+   ----------------------------------------------------------------
+   On reste dans la palette toxique mais sombre, plus "boue
+   chimique" que vert vif, pour ne pas concurrencer le slot
+   central.
+   ---------------------------------------------------------------- */
+
+body.theme-zaun .slot:not(.is-current) .slot-frame {
+  background: rgba(60, 90, 60, 0.75);
+}
+
+/* ----------------------------------------------------------------
+   Marquage des champions joués — Shimmer magenta
+   ----------------------------------------------------------------
+   Vert étant la couleur dominante du thème, on shift les "joués"
+   vers le magenta Shimmer pour un contraste visuel fort. Référence
+   directe à la drogue Shimmer qui transforme les corps dans
+   Arcane → "ces champions ont été 'transformés' par ton aventure".
+   ---------------------------------------------------------------- */
+
+body.theme-zaun.opt-mark-past .slot.is-past .slot-frame {
+  background: linear-gradient(
+    180deg,
+    var(--color-shimmer-soft) 0%,
+    var(--color-shimmer) 50%,
+    #7a2868 100%
+  );
+}
+
+body.theme-zaun.opt-mark-past .slot.is-past .slot-status {
+  color: var(--color-shimmer-soft);
+  text-shadow:
+    0 0 4px rgba(0, 0, 0, 0.95),
+    0 0 12px rgba(217, 67, 196, 0.60),
+    0 0 4px rgba(217, 67, 196, 0.45),
+    2px 2px 0 rgba(0, 0, 0, 0.9);
+}
+
+/* ----------------------------------------------------------------
+   Nom du champion — vert acide + flicker néon
+   ----------------------------------------------------------------
+   Couleur acide pour la lisibilité contrastée avec le fond
+   transparent. Flicker très rare (1 fois toutes les 7s, durée
+   ~70ms) → effet enseigne néon défectueuse, pas distrayant en
+   stream mais ajoute de la vie à l'overlay.
+   ---------------------------------------------------------------- */
+
+body.theme-zaun #champion-name {
+  color: #c8ff7f;
+  text-shadow:
+    0 0 4px rgba(0, 0, 0, 0.95),
+    0 0 14px rgba(95, 196, 110, 0.65),
+    0 0 24px rgba(95, 196, 110, 0.30),
+    0 2px 4px rgba(0, 0, 0, 0.9),
+    2px 2px 0 rgba(0, 0, 0, 0.9);
+  animation: zaun-flicker 7s steps(1, end) infinite;
+}
+
+@keyframes zaun-flicker {
+  0%, 91.8%, 92.8%, 100% { opacity: 1; }
+  92%   { opacity: 0.55; }
+  92.4% { opacity: 0.85; }
+}
+
+/* ----------------------------------------------------------------
+   Compteur global — accent vert toxique
+   ---------------------------------------------------------------- */
+
+body.theme-zaun #global-counter {
+  background: rgba(15, 30, 18, 0.92);
+  border-color: rgba(95, 196, 110, 0.65);
+  color: #c8ff7f;
+  letter-spacing: 0.16em;
+  box-shadow:
+    inset 0 0 0 1px rgba(95, 196, 110, 0.30),
+    0 4px 16px rgba(0, 0, 0, 0.75);
+}
+
+/* ----------------------------------------------------------------
+   Smogstream — pipe industrielle + bulles toxiques montantes
+   ----------------------------------------------------------------
+   Le SVG #smog-stream est statique dans overlay.html, on bascule
+   son opacity pour un fade-in propre au changement de thème.
+   ---------------------------------------------------------------- */
+
+body.theme-zaun #smog-stream {
+  opacity: 1;
+}

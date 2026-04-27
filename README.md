@@ -105,20 +105,27 @@ Carte **"Apparence"** du panneau de contrôle, deux choix indépendants :
 
 | Réglage | Choix disponibles | Effet |
 |---|---|---|
-| **Thème visuel** | `Classique` (défaut) · `Hextech / Piltover ✨` | Ambiance globale : couleurs, glows, typo, effets magiques |
+| **Thème visuel** | `Classique` (défaut) · `Hextech / Piltover ✨` · `Zaun / Shimmer ☣` | Ambiance globale : couleurs, glows, typo, effets magiques |
 | **Forme des cadres** | `Carré arrondi` (défaut) · `Hexagonal ⬡` | Forme des icônes du carrousel |
 
 Les deux options se combinent librement (ex. Hextech + Hexagonal pour un look pile inspiré d'Arcane, ou Classique + Hexagonal pour un look LoL plus sobre).
 
-### Le thème **Hextech / Piltover**
-Inspiré directement de l'univers visuel de la série Arcane : or chaud, cuivre, bleu nuit, magie hextech. Au programme :
-- 🌟 Aura conique dorée qui tourne lentement derrière le champion en cours
-- 💛 Glow doré pulsant sur l'icône centrale (effet "vivant")
-- 🖼️ Vignettage radial sombre en arrière-plan pour donner du poids
-- ✨ Cadre central avec double bordure dorée façon ouvrage Piltover
-- 📜 Nom du champion en typo **Cinzel** avec effet métal embouti doré
+### Le thème **Hextech / Piltover ✨**
+Inspiré directement de l'univers visuel de la série Arcane : or chaud, cadres dorés, magie hextech. Au programme :
+- 💛 Cadre central en dégradé or (clair → sombre) façon métal poli Piltover
+- 🌟 Halo radial doré qui respire derrière le champion en cours
+- ✨ Glow volumétrique en pile de drop-shadow (1px crisp + couches diffuses)
+- 🪙 **Hexstream** : filament doré qui parcourt l'arc du carrousel, avec 3 particules qui dérivent de bas en haut
 
-> 💡 D'autres thèmes (Zaun / Shimmer, Summoner's Rift) arriveront dans les prochaines versions. Si tu as une idée de thème, ouvre une issue !
+### Le thème **Zaun / Shimmer ☣**
+Les bas-fonds chimiques de Piltover, façon Singed / Twitch / Zac / Shimmer dans Arcane. Une vraie ambiance toxique et industrielle :
+- ☣ Cadre central en dégradé toxique (vert acide → vert profond)
+- 🧪 Pulse instable avec **shift chromatique** vers le jaune-acide au pic (réaction chimique)
+- 💨 **Smogstream** : pipe industrielle dashée qui s'écoule, avec des **bulles toxiques qui remontent** (vapeurs chimiques)
+- 💜 Champions joués marqués en **magenta Shimmer** (référence à la drogue d'Arcane qui transforme les corps)
+- 🔆 Nom du champion en vert acide avec un **flicker très rare** type enseigne néon défectueuse
+
+> 💡 D'autres thèmes (Summoner's Rift) arriveront dans les prochaines versions. Si tu as une idée de thème, ouvre une issue !
 
 ---
 

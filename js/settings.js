@@ -21,7 +21,7 @@
  *     showGlobalCounter:   boolean,  // compteur 42 / 168 en haut à droite
  *     markPastPlayed:      boolean,  // ✓ vert + cadre vert sur les joués
  *     markUpcoming:        boolean,  // ⏳ sablier sur les à venir
- *     theme:               string,   // 'default' | 'hextech'
+ *     theme:               string,   // 'default' | 'hextech' | 'zaun'
  *     slotShape:           string,   // 'rounded'  | 'hexagonal'
  *   }
  *
@@ -60,7 +60,7 @@
   // Valeurs autorisées pour les settings énumérés (chaînes).
   // Toute valeur hors-liste est ignorée et retombe sur le défaut.
   const ENUM_VALUES = {
-    theme: ['default', 'hextech'],
+    theme: ['default', 'hextech', 'zaun'],
     slotShape: ['rounded', 'hexagonal'],
   };
 

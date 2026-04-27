@@ -92,7 +92,7 @@ appliquées en temps réel sur l'overlay et persistées dans `localStorage`.
 | `showGlobalCounter`       | boolean | `false` | Pavé doré "42 / 168" en haut à droite de l'overlay |
 | `markPastPlayed`          | boolean | `false` | ✓ vert posé sur les slots `−1` et `−2` + cadre vert |
 | `markUpcoming`            | boolean | `false` | ⏳ posé sur les slots `+1` et `+2` (cadre laissé en gris) |
-| `theme`                   | enum: `default` \| `hextech` | `default` | Ambiance globale (palette, glow, typo) |
+| `theme`                   | enum: `default` \| `hextech` \| `zaun` | `default` | Ambiance globale (palette, glow, typo) |
 | `slotShape`               | enum: `rounded` \| `hexagonal` | `rounded` | Forme du cadre des icônes |
 
 Les options se cumulent librement.
@@ -189,7 +189,8 @@ lolphabet/
 │   ├── overlay.css           ← styles du carrousel + options + formes
 │   ├── control.css           ← styles du panneau (cards, toggles, slider)
 │   └── themes/               ← un fichier CSS par thème visuel
-│       └── hextech.css       ← thème Hextech / Piltover (or, aura, Cinzel)
+│       ├── hextech.css       ← thème Hextech / Piltover (or, halo, Hexstream)
+│       └── zaun.css          ← thème Zaun / Shimmer (toxique, pipe, bulles)
 ├── js/
 │   ├── data-dragon.js        ← fetch + cache champions Data Dragon
 │   ├── positions-data.js     ← mapping champion → poste
