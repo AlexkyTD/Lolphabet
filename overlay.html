@@ -13,6 +13,94 @@
   <body>
     <div id="carousel">
       <div id="global-counter"></div>
+
+      <!-- Hexstream : filière magique hextech qui parcourt l'arc du
+           carrousel avec quelques particules dorées dérivantes.
+           Utilisée uniquement par le thème Hextech (cachée sinon).
+           Le SVG est placé AVANT le nom et les slots pour qu'il soit
+           rendu en arrière-plan : on voit le filament et les
+           particules entre les icônes, mais ils sont cachés derrière
+           les icônes elles-mêmes pour un effet "filament magique
+           qui passe par les hexgems". -->
+      <svg id="hex-stream" viewBox="-110 -450 220 900"
+           preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <!-- Dégradé doré le long du filament : fondu aux extrémités
+               pour qu'il "naisse" et "meure" dans le vide. -->
+          <linearGradient id="hex-spine-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#d4a544" stop-opacity="0"/>
+            <stop offset="15%"  stop-color="#d4a544" stop-opacity="0.20"/>
+            <stop offset="50%"  stop-color="#ffdc82" stop-opacity="0.45"/>
+            <stop offset="85%"  stop-color="#d4a544" stop-opacity="0.20"/>
+            <stop offset="100%" stop-color="#d4a544" stop-opacity="0"/>
+          </linearGradient>
+
+          <!-- Glow doux pour le filament et les particules. -->
+          <filter id="hex-glow" x="-150%" y="-150%" width="400%" height="400%">
+            <feGaussianBlur stdDeviation="1.6" result="b"/>
+            <feMerge>
+              <feMergeNode in="b"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+
+          <!-- Path partagé par le filament visible ET les particules
+               qui le suivent en mouvement. Courbes quadratiques
+               passant par les centres des 5 slots, prolongées au-delà
+               aux deux bouts pour que les particules apparaissent /
+               disparaissent doucement dans le vide. -->
+          <path id="hex-spine"
+                d="M -80,-420
+                   Q -80,-385 -80,-360
+                   Q -55,-285 -35,-210
+                   Q -15,-105 0,0
+                   Q -15,105 -35,210
+                   Q -55,285 -80,360
+                   Q -80,385 -80,420"
+                fill="none"/>
+        </defs>
+
+        <!-- Filament lui-même : visible mais discret. -->
+        <use href="#hex-spine"
+             stroke="url(#hex-spine-grad)"
+             stroke-width="1.4"
+             stroke-linecap="round"
+             fill="none"
+             filter="url(#hex-glow)"/>
+
+        <!-- Particules dorées qui dérivent. Tailles, durées et délais
+             différents → distribution organique, pas de "convoi". -->
+        <circle r="2.4" fill="#ffeb9d" filter="url(#hex-glow)">
+          <animateMotion dur="9s" repeatCount="indefinite">
+            <mpath href="#hex-spine"/>
+          </animateMotion>
+          <animate attributeName="opacity"
+                   values="0; 0.95; 0.95; 0"
+                   keyTimes="0; 0.15; 0.85; 1"
+                   dur="9s" repeatCount="indefinite"/>
+        </circle>
+
+        <circle r="1.7" fill="#f5dfa8" filter="url(#hex-glow)">
+          <animateMotion dur="11s" begin="3s" repeatCount="indefinite">
+            <mpath href="#hex-spine"/>
+          </animateMotion>
+          <animate attributeName="opacity"
+                   values="0; 0.75; 0.75; 0"
+                   keyTimes="0; 0.15; 0.85; 1"
+                   dur="11s" begin="3s" repeatCount="indefinite"/>
+        </circle>
+
+        <circle r="1.4" fill="#fff5c8" filter="url(#hex-glow)">
+          <animateMotion dur="13s" begin="6s" repeatCount="indefinite">
+            <mpath href="#hex-spine"/>
+          </animateMotion>
+          <animate attributeName="opacity"
+                   values="0; 0.85; 0.85; 0"
+                   keyTimes="0; 0.15; 0.85; 1"
+                   dur="13s" begin="6s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+
       <div id="champion-name"></div>
       <div id="slots"></div>
     </div>

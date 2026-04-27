@@ -177,3 +177,13 @@ body.theme-hextech #global-counter {
     inset 0 0 0 1px rgba(212, 165, 68, 0.30),
     0 4px 16px rgba(0, 0, 0, 0.55);
 }
+
+/* ----------------------------------------------------------------
+   Hexstream — filament magique entre les icônes
+   ----------------------------------------------------------------
+   Activé uniquement par le thème Hextech. Le SVG est statique
+   dans le DOM (overlay.html), c'est l'opacity qu'on bascule ici
+   pour un fade-in propre lors du changement de thème. */
+body.theme-hextech #hex-stream {
+  opacity: 1;
+}

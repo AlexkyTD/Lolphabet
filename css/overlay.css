@@ -118,6 +118,23 @@ body.opt-global-counter #global-counter {
   height: var(--slot-size);
 }
 
+/* Hexstream — SVG décoratif positionné par-dessus le centre du
+   carrousel. Sa viewBox (-110 -450 220 900) reproduit le système
+   de coords des slots (origine au centre, mêmes pixels). Caché par
+   défaut, montré uniquement par le thème Hextech. */
+#hex-stream {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220px;
+  height: 900px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  overflow: visible;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
 /* ----------------------------------------------------------------
    Slot — conteneur racine, positionné en absolu et animé en transform
    ---------------------------------------------------------------- */
