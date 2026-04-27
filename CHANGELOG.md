@@ -6,6 +6,29 @@ Le projet suit (à peu près) le [versioning sémantique](https://semver.org/lan
 
 ---
 
+## [1.1.1] — 2026-04-27
+
+### 🎨 Polissage visuel — qualité Riot Games
+
+Refonte de la qualité visuelle suite à un audit critique. Les effets v1.1.0 manquaient de finition. Cette version remet le thème Hextech au niveau "professionnel UI Riot".
+
+### Corrigé
+- **Bordure hexagonale qui ne suivait pas la forme** : la bordure CSS s'applique sur un rectangle qui se faisait clipper par `clip-path`, créant des coupures visuelles disgracieuses. Refonte du HTML des slots avec un pattern **double-cadre** :
+  - Wrapper extérieur `.slot-frame` au fond coloré (= la bordure visible)
+  - Wrapper intérieur `.slot-frame-inner` inseté de 3px, contenant l'image
+  - Les deux partagent le même `clip-path` / `border-radius` → la bordure suit parfaitement la forme, hexagonale ou arrondie
+- **Police Cinzel illisible** : retour au stack système (`-apple-system, Segoe UI, Roboto`), suppression du `<link>` Google Fonts dans `overlay.html`. Le nom du champion en thème Hextech reste teinté or via `color` + triple `text-shadow`.
+- **Conic gradient tournant remplacé** par un halo radial multi-couches qui respire (3 layers : cœur lumineux + halo principal + brume ambient), animé en `scale` + `opacity`. Effet plus organique, façon hexgem qui pulse plutôt que projecteur tournant. `mix-blend-mode: screen` pour un rendu lumière émissive.
+- **Glow simple drop-shadow remplacé** par une **pile de 5 drop-shadow** (1px crisp + 6px close + 18px mid + 40px haze + ombre portée). C'est ainsi que les UI pro construisent leurs glows volumétriques. Animation 4s `ease-in-out` (organique) au lieu de 2.6s.
+- **Vignettage bleu nuit retiré** : le fond de l'overlay est de nouveau totalement transparent. Plus de `body::before` qui colorait le stream.
+
+### Sous le capot
+- Nouvelle propriété CSS `--frame-border` (3px) avec calcul automatique du `--radius-inner` pour cohérence en mode arrondi.
+- Le slot central reçoit un dégradé vertical (or clair → or → or sombre) sur le wrapper extérieur, simulant un éclairage naturel d'en haut sur un métal poli.
+- Légère asymétrie d'inset en mode hexagonal pour que la bordure reste visible au sommet et à la pointe basse de l'hex.
+
+---
+
 ## [1.1.0] — 2026-04-27
 
 ### 🎨 Refonte visuelle : système de thèmes + forme hexagonale

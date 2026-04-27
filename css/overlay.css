@@ -4,30 +4,42 @@
    horizontalement, les slots sont positionnés en absolu par
    rapport au conteneur et animés via transform.
 
-   Structure d'un slot :
+   Structure d'un slot (depuis v1.1.1) :
      <div class="slot is-past|is-current|is-upcoming">
-       <div class="slot-frame">    <- bordure et ombres
-         <img />                   <- image du champion (la seule
-                                      à recevoir le filtre grayscale
-                                      + le blur, pour que la bordure
-                                      reste nette même floutée)
+       <div class="slot-aura"></div>          <- décor optionnel (thèmes)
+       <div class="slot-frame">               <- "fond" coloré = bordure
+         <div class="slot-frame-inner">       <- inseté, image dedans
+           <img />
+         </div>
        </div>
-       <div class="slot-status"></div>    <- pictogramme ✓ ou ⏳
+       <div class="slot-status"></div>        <- ✓ ou ⏳ via ::before
        <div class="slot-position">#42</div>
      </div>
+
+   Astuce clé : la "bordure" est obtenue avec un wrapper extérieur
+   coloré + un wrapper intérieur inseté. Les deux partagent la même
+   forme (border-radius pour rounded, clip-path pour hexagonal).
+   L'écart entre les deux = épaisseur de bordure VISUELLEMENT, qui
+   épouse parfaitement la forme — y compris hexagonale.
    ---------------------------------------------------------------- */
 
 :root {
-  --slot-size: 180px;           /* taille de l'icône "actuelle" */
+  --slot-size: 180px;
   --slide-duration: 350ms;
   --slide-ease: cubic-bezier(0.22, 1, 0.36, 1);
 
+  /* Épaisseur de la bordure (= inset du frame-inner par rapport au frame). */
+  --frame-border: 3px;
+  --frame-border-current: 4px;
+
+  /* Rayons pour le mode "carré arrondi". */
+  --radius-outer: 12px;
+  --radius-inner: calc(var(--radius-outer) - var(--frame-border));
+
   --color-gold: #f0c13c;
-  --color-played: #4ade80;      /* vert pour les champions joués */
+  --color-played: #4ade80;
   --color-upcoming-icon: #d8d8d8;
 
-  /* Intensité du flou des prochains champions, surchargée en JS
-     d'après Settings.blurIntensity (px). Valeur par défaut = 8. */
   --blur-intensity: 8px;
 }
 
@@ -54,8 +66,6 @@ html, body {
   justify-content: center;
 }
 
-/* Le nom du champion est positionné juste au-dessus de l'icône
-   centrale (qui elle est au milieu vertical du carrousel). */
 #champion-name {
   position: absolute;
   left: 50%;
@@ -69,13 +79,12 @@ html, body {
     2px 2px 0 rgba(0, 0, 0, 0.9);
   white-space: nowrap;
   letter-spacing: 0.03em;
-  transition: opacity var(--slide-duration) var(--slide-ease);
+  transition:
+    color var(--slide-duration) var(--slide-ease),
+    text-shadow var(--slide-duration) var(--slide-ease),
+    opacity var(--slide-duration) var(--slide-ease);
 }
 
-/* Compteur global "42 / 168" — petit pavé doré ancré en haut à
-   DROITE de l'overlay (le carrousel étant biaisé sur la gauche
-   par l'arc de cercle, le côté droit est libre). Caché par défaut,
-   affiché si <body> a la classe .opt-global-counter. */
 #global-counter {
   position: absolute;
   top: 14px;
@@ -105,6 +114,10 @@ body.opt-global-counter #global-counter {
   height: var(--slot-size);
 }
 
+/* ----------------------------------------------------------------
+   Slot — conteneur racine, positionné en absolu et animé en transform
+   ---------------------------------------------------------------- */
+
 .slot {
   position: absolute;
   top: 0;
@@ -112,41 +125,78 @@ body.opt-global-counter #global-counter {
   width: var(--slot-size);
   height: var(--slot-size);
   transform-origin: center center;
-  will-change: transform, opacity;
+  will-change: transform, opacity, filter;
   transition:
     transform var(--slide-duration) var(--slide-ease),
-    opacity var(--slide-duration) var(--slide-ease);
+    opacity var(--slide-duration) var(--slide-ease),
+    filter var(--slide-duration) var(--slide-ease);
 }
 
-/* Le wrapper qui porte la bordure et les ombres. C'est lui qu'on
-   colore en doré pour le central, en vert pour les joués, etc.
-   La bordure ne sera JAMAIS floutée — c'est l'astuce qui permet
-   au flou de ne s'appliquer qu'à l'image. */
+/* Aura placée derrière le cadre. Caché par défaut, n'est visible
+   que dans certains thèmes (Hextech) sur le slot central. */
+.slot-aura {
+  position: absolute;
+  inset: -40px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  /* z-index négatif pour passer derrière .slot-frame, dans le
+     stacking context du .slot. */
+  z-index: -1;
+}
+
+/* ----------------------------------------------------------------
+   Cadre extérieur — son arrière-plan EST la "bordure" visible
+   ---------------------------------------------------------------- */
+
 .slot-frame {
   position: absolute;
   inset: 0;
-  border: 3px solid rgba(255, 255, 255, 0.7);
-  box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.6),
-    0 8px 24px rgba(0, 0, 0, 0.6);
-  overflow: hidden;       /* clip l'image floutée pour qu'elle ne déborde pas */
-  transition:
-    border-color var(--slide-duration) var(--slide-ease),
-    box-shadow var(--slide-duration) var(--slide-ease);
+  background: rgba(255, 255, 255, 0.7);
+  transition: background var(--slide-duration) var(--slide-ease);
 }
 
-/* Forme du slot : par défaut carré arrondi. La classe shape-* est
-   posée sur <body> par overlay.js d'après Settings.slotShape. */
+/* ----------------------------------------------------------------
+   Cadre intérieur — inseté, contient l'image. Le gap entre les deux
+   ---------------------------------------------------------------- */
+
+.slot-frame-inner {
+  position: absolute;
+  inset: var(--frame-border);
+  overflow: hidden;
+  background: #000;
+}
+
+.slot-frame-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* Slots non-centraux : niveaux de gris + assombrissement. */
+  filter: grayscale(1) brightness(0.55);
+  transition: filter var(--slide-duration) var(--slide-ease);
+}
+
+/* ----------------------------------------------------------------
+   Forme : carré arrondi (par défaut)
+   ---------------------------------------------------------------- */
+
 body.shape-rounded .slot-frame {
-  border-radius: 12px;
+  border-radius: var(--radius-outer);
 }
 
-body.shape-hexagonal .slot-frame {
-  border-radius: 0;
-  /* Hexagone "plat dessus / plat dessous", clip-path inclut la bordure.
-     Marche très bien avec les icônes carrées de Data Dragon : symétrie
-     horizontale, verticale et diagonale → coupe les 4 coins de manière
-     équilibrée. */
+body.shape-rounded .slot-frame-inner {
+  border-radius: var(--radius-inner);
+}
+
+/* ----------------------------------------------------------------
+   Forme : hexagonale
+   Les DEUX wrappers reçoivent le même clip-path → la "bordure"
+   suit parfaitement la forme hexagonale, plus de coupures moches.
+   ---------------------------------------------------------------- */
+
+body.shape-hexagonal .slot-frame,
+body.shape-hexagonal .slot-frame-inner {
   clip-path: polygon(
     50% 0%,
     100% 25%,
@@ -155,49 +205,41 @@ body.shape-hexagonal .slot-frame {
     0% 75%,
     0% 25%
   );
-  /* Note : box-shadow ne traverse pas clip-path. En forme hexagonale,
-     les ombres et glow sont gérés par filter: drop-shadow() dans les
-     fichiers de thème (qui suit la forme réelle, y compris clip-path). */
 }
 
-/* L'aura magique posée derrière le cadre. Caché par défaut, n'est
-   visible que dans certains thèmes (ex : Hextech) sur le slot central. */
-.slot-aura {
-  position: absolute;
-  inset: -30px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.slot-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  /* Les images des slots non-centraux sont en niveaux de gris et
-     un peu assombries — l'image centrale repassera en couleur via
-     la règle .is-current plus bas. */
-  filter: grayscale(1) brightness(0.55);
-  transition: filter var(--slide-duration) var(--slide-ease);
-}
-
-/* Slot central : image en pleine couleur, cadre doré, glow. */
-.slot.is-current .slot-frame img {
-  filter: none;
-}
-
-.slot.is-current .slot-frame {
-  border-color: var(--color-gold);
-  box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.7),
-    0 0 28px rgba(240, 193, 60, 0.55),
-    0 12px 36px rgba(0, 0, 0, 0.75);
+/* En mode hexagonal, le bord supérieur du frame-inner est légèrement
+   plus haut que celui du frame (parce qu'on inset 3px d'un bounding
+   box légèrement plus petit, mais le polygon part de y=0). On compense
+   en augmentant légèrement l'inset vertical. Sans ça, l'image touche
+   le sommet du hex extérieur et la "bordure" disparaît au pic. */
+body.shape-hexagonal .slot-frame-inner {
+  inset: calc(var(--frame-border) + 1px) var(--frame-border);
 }
 
 /* ----------------------------------------------------------------
-   Préférences d'affichage activables depuis le panneau de contrôle
-   (classes posées sur <body> par overlay.js d'après Settings).
+   Slot central — bordure dorée, image en couleur
+   On change la couleur de fond du frame extérieur (= la bordure).
+   ---------------------------------------------------------------- */
+
+.slot.is-current .slot-frame {
+  background: var(--color-gold);
+}
+
+.slot.is-current .slot-frame-inner img {
+  filter: none;
+}
+
+/* Drop-shadow doré subtil + ombre portée pour donner du poids.
+   filter: drop-shadow suit la forme réelle (y compris clip-path),
+   contrairement à box-shadow qui est ignoré sur clip-path. */
+.slot.is-current {
+  filter:
+    drop-shadow(0 0 14px rgba(240, 193, 60, 0.45))
+    drop-shadow(0 6px 20px rgba(0, 0, 0, 0.6));
+}
+
+/* ----------------------------------------------------------------
+   Préférences d'affichage activables depuis le panneau
    ---------------------------------------------------------------- */
 
 /* --- Numéros de position ---------------------------------------- */
@@ -234,9 +276,8 @@ body.opt-position-numbers .slot.is-current .slot-position {
   padding: 3px 10px;
 }
 
-/* Recentrage des badges en forme hexagonale : les coins sont
-   clippés, donc on remonte le badge au centre horizontal pour
-   qu'il reste sur l'image visible. */
+/* En mode hexagonal, recentrage horizontal pour rester sur la zone
+   visible (les coins du carré sont clippés). */
 body.shape-hexagonal .slot-position {
   bottom: 9%;
   right: auto;
@@ -252,18 +293,14 @@ body.shape-hexagonal .slot.is-current .slot-position {
 }
 
 /* --- Flou des prochains ---------------------------------------- */
-/* Appliqué uniquement à l'IMAGE (.slot-frame img), donc la bordure
-   du cadre reste nette. L'intensité du flou est pilotée par la
-   variable CSS --blur-intensity (réglable depuis le panneau). */
-body.opt-blur-upcoming .slot.is-upcoming .slot-frame img {
+/* Appliqué uniquement à l'IMAGE — donc la bordure du cadre reste
+   parfaitement nette. */
+body.opt-blur-upcoming .slot.is-upcoming .slot-frame-inner img {
   filter: grayscale(1) brightness(0.55) blur(var(--blur-intensity));
 }
 
 /* --- Pictogramme de statut (✓ joué / ⏳ à venir) ---------------- */
 
-/* Pictogramme de statut (✓ vert / ⏳ sablier) — pas de fond, juste
-   le caractère, avec une ombre portée marquée pour rester lisible
-   par-dessus l'icône du champion. */
 .slot-status {
   position: absolute;
   top: 8px;
@@ -283,15 +320,13 @@ body.opt-blur-upcoming .slot.is-upcoming .slot-frame img {
     2px 2px 0 rgba(0, 0, 0, 0.9);
 }
 
-/* En forme hexagonale, on recentre le picto au sommet pour qu'il
-   reste sur la zone visible (les coins sont clippés). */
 body.shape-hexagonal .slot-status {
   top: 4%;
   left: 50%;
   transform: translateX(-50%);
 }
 
-/* Marquage des champions joués : ✓ vert (en plein) + cadre vert */
+/* Marquage des champions joués : ✓ vert + cadre vert */
 body.opt-mark-past .slot.is-past .slot-status {
   display: flex;
   color: var(--color-played);
@@ -303,14 +338,10 @@ body.opt-mark-past .slot.is-past .slot-status::before {
 }
 
 body.opt-mark-past .slot.is-past .slot-frame {
-  border-color: var(--color-played);
-  box-shadow:
-    0 0 0 2px rgba(0, 0, 0, 0.6),
-    0 0 14px rgba(74, 222, 128, 0.35),
-    0 8px 24px rgba(0, 0, 0, 0.6);
+  background: var(--color-played);
 }
 
-/* Marquage des champions à venir : sablier ⏳ (cadre laissé gris) */
+/* Marquage des champions à venir : sablier ⏳ (cadre gris standard) */
 body.opt-mark-upcoming .slot.is-upcoming .slot-status {
   display: flex;
   color: var(--color-upcoming-icon);

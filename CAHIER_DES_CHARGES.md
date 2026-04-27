@@ -213,18 +213,28 @@ lolphabet/
 
 ```html
 <div class="slot is-past|is-current|is-upcoming">
-  <div class="slot-aura"></div>      <!-- aura magique réservée aux thèmes (Hextech) -->
-  <div class="slot-frame">           <!-- bordure et ombres (TOUJOURS net) -->
-    <img />                          <!-- seul élément qui reçoit grayscale + blur -->
+  <div class="slot-aura"></div>          <!-- décor optionnel des thèmes -->
+  <div class="slot-frame">               <!-- "fond" coloré = la bordure -->
+    <div class="slot-frame-inner">       <!-- inseté de 3px, contient l'image -->
+      <img />                            <!-- seul élément avec grayscale/blur -->
+    </div>
   </div>
-  <div class="slot-status"></div>    <!-- pictogramme ✓ ou ⏳ via ::before -->
+  <div class="slot-status"></div>        <!-- pictogramme ✓ ou ⏳ via ::before -->
   <div class="slot-position">#42</div>
 </div>
 ```
 
-La séparation `.slot-frame` (cadre) / `<img>` (image) permet de **flouter
-uniquement l'image** sans dégrader la lisibilité du cadre — point critique pour
-la qualité visuelle de l'option `blurUpcoming`.
+**Pattern "double-cadre"** : le wrapper extérieur `.slot-frame` porte la couleur
+de bordure dans son `background`. Le wrapper intérieur `.slot-frame-inner` est
+inseté de `--frame-border` (3px), contient l'image, et porte le même
+`clip-path` / `border-radius` que l'extérieur. **L'écart entre les deux est la
+bordure visible**, qui épouse parfaitement la forme — y compris hexagonale.
+
+Cette technique remplace le `border` CSS qui ne suivait pas le `clip-path`
+(d'où les coupures moches en mode hexagonal en v1.1.0).
+
+La séparation cadre / image permet aussi de **flouter uniquement l'image**
+sans dégrader la lisibilité du cadre (option `blurUpcoming`).
 
 `.slot-aura` est rendue invisible par défaut (`opacity: 0`) ; les thèmes
 décoratifs (ex : `theme-hextech`) l'activent uniquement sur le slot central

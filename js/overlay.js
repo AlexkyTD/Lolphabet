@@ -70,18 +70,26 @@
     aura.className = 'slot-aura';
     el.appendChild(aura);
 
-    // Wrapper "cadre" — porte la bordure et les ombres. Sépare le
-    // visuel du cadre (toujours net) de l'image (qui peut être
-    // floutée via Settings.blurUpcoming).
+    // Structure "double-cadre" pour obtenir une bordure qui suit la
+    // forme (carré arrondi OU hexagone). Le wrapper extérieur a
+    // l'arrière-plan coloré (= la "bordure"). Le wrapper intérieur,
+    // inseté de quelques pixels, clip l'image. Les deux ont le même
+    // clip-path / border-radius. Le gap entre les deux = bordure
+    // visible qui épouse la forme. Cette technique remplace l'ancien
+    // border CSS qui ne suivait pas le clip-path hexagonal.
     const frame = document.createElement('div');
     frame.className = 'slot-frame';
+
+    const inner = document.createElement('div');
+    inner.className = 'slot-frame-inner';
 
     const img = document.createElement('img');
     img.src = champion.iconUrl;
     img.alt = champion.name;
     img.draggable = false;
-    frame.appendChild(img);
+    inner.appendChild(img);
 
+    frame.appendChild(inner);
     el.appendChild(frame);
 
     // Pastille de statut (✓ joué / ⏳ à venir) — contenu posé via

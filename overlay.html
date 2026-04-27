@@ -4,16 +4,10 @@
     <meta charset="UTF-8" />
     <title>Lolphabet — Overlay</title>
 
-    <!-- Police Cinzel utilisée par le thème Hextech (chargée systématiquement
-         pour pouvoir basculer entre thèmes sans rechargement). Mise en cache
-         par le navigateur dès le premier load. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&display=swap" rel="stylesheet" />
-
     <link rel="stylesheet" href="css/overlay.css" />
     <!-- Tous les thèmes sont chargés ; chacun ne s'active que via la classe
-         theme-X posée sur <body> par overlay.js. -->
+         theme-X posée sur <body> par overlay.js. Aucune dépendance externe :
+         on utilise le stack de polices système pour rester cohérent partout. -->
     <link rel="stylesheet" href="css/themes/hextech.css" />
   </head>
   <body>
