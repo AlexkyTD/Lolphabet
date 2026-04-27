@@ -57,26 +57,30 @@ body.theme-hextech .slot.is-current .slot-frame {
    qu'un seul drop-shadow flou ne peut pas reproduire. */
 body.theme-hextech .slot.is-current {
   filter:
-    drop-shadow(0 0 1px rgba(212, 165, 68, 0.85))
-    drop-shadow(0 0 3px rgba(212, 165, 68, 0.22))
+    drop-shadow(0 0 1px rgba(212, 165, 68, 0.95))
+    drop-shadow(0 0 4px rgba(212, 165, 68, 0.40))
+    drop-shadow(0 0 12px rgba(212, 165, 68, 0.20))
     drop-shadow(0 6px 14px rgba(0, 0, 0, 0.55));
-  animation: hextech-pulse 4.5s ease-in-out infinite;
+  animation: hextech-pulse 4s ease-in-out infinite;
 }
 
-/* Respiration très douce : seule la couche close (3-5px) varie
-   subtilement, le contour 1px reste constant pour la netteté. La
-   couche mid (12-14px) a été retirée pour minimiser l'emprise. */
+/* Respiration : on fait varier subtilement les couches de glow
+   (close + mid), en gardant la couche 1px constante pour que le
+   contour reste net. La couche "haze" précédente (40px) a été
+   retirée pour rester discret. */
 @keyframes hextech-pulse {
   0%, 100% {
     filter:
-      drop-shadow(0 0 1px rgba(212, 165, 68, 0.85))
-      drop-shadow(0 0 2px rgba(212, 165, 68, 0.18))
+      drop-shadow(0 0 1px rgba(212, 165, 68, 0.95))
+      drop-shadow(0 0 3px rgba(212, 165, 68, 0.35))
+      drop-shadow(0 0 10px rgba(212, 165, 68, 0.18))
       drop-shadow(0 6px 14px rgba(0, 0, 0, 0.55));
   }
   50% {
     filter:
-      drop-shadow(0 0 1px rgba(212, 165, 68, 0.85))
-      drop-shadow(0 0 5px rgba(255, 220, 130, 0.30))
+      drop-shadow(0 0 1px rgba(212, 165, 68, 0.95))
+      drop-shadow(0 0 6px rgba(255, 220, 130, 0.55))
+      drop-shadow(0 0 14px rgba(212, 165, 68, 0.28))
       drop-shadow(0 6px 14px rgba(0, 0, 0, 0.55));
   }
 }
@@ -93,27 +97,36 @@ body.theme-hextech .slot.is-current {
 body.theme-hextech .slot.is-current .slot-aura {
   opacity: 1;
   background:
-    /* Halo doré très resserré, juste sur le pourtour du cadre. */
+    /* Cœur lumineux, très petit, blanc-or chaud. */
     radial-gradient(
       circle at center,
-      transparent 45%,
-      rgba(212, 165, 68, 0.18) 55%,
-      rgba(212, 165, 68, 0.08) 75%,
-      transparent 100%
+      rgba(255, 235, 180, 0.40) 0%,
+      rgba(255, 220, 130, 0.20) 12%,
+      transparent 30%
+    ),
+    /* Halo principal doré, resserré. */
+    radial-gradient(
+      circle at center,
+      rgba(212, 165, 68, 0.25) 25%,
+      rgba(212, 165, 68, 0.10) 45%,
+      transparent 65%
     );
-  animation: hextech-breath 4.5s ease-in-out infinite;
+  animation: hextech-breath 4s ease-in-out infinite;
   /* Mix-blend-mode "screen" : les pixels clairs s'additionnent à
      ce qu'il y a derrière, ce qui donne un effet "lumière émissive"
-     plutôt qu'une couleur posée par-dessus. */
+     plutôt qu'une couleur posée par-dessus. C'est ce que les VFX
+     pros utilisent pour les glows. */
   mix-blend-mode: screen;
 }
 
 @keyframes hextech-breath {
   0%, 100% {
-    opacity: 0.55;
+    transform: scale(1);
+    opacity: 0.80;
   }
   50% {
-    opacity: 0.85;
+    transform: scale(1.05);
+    opacity: 0.95;
   }
 }
 
