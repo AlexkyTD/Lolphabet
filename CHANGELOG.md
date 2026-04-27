@@ -6,6 +6,16 @@ Le projet suit (à peu près) le [versioning sémantique](https://semver.org/lan
 
 ---
 
+## [1.2.1] — 2026-04-27
+
+### Ajouté
+- **Troisième forme de cadre : `circle` (rond ⚪)**, en plus de `rounded` (carré arrondi) et `hexagonal` (⬡). Implémentée via `border-radius: 50%` sur les deux wrappers du pattern double-cadre, donnant un anneau de bordure de 3 px parfaitement uniforme. Combinable avec n'importe quel thème.
+- Les positions des badges (`#N` et pastilles ✓ / ⏳) sont automatiquement recentrées horizontalement en mode `circle` (mêmes règles que `hexagonal`) pour rester sur la zone visible — les coins du carré sont clippés dans les deux cas.
+- `Settings.ENUM_VALUES.slotShape` étendu à `['rounded', 'hexagonal', 'circle']`.
+- Option Rond ⚪ ajoutée dans le dropdown du panneau de contrôle.
+
+---
+
 ## [1.2.0] — 2026-04-27
 
 ### ☣ Nouveau thème : **Zaun / Shimmer**
@@ -174,6 +184,7 @@ Toutes les fonctionnalités des versions antérieures sont conservées sans chan
 - Synchro overlay ↔ contrôle via triple mécanisme (BroadcastChannel + storage event + polling 500 ms) pour garantir que ça marche dans tous les contextes (file://, OBS CEF, etc.).
 - README, LICENSE (MIT), .gitignore, CAHIER_DES_CHARGES.
 
+[1.2.1]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.2.1
 [1.2.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.2.0
 [1.1.1]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.1.1
 [1.1.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.1.0

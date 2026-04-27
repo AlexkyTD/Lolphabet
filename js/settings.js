@@ -22,7 +22,7 @@
  *     markPastPlayed:      boolean,  // ✓ vert + cadre vert sur les joués
  *     markUpcoming:        boolean,  // ⏳ sablier sur les à venir
  *     theme:               string,   // 'default' | 'hextech' | 'zaun'
- *     slotShape:           string,   // 'rounded'  | 'hexagonal'
+ *     slotShape:           string,   // 'rounded' | 'hexagonal' | 'circle'
  *   }
  *
  * API publique :
@@ -61,7 +61,7 @@
   // Toute valeur hors-liste est ignorée et retombe sur le défaut.
   const ENUM_VALUES = {
     theme: ['default', 'hextech', 'zaun'],
-    slotShape: ['rounded', 'hexagonal'],
+    slotShape: ['rounded', 'hexagonal', 'circle'],
   };
 
   let current = { ...DEFAULTS };

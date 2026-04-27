@@ -106,7 +106,7 @@ Carte **"Apparence"** du panneau de contrôle, deux choix indépendants :
 | Réglage | Choix disponibles | Effet |
 |---|---|---|
 | **Thème visuel** | `Classique` (défaut) · `Hextech / Piltover ✨` · `Zaun / Shimmer ☣` | Ambiance globale : couleurs, glows, typo, effets magiques |
-| **Forme des cadres** | `Carré arrondi` (défaut) · `Hexagonal ⬡` | Forme des icônes du carrousel |
+| **Forme des cadres** | `Carré arrondi` (défaut) · `Hexagonal ⬡` · `Rond ⚪` | Forme des icônes du carrousel |
 
 Les deux options se combinent librement (ex. Hextech + Hexagonal pour un look pile inspiré d'Arcane, ou Classique + Hexagonal pour un look LoL plus sobre).
 

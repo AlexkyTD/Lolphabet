@@ -93,7 +93,7 @@ appliquées en temps réel sur l'overlay et persistées dans `localStorage`.
 | `markPastPlayed`          | boolean | `false` | ✓ vert posé sur les slots `−1` et `−2` + cadre vert |
 | `markUpcoming`            | boolean | `false` | ⏳ posé sur les slots `+1` et `+2` (cadre laissé en gris) |
 | `theme`                   | enum: `default` \| `hextech` \| `zaun` | `default` | Ambiance globale (palette, glow, typo) |
-| `slotShape`               | enum: `rounded` \| `hexagonal` | `rounded` | Forme du cadre des icônes |
+| `slotShape`               | enum: `rounded` \| `hexagonal` \| `circle` | `rounded` | Forme du cadre des icônes |
 
 Les options se cumulent librement.
 
@@ -254,13 +254,14 @@ aucune modification du code existant.
 
 ### Forme des cadres
 
-Indépendante du thème, gérée par la classe `body.shape-<rounded|hexagonal>` :
+Indépendante du thème, gérée par la classe `body.shape-<rounded|hexagonal|circle>` :
 - `rounded` : `border-radius: 12px` (forme par défaut depuis v0.1)
 - `hexagonal` : `clip-path: polygon(...)` hexagone "vertical" (pointe haut/bas)
+- `circle` : `border-radius: 50%` cercle parfait (les slots étant carrés 180×180)
 
-En forme hexagonale, les badges (`#N` et pastille de statut) sont
+En forme hexagonale OU ronde, les badges (`#N` et pastille de statut) sont
 automatiquement recentrés horizontalement par CSS pour rester sur la zone
-visible (les coins du carré sont clippés).
+visible (les coins du carré sont clippés dans les deux cas).
 
 ### Format de l'état persisté
 

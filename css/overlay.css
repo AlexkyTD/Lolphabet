@@ -242,6 +242,19 @@ body.shape-hexagonal .slot-frame-inner {
 }
 
 /* ----------------------------------------------------------------
+   Forme : ronde
+   Bordure suivie nativement via border-radius: 50% sur les deux
+   wrappers. Comme les slots sont carrés (180x180), border-radius
+   50% donne un cercle parfait. Le gap de 3px entre les deux est
+   uniforme tout autour, puisque c'est un anneau.
+   ---------------------------------------------------------------- */
+
+body.shape-circle .slot-frame,
+body.shape-circle .slot-frame-inner {
+  border-radius: 50%;
+}
+
+/* ----------------------------------------------------------------
    Slot central — bordure dorée, image en couleur
    On change la couleur de fond du frame extérieur (= la bordure).
    ---------------------------------------------------------------- */
@@ -301,16 +314,19 @@ body.opt-position-numbers .slot.is-current .slot-position {
   padding: 3px 10px;
 }
 
-/* En mode hexagonal, recentrage horizontal pour rester sur la zone
-   visible (les coins du carré sont clippés). */
-body.shape-hexagonal .slot-position {
+/* En mode hexagonal ou rond, recentrage horizontal pour rester sur
+   la zone visible (les coins du carré sont clippés dans les deux
+   cas). Mêmes règles pour les deux formes non-rectangulaires. */
+body.shape-hexagonal .slot-position,
+body.shape-circle .slot-position {
   bottom: 9%;
   right: auto;
   left: 50%;
   transform: translateX(-50%);
 }
 
-body.shape-hexagonal .slot.is-current .slot-position {
+body.shape-hexagonal .slot.is-current .slot-position,
+body.shape-circle .slot.is-current .slot-position {
   bottom: 9%;
   right: auto;
   left: 50%;
@@ -345,7 +361,8 @@ body.opt-blur-upcoming .slot.is-upcoming .slot-frame-inner img {
     2px 2px 0 rgba(0, 0, 0, 0.9);
 }
 
-body.shape-hexagonal .slot-status {
+body.shape-hexagonal .slot-status,
+body.shape-circle .slot-status {
   top: 4%;
   left: 50%;
   transform: translateX(-50%);
