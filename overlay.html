@@ -189,6 +189,13 @@
              passent par le filtre heavy-blur pour un effet de brume
              diffuse, pas de "balle". Une des nappes est en
              magenta Shimmer pour imprégner discrètement le décor. -->
+        <!-- Note importante : tous les <circle> qui ont un begin > 0
+             reçoivent opacity="0" comme attribut par défaut. Sans ça,
+             entre t=0 et t=begin, le cercle est rendu à sa valeur
+             initiale (opacity 1 par défaut) sur sa position initiale,
+             fixe → effet "pop" visible quand l'animation démarre.
+             opacity="0" par défaut → invisible jusqu'à ce que
+             l'animation prenne le relais. -->
         <g filter="url(#smoke-heavy-blur)">
           <!-- Nappe 1 — verte, bas-gauche → haut-gauche, large -->
           <circle cx="-65" cy="380" r="22" fill="url(#smoke-cloud-grad)">
@@ -198,32 +205,31 @@
             <animate attributeName="opacity" values="0; 0.70; 0.55; 0" keyTimes="0; 0.25; 0.75; 1" dur="22s" repeatCount="indefinite"/>
           </circle>
           <!-- Nappe 2 — verte, milieu-gauche → haut-droit -->
-          <circle cx="-95" cy="200" r="18" fill="url(#smoke-cloud-grad)">
+          <circle cx="-95" cy="200" r="18" fill="url(#smoke-cloud-grad)" opacity="0">
             <animate attributeName="cy" values="200; -420" dur="29s" begin="6s" repeatCount="indefinite"/>
             <animate attributeName="cx" values="-95; -75; -98; -65" dur="29s" begin="6s" repeatCount="indefinite"/>
             <animate attributeName="r"  values="16; 22; 28" dur="29s" begin="6s" repeatCount="indefinite"/>
             <animate attributeName="opacity" values="0; 0.65; 0.50; 0" keyTimes="0; 0.25; 0.75; 1" dur="29s" begin="6s" repeatCount="indefinite"/>
           </circle>
           <!-- Nappe 3 — magenta Shimmer, bas-centre → haut-gauche, lente -->
-          <circle cx="-50" cy="0" r="20" fill="url(#shimmer-cloud-grad)">
+          <circle cx="-50" cy="0" r="20" fill="url(#shimmer-cloud-grad)" opacity="0">
             <animate attributeName="cy" values="0; -420" dur="35s" begin="13s" repeatCount="indefinite"/>
             <animate attributeName="cx" values="-50; -70; -55; -80" dur="35s" begin="13s" repeatCount="indefinite"/>
             <animate attributeName="r"  values="18; 24; 30" dur="35s" begin="13s" repeatCount="indefinite"/>
             <animate attributeName="opacity" values="0; 0.55; 0.40; 0" keyTimes="0; 0.25; 0.75; 1" dur="35s" begin="13s" repeatCount="indefinite"/>
           </circle>
-          <!-- Nappe 4 — verte (NOUVEAU), côté droit pour aérer le côté
-               opposé à l'arc des icônes. Démarre milieu-droit, monte
-               en dérivant. -->
-          <circle cx="55" cy="280" r="17" fill="url(#smoke-cloud-grad)">
+          <!-- Nappe 4 — verte, côté droit pour aérer le côté opposé
+               à l'arc des icônes. Démarre milieu-droit, monte en
+               dérivant. -->
+          <circle cx="55" cy="280" r="17" fill="url(#smoke-cloud-grad)" opacity="0">
             <animate attributeName="cy" values="280; -420" dur="26s" begin="3s" repeatCount="indefinite"/>
             <animate attributeName="cx" values="55; 70; 50; 80" dur="26s" begin="3s" repeatCount="indefinite"/>
             <animate attributeName="r"  values="15; 22; 28; 24" dur="26s" begin="3s" repeatCount="indefinite"/>
             <animate attributeName="opacity" values="0; 0.60; 0.45; 0" keyTimes="0; 0.25; 0.75; 1" dur="26s" begin="3s" repeatCount="indefinite"/>
           </circle>
-          <!-- Nappe 5 — verte (NOUVEAU), petite et plus rapide pour
-               créer un peu plus de mouvement perceptible. Démarre
-               bas-droit. -->
-          <circle cx="40" cy="420" r="14" fill="url(#smoke-cloud-grad)">
+          <!-- Nappe 5 — verte, petite et plus rapide pour créer un
+               peu plus de mouvement perceptible. Démarre bas-droit. -->
+          <circle cx="40" cy="420" r="14" fill="url(#smoke-cloud-grad)" opacity="0">
             <animate attributeName="cy" values="420; -420" dur="19s" begin="9s" repeatCount="indefinite"/>
             <animate attributeName="cx" values="40; 60; 35; 55" dur="19s" begin="9s" repeatCount="indefinite"/>
             <animate attributeName="r"  values="12; 18; 22" dur="19s" begin="9s" repeatCount="indefinite"/>
@@ -255,66 +261,84 @@
              (2.7s vs 1.9s vs 2.3s vs 11s vs 7s vs 9s) pour qu'aucune
              périodicité ne se synchronise → mouvement chaotique réel. -->
 
-        <!-- Bulle 1 : medium green -->
-        <circle r="2.8" fill="url(#bubble-green-grad)"
-                stroke="rgba(158, 255, 95, 0.85)" stroke-width="0.4"
-                filter="url(#bubble-glow)">
-          <animateMotion dur="11s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
-            <mpath href="#smog-spine"/>
-          </animateMotion>
-          <animate attributeName="cx" values="0; 2.5; -1.5; 1.8; 0" dur="2.7s" repeatCount="indefinite"/>
-          <animate attributeName="r"  values="2.6; 3.1; 2.6; 2.9; 2.6" dur="3.1s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="11s" repeatCount="indefinite"/>
-        </circle>
+        <!-- Chaque bulle est enveloppée dans un <g transform="translate(X, 0)">
+             avec un X différent → décale la trajectoire entière de la bulle
+             horizontalement. Le path reste partagé (cohérence du chemin),
+             mais visuellement les bulles ne se superposent plus sur la
+             même ligne. Les offsets retenus créent une dispersion latérale
+             d'environ 60 px entre la bulle la plus à gauche et la plus à
+             droite, suffisante pour briser l'effet "convoi" sans pour
+             autant projeter de bulles trop loin de l'arc des icônes. -->
 
-        <!-- Bulle 2 : small green -->
-        <circle r="1.6" fill="url(#bubble-green-grad)"
-                stroke="rgba(158, 255, 95, 0.75)" stroke-width="0.3"
-                filter="url(#bubble-glow)">
-          <animateMotion dur="7s" begin="2s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
-            <mpath href="#smog-spine"/>
-          </animateMotion>
-          <animate attributeName="cx" values="0; -1.6; 2; -1; 0" dur="1.9s" begin="2s" repeatCount="indefinite"/>
-          <animate attributeName="r"  values="1.4; 1.9; 1.4" dur="2.3s" begin="2s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0; 0.78; 0.78; 0" keyTimes="0; 0.15; 0.85; 1" dur="7s" begin="2s" repeatCount="indefinite"/>
-        </circle>
+        <!-- Bulle 1 : medium green — sur la ligne de référence. -->
+        <g transform="translate(0, 0)">
+          <circle r="2.8" fill="url(#bubble-green-grad)"
+                  stroke="rgba(158, 255, 95, 0.85)" stroke-width="0.4"
+                  opacity="0" filter="url(#bubble-glow)">
+            <animateMotion dur="11s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
+              <mpath href="#smog-spine"/>
+            </animateMotion>
+            <animate attributeName="cx" values="0; 2.5; -1.5; 1.8; 0" dur="2.7s" repeatCount="indefinite"/>
+            <animate attributeName="r"  values="2.6; 3.1; 2.6; 2.9; 2.6" dur="3.1s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="11s" repeatCount="indefinite"/>
+          </circle>
+        </g>
 
-        <!-- Bulle 3 : tiny green -->
-        <circle r="1.0" fill="url(#bubble-green-grad)"
-                stroke="rgba(158, 255, 95, 0.6)" stroke-width="0.2"
-                filter="url(#bubble-glow)">
-          <animateMotion dur="6s" begin="4s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
-            <mpath href="#smog-spine"/>
-          </animateMotion>
-          <animate attributeName="cx" values="0; 2; -1; 1.5; 0" dur="1.7s" begin="4s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="6s" begin="4s" repeatCount="indefinite"/>
-        </circle>
+        <!-- Bulle 2 : small green — décalée à droite de +28 px. -->
+        <g transform="translate(28, 0)">
+          <circle r="1.6" fill="url(#bubble-green-grad)"
+                  stroke="rgba(158, 255, 95, 0.75)" stroke-width="0.3"
+                  opacity="0" filter="url(#bubble-glow)">
+            <animateMotion dur="7s" begin="2s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
+              <mpath href="#smog-spine"/>
+            </animateMotion>
+            <animate attributeName="cx" values="0; -1.6; 2; -1; 0" dur="1.9s" begin="2s" repeatCount="indefinite"/>
+            <animate attributeName="r"  values="1.4; 1.9; 1.4" dur="2.3s" begin="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.78; 0.78; 0" keyTimes="0; 0.15; 0.85; 1" dur="7s" begin="2s" repeatCount="indefinite"/>
+          </circle>
+        </g>
 
-        <!-- Bulle 4 : medium green -->
-        <circle r="2.2" fill="url(#bubble-green-grad)"
-                stroke="rgba(158, 255, 95, 0.85)" stroke-width="0.35"
-                filter="url(#bubble-glow)">
-          <animateMotion dur="9s" begin="3.5s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
-            <mpath href="#smog-spine"/>
-          </animateMotion>
-          <animate attributeName="cx" values="0; -2.2; 1.2; -1.5; 0" dur="2.3s" begin="3.5s" repeatCount="indefinite"/>
-          <animate attributeName="r"  values="2.0; 2.5; 2.0" dur="2.6s" begin="3.5s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0; 0.80; 0.80; 0" keyTimes="0; 0.15; 0.85; 1" dur="9s" begin="3.5s" repeatCount="indefinite"/>
-        </circle>
+        <!-- Bulle 3 : tiny green — décalée à gauche de -14 px. -->
+        <g transform="translate(-14, 0)">
+          <circle r="1.0" fill="url(#bubble-green-grad)"
+                  stroke="rgba(158, 255, 95, 0.6)" stroke-width="0.2"
+                  opacity="0" filter="url(#bubble-glow)">
+            <animateMotion dur="6s" begin="4s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
+              <mpath href="#smog-spine"/>
+            </animateMotion>
+            <animate attributeName="cx" values="0; 2; -1; 1.5; 0" dur="1.7s" begin="4s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="6s" begin="4s" repeatCount="indefinite"/>
+          </circle>
+        </g>
 
-        <!-- Bulle 5 : RARE Shimmer magenta — la signature visuelle de
-             Zaun qui passe environ une fois sur 4 cycles, créant un
-             "événement" visuel qui récompense l'attention. -->
-        <circle r="2.0" fill="url(#bubble-shimmer-grad)"
-                stroke="rgba(237, 148, 212, 0.85)" stroke-width="0.4"
-                filter="url(#bubble-glow)">
-          <animateMotion dur="17s" begin="9s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
-            <mpath href="#smog-spine"/>
-          </animateMotion>
-          <animate attributeName="cx" values="0; 1.8; -2; 0.8; 0" dur="2.5s" begin="9s" repeatCount="indefinite"/>
-          <animate attributeName="r"  values="1.8; 2.4; 1.8" dur="2.9s" begin="9s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.18; 0.82; 1" dur="17s" begin="9s" repeatCount="indefinite"/>
-        </circle>
+        <!-- Bulle 4 : medium green — décalée à droite de +42 px (la
+             plus à droite, hors zone des icônes). -->
+        <g transform="translate(42, 0)">
+          <circle r="2.2" fill="url(#bubble-green-grad)"
+                  stroke="rgba(158, 255, 95, 0.85)" stroke-width="0.35"
+                  opacity="0" filter="url(#bubble-glow)">
+            <animateMotion dur="9s" begin="3.5s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
+              <mpath href="#smog-spine"/>
+            </animateMotion>
+            <animate attributeName="cx" values="0; -2.2; 1.2; -1.5; 0" dur="2.3s" begin="3.5s" repeatCount="indefinite"/>
+            <animate attributeName="r"  values="2.0; 2.5; 2.0" dur="2.6s" begin="3.5s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.80; 0.80; 0" keyTimes="0; 0.15; 0.85; 1" dur="9s" begin="3.5s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+
+        <!-- Bulle 5 : RARE Shimmer magenta — décalée à droite de +12 px. -->
+        <g transform="translate(12, 0)">
+          <circle r="2.0" fill="url(#bubble-shimmer-grad)"
+                  stroke="rgba(237, 148, 212, 0.85)" stroke-width="0.4"
+                  opacity="0" filter="url(#bubble-glow)">
+            <animateMotion dur="17s" begin="9s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
+              <mpath href="#smog-spine"/>
+            </animateMotion>
+            <animate attributeName="cx" values="0; 1.8; -2; 0.8; 0" dur="2.5s" begin="9s" repeatCount="indefinite"/>
+            <animate attributeName="r"  values="1.8; 2.4; 1.8" dur="2.9s" begin="9s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.18; 0.82; 1" dur="17s" begin="9s" repeatCount="indefinite"/>
+          </circle>
+        </g>
       </svg>
 
       <div id="champion-name"></div>
