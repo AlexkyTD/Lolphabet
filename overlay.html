@@ -104,20 +104,21 @@
 
       <!-- Smogstream — Refonte v1.3 (vraiment Zaun, pas Hextech-en-vert).
            ============================================================
-           3 couches superposées :
+           2 couches visibles :
              1. Nappes de smog environnemental (3 grosses radial
                 gradients diffuses qui montent lentement, dérivent
                 horizontalement, grossissent). Imprègne l'overlay
                 sans le saturer.
-             2. Pipe industrielle erratique (stroke-dasharray
-                irrégulier, flow inversé pour suivre la direction
-                des bulles).
-             3. Bulles avec relief 3D (radialGradient interne
+             2. Bulles avec relief 3D (radialGradient interne
                 simulant un point de lumière en haut-gauche), tailles
                 variées, wobble indépendant du chemin (cx animé en
                 parallèle du déplacement le long du path), breath
                 respiration sur le rayon. 4 bulles vertes + 1 rare
                 bulle Shimmer magenta qui passe toutes les ~17s.
+
+           Le path #smog-spine est conservé dans <defs> uniquement
+           comme guide de trajectoire pour les <animateMotion> des
+           bulles ; il n'est plus dessiné en tant que pipe visible.
 
            Cachée par défaut, visible uniquement sur le thème Zaun. -->
       <svg id="smog-stream" viewBox="-110 -450 220 900"
@@ -152,15 +153,6 @@
             <stop offset="50%"  stop-color="rgba(217, 67, 196, 0.12)"/>
             <stop offset="100%" stop-color="rgba(217, 67, 196, 0)"/>
           </radialGradient>
-
-          <!-- Dégradé de la pipe (kept). -->
-          <linearGradient id="smog-spine-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stop-color="#5fc46e" stop-opacity="0"/>
-            <stop offset="15%"  stop-color="#5fc46e" stop-opacity="0.18"/>
-            <stop offset="50%"  stop-color="#9eff5f" stop-opacity="0.40"/>
-            <stop offset="85%"  stop-color="#5fc46e" stop-opacity="0.18"/>
-            <stop offset="100%" stop-color="#5fc46e" stop-opacity="0"/>
-          </linearGradient>
 
           <!-- Blur très large pour les nappes de smog : effet "brume". -->
           <filter id="smoke-heavy-blur" x="-100%" y="-100%" width="300%" height="300%">
@@ -218,24 +210,12 @@
           </circle>
         </g>
 
-        <!-- ======================================================
-             COUCHE 2 — Pipe industrielle qui s'écoule vers le haut
-             ======================================================
-             Dasharray irrégulier "2 4 5 3" pour un effet "tuyau qui
-             fuit" plutôt qu'un pointillé propre. Le offset est animé
-             POSITIVEMENT (et non négativement) pour que les segments
-             remontent — cohérent avec la direction des bulles. -->
-        <use href="#smog-spine"
-             stroke="url(#smog-spine-grad)"
-             stroke-width="1.4"
-             stroke-linecap="round"
-             stroke-dasharray="2 4 5 3"
-             fill="none">
-          <animate attributeName="stroke-dashoffset"
-                   values="0; 14"
-                   dur="3.5s"
-                   repeatCount="indefinite"/>
-        </use>
+        <!-- Note : la pipe industrielle visible (qui reliait les
+             icônes) a été retirée. On garde le path #smog-spine
+             dans <defs> car les bulles l'utilisent comme guide de
+             trajectoire via <mpath>, mais elle n'est plus dessinée :
+             les bulles donnent toute la structure visuelle, le
+             smog ambiant donne l'atmosphère, c'est suffisant. -->
 
         <!-- ======================================================
              COUCHE 3 — Bulles avec relief 3D + wobble organique
