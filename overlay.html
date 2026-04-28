@@ -15,19 +15,27 @@
     <div id="carousel">
       <div id="global-counter"></div>
 
-      <!-- Hexstream : filière magique hextech qui parcourt l'arc du
-           carrousel avec quelques particules dorées dérivantes.
-           Utilisée uniquement par le thème Hextech (cachée sinon).
+      <!-- Hexstream — circuit hextech d'Arcane.
            Le SVG est placé AVANT le nom et les slots pour qu'il soit
-           rendu en arrière-plan : on voit le filament et les
-           particules entre les icônes, mais ils sont cachés derrière
-           les icônes elles-mêmes pour un effet "filament magique
-           qui passe par les hexgems". -->
+           rendu en arrière-plan : filament et particules visibles
+           entre les icônes, cachés derrière elles → effet "filament
+           magique qui passe par les hexgems".
+
+           Architecture :
+             - 1 filament doré le long de l'arc (le "circuit")
+             - 4 particules circulant dessus, chacune avec un id SMIL
+               pour pouvoir les référencer comme sources de sync :
+                 * p-gold-1 (la plus grosse, dur 9s)  — cadre métallique
+                 * p-gold-2 (moyenne, dur 11s)        — cadre métallique
+                 * p-cyan-1 (signature, dur 10s)      — magie qui circule
+                 * p-cyan-2 (petite, dur 14s)         — magie qui circule
+             - 4 nœuds hexagonaux (stations) AUX positions exactes du
+               path, qui scintillent (sparkle) quand une particule
+               les TOUCHE réellement, via les événements SMIL
+               `id.begin + offset` et `id.repeat + offset`. -->
       <svg id="hex-stream" viewBox="-110 -450 220 900"
            preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         <defs>
-          <!-- Dégradé doré le long du filament : fondu aux extrémités
-               pour qu'il "naisse" et "meure" dans le vide. -->
           <linearGradient id="hex-spine-grad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%"   stop-color="#d4a544" stop-opacity="0"/>
             <stop offset="15%"  stop-color="#d4a544" stop-opacity="0.20"/>
@@ -36,7 +44,6 @@
             <stop offset="100%" stop-color="#d4a544" stop-opacity="0"/>
           </linearGradient>
 
-          <!-- Glow doux pour le filament et les particules. -->
           <filter id="hex-glow" x="-150%" y="-150%" width="400%" height="400%">
             <feGaussianBlur stdDeviation="1.6" result="b"/>
             <feMerge>
@@ -45,23 +52,15 @@
             </feMerge>
           </filter>
 
-          <!-- Path partagé par le filament visible ET les particules
-               qui le suivent en mouvement. Courbes quadratiques
-               passant par les centres des 5 slots, prolongées au-delà
-               aux deux bouts pour que les particules apparaissent /
-               disparaissent doucement dans le vide. -->
+          <!-- Path partagé : courbes Bézier quadratiques passant par
+               les centres des 5 slots, prolongé aux bouts pour le
+               fade in/out des particules dans le vide. -->
           <path id="hex-spine"
-                d="M -80,-420
-                   Q -80,-385 -80,-360
-                   Q -55,-285 -35,-210
-                   Q -15,-105 0,0
-                   Q -15,105 -35,210
-                   Q -55,285 -80,360
-                   Q -80,385 -80,420"
+                d="M -80,-420 Q -80,-385 -80,-360 Q -55,-285 -35,-210 Q -15,-105 0,0 Q -15,105 -35,210 Q -55,285 -80,360 Q -80,385 -80,420"
                 fill="none"/>
         </defs>
 
-        <!-- Filament lui-même : visible mais discret. -->
+        <!-- Filament visible -->
         <use href="#hex-spine"
              stroke="url(#hex-spine-grad)"
              stroke-width="1.4"
@@ -69,162 +68,141 @@
              fill="none"
              filter="url(#hex-glow)"/>
 
-        <!-- Particules dorées qui dérivent. Tailles, durées et délais
-             différents → distribution organique, pas de "convoi". -->
+        <!-- ============= PARTICULES (4 au total, avec ids) =============
+             Chaque animateMotion porte un id pour servir de source de
+             sync aux sparkles des nœuds. -->
+
+        <!-- p-gold-1 : la plus grosse (cadre métallique) -->
         <circle r="2.4" fill="#ffeb9d" filter="url(#hex-glow)">
-          <animateMotion dur="9s" repeatCount="indefinite">
+          <animateMotion id="p-gold-1" dur="9s" repeatCount="indefinite">
             <mpath href="#hex-spine"/>
           </animateMotion>
-          <animate attributeName="opacity"
-                   values="0; 0.95; 0.95; 0"
-                   keyTimes="0; 0.15; 0.85; 1"
-                   dur="9s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.95; 0.95; 0" keyTimes="0; 0.15; 0.85; 1" dur="9s" repeatCount="indefinite"/>
         </circle>
 
-        <circle r="1.7" fill="#f5dfa8" filter="url(#hex-glow)">
-          <animateMotion dur="11s" begin="3s" repeatCount="indefinite">
+        <!-- p-gold-2 : moyenne (cadre métallique) -->
+        <circle r="1.7" fill="#f5dfa8" opacity="0" filter="url(#hex-glow)">
+          <animateMotion id="p-gold-2" dur="11s" begin="3s" repeatCount="indefinite">
             <mpath href="#hex-spine"/>
           </animateMotion>
-          <animate attributeName="opacity"
-                   values="0; 0.75; 0.75; 0"
-                   keyTimes="0; 0.15; 0.85; 1"
-                   dur="11s" begin="3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.75; 0.75; 0" keyTimes="0; 0.15; 0.85; 1" dur="11s" begin="3s" repeatCount="indefinite"/>
         </circle>
 
-        <circle r="1.4" fill="#fff5c8" filter="url(#hex-glow)">
-          <animateMotion dur="13s" begin="6s" repeatCount="indefinite">
-            <mpath href="#hex-spine"/>
-          </animateMotion>
-          <animate attributeName="opacity"
-                   values="0; 0.85; 0.85; 0"
-                   keyTimes="0; 0.15; 0.85; 1"
-                   dur="13s" begin="6s" repeatCount="indefinite"/>
-        </circle>
-
-        <!-- Particules CYAN-BLEU : signature Hextech d'Arcane.
-             Les 3 particules dorées au-dessus représentent le cadre
-             métallique ; ces 2 cyan représentent la MAGIE qui circule
-             dans le circuit. Sur la même ligne que les dorées (suivent
-             le path #hex-spine sans offset latéral) → la "magie qui
-             traverse les stations" est cohérente avec le tracé. -->
-
+        <!-- p-cyan-1 : signature magie hextech -->
         <circle r="2.0" fill="#c8e6ff" opacity="0" filter="url(#hex-glow)">
-          <animateMotion dur="10s" begin="1.5s" repeatCount="indefinite">
+          <animateMotion id="p-cyan-1" dur="10s" begin="1.5s" repeatCount="indefinite">
             <mpath href="#hex-spine"/>
           </animateMotion>
-          <animate attributeName="opacity"
-                   values="0; 0.85; 0.85; 0"
-                   keyTimes="0; 0.15; 0.85; 1"
-                   dur="10s" begin="1.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="10s" begin="1.5s" repeatCount="indefinite"/>
         </circle>
 
+        <!-- p-cyan-2 : signature, plus petite -->
         <circle r="1.5" fill="#9ecbff" opacity="0" filter="url(#hex-glow)">
-          <animateMotion dur="14s" begin="7s" repeatCount="indefinite">
+          <animateMotion id="p-cyan-2" dur="14s" begin="7s" repeatCount="indefinite">
             <mpath href="#hex-spine"/>
           </animateMotion>
-          <animate attributeName="opacity"
-                   values="0; 0.75; 0.75; 0"
-                   keyTimes="0; 0.15; 0.85; 1"
-                   dur="14s" begin="7s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.75; 0.75; 0" keyTimes="0; 0.15; 0.85; 1" dur="14s" begin="7s" repeatCount="indefinite"/>
         </circle>
 
-        <!-- ======================================================
-             NŒUDS HEXAGONAUX — stations du circuit Hextech
-             ======================================================
-             4 hexagones décoratifs placés EXACTEMENT sur le path
-             #hex-spine, aux 4 midpoints entre les icônes. Coords
-             calculées pour t=0.4 / 0.43 sur les courbes Bézier
-             quadratiques du path :
-               - Nœud 1 (entre prev2 et prev1) : (-61, -300)
-               - Nœud 2 (entre prev1 et current) : (-19, -120)
-               - Nœud 3 (entre current et next1) : (-19, +120)
-               - Nœud 4 (entre next1 et next2) : (-61, +300)
+        <!-- ============= NŒUDS HEXAGONAUX (stations) =============
+             Placés EXACTEMENT sur le path, aux fractions calculées
+             par arc length :
+               Nœud 1 (-61, -300)  fraction 0.143
+               Nœud 2 (-19, -120)  fraction 0.359
+               Nœud 3 (-19, +120)  fraction 0.642
+               Nœud 4 (-61, +300)  fraction 0.857
 
-             Style 'station' : hexagone d'or fin (la monture) + gemme
-             cyan-blanc au centre (la magie).
+             SPARKLE SYNCHRONISÉ : chaque nœud a 4 <animateTransform>
+             scale, un par particule, avec begin = "p-X.begin + Δs;
+             p-X.repeat + Δs" où Δ = duration_particule × fraction.
+             additive="sum" → les sparkles se composent par
+             multiplication des scales si plusieurs particules sont
+             au même nœud simultanément (rare).
 
-             Animation à deux niveaux :
-               1. Pulse de fond doux (opacity 0.45→0.85, cycle 6s)
-                  avec begins désynchronisés (0/1.5/3/4.5s) pour qu'
-                  aucun nœud ne pulse en phase avec un autre.
-               2. SPARKLE checkpoint : un <animateTransform type='scale'>
-                  appliqué à un <g> interne (pour scale autour du
-                  centre du nœud) avec 4 spikes brefs par cycle de
-                  12s (keyTimes irréguliers) — l'effet 'checkpoint'
-                  quand une particule passe. La fréquence (~3s entre
-                  spikes) est calibrée sur le rythme moyen des
-                  passages de particules (5 particules × ~10s de
-                  cycle / 4 nœuds → ~2-3s/nœud). L'œil perçoit la
-                  corrélation visuelle même si elle n'est pas
-                  rigoureusement synchronisée. -->
+             Calculs des offsets (D × f) :
+               Node 1 (f=0.143)  gold-1: 1.29  gold-2: 1.57  cyan-1: 1.43  cyan-2: 2.00
+               Node 2 (f=0.359)  gold-1: 3.23  gold-2: 3.95  cyan-1: 3.59  cyan-2: 5.03
+               Node 3 (f=0.642)  gold-1: 5.78  gold-2: 7.06  cyan-1: 6.42  cyan-2: 8.99
+               Node 4 (f=0.857)  gold-1: 7.71  gold-2: 9.43  cyan-1: 8.57  cyan-2: 12.00
+
+             Sparkle : scale 1 → 1.55 → 1 sur 0.5s, keyTimes "0; 0.3; 1"
+             pour rise rapide et fall plus douce (effet "checkpoint hit"). -->
         <g class="hex-nodes" filter="url(#hex-glow)">
 
-          <!-- Nœud 1 : entre prev2 et prev1, sur le path -->
+          <!-- Nœud 1 : (-61, -300) -->
           <g transform="translate(-61, -300)">
-            <g>
-              <polygon points="0,-6.5 5.63,-3.25 5.63,3.25 0,6.5 -5.63,3.25 -5.63,-3.25"
-                       fill="none" stroke="#d4a544" stroke-width="0.8" stroke-linejoin="round">
-                <animate attributeName="opacity" values="0.45; 0.85; 0.45" dur="6s" repeatCount="indefinite"/>
-              </polygon>
-              <circle r="1.3" fill="#c8e6ff">
-                <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" repeatCount="indefinite"/>
-              </circle>
-              <animateTransform attributeName="transform" type="scale"
-                                values="1; 1; 1.55; 1; 1; 1.55; 1; 1; 1.55; 1; 1; 1.55; 1"
-                                keyTimes="0; 0.06; 0.09; 0.12; 0.30; 0.33; 0.36; 0.55; 0.58; 0.61; 0.81; 0.84; 1"
-                                dur="12s" begin="0s" repeatCount="indefinite"/>
-            </g>
+            <polygon points="0,-6.5 5.63,-3.25 5.63,3.25 0,6.5 -5.63,3.25 -5.63,-3.25"
+                     fill="none" stroke="#d4a544" stroke-width="0.8" stroke-linejoin="round">
+              <animate attributeName="opacity" values="0.45; 0.85; 0.45" dur="6s" repeatCount="indefinite"/>
+            </polygon>
+            <circle r="1.3" fill="#c8e6ff">
+              <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" repeatCount="indefinite"/>
+            </circle>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-gold-1.begin + 1.29s; p-gold-1.repeat + 1.29s"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-gold-2.begin + 1.57s; p-gold-2.repeat + 1.57s"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-cyan-1.begin + 1.43s; p-cyan-1.repeat + 1.43s"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-cyan-2.begin + 2.00s; p-cyan-2.repeat + 2.00s"/>
           </g>
 
-          <!-- Nœud 2 : entre prev1 et current, sur le path -->
+          <!-- Nœud 2 : (-19, -120) -->
           <g transform="translate(-19, -120)">
-            <g>
-              <polygon points="0,-6.5 5.63,-3.25 5.63,3.25 0,6.5 -5.63,3.25 -5.63,-3.25"
-                       fill="none" stroke="#d4a544" stroke-width="0.8" stroke-linejoin="round">
-                <animate attributeName="opacity" values="0.45; 0.85; 0.45" dur="6s" begin="1.5s" repeatCount="indefinite"/>
-              </polygon>
-              <circle r="1.3" fill="#c8e6ff">
-                <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="1.5s" repeatCount="indefinite"/>
-              </circle>
-              <animateTransform attributeName="transform" type="scale"
-                                values="1; 1; 1.55; 1; 1; 1.55; 1; 1; 1.55; 1; 1; 1.55; 1"
-                                keyTimes="0; 0.06; 0.09; 0.12; 0.30; 0.33; 0.36; 0.55; 0.58; 0.61; 0.81; 0.84; 1"
-                                dur="12s" begin="3s" repeatCount="indefinite"/>
-            </g>
+            <polygon points="0,-6.5 5.63,-3.25 5.63,3.25 0,6.5 -5.63,3.25 -5.63,-3.25"
+                     fill="none" stroke="#d4a544" stroke-width="0.8" stroke-linejoin="round">
+              <animate attributeName="opacity" values="0.45; 0.85; 0.45" dur="6s" begin="1.5s" repeatCount="indefinite"/>
+            </polygon>
+            <circle r="1.3" fill="#c8e6ff">
+              <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="1.5s" repeatCount="indefinite"/>
+            </circle>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-gold-1.begin + 3.23s; p-gold-1.repeat + 3.23s"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-gold-2.begin + 3.95s; p-gold-2.repeat + 3.95s"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-cyan-1.begin + 3.59s; p-cyan-1.repeat + 3.59s"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-cyan-2.begin + 5.03s; p-cyan-2.repeat + 5.03s"/>
           </g>
 
-          <!-- Nœud 3 : entre current et next1, sur le path -->
+          <!-- Nœud 3 : (-19, +120) -->
           <g transform="translate(-19, 120)">
-            <g>
-              <polygon points="0,-6.5 5.63,-3.25 5.63,3.25 0,6.5 -5.63,3.25 -5.63,-3.25"
-                       fill="none" stroke="#d4a544" stroke-width="0.8" stroke-linejoin="round">
-                <animate attributeName="opacity" values="0.45; 0.85; 0.45" dur="6s" begin="3s" repeatCount="indefinite"/>
-              </polygon>
-              <circle r="1.3" fill="#c8e6ff">
-                <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="3s" repeatCount="indefinite"/>
-              </circle>
-              <animateTransform attributeName="transform" type="scale"
-                                values="1; 1; 1.55; 1; 1; 1.55; 1; 1; 1.55; 1; 1; 1.55; 1"
-                                keyTimes="0; 0.06; 0.09; 0.12; 0.30; 0.33; 0.36; 0.55; 0.58; 0.61; 0.81; 0.84; 1"
-                                dur="12s" begin="6s" repeatCount="indefinite"/>
-            </g>
+            <polygon points="0,-6.5 5.63,-3.25 5.63,3.25 0,6.5 -5.63,3.25 -5.63,-3.25"
+                     fill="none" stroke="#d4a544" stroke-width="0.8" stroke-linejoin="round">
+              <animate attributeName="opacity" values="0.45; 0.85; 0.45" dur="6s" begin="3s" repeatCount="indefinite"/>
+            </polygon>
+            <circle r="1.3" fill="#c8e6ff">
+              <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="3s" repeatCount="indefinite"/>
+            </circle>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-gold-1.begin + 5.78s; p-gold-1.repeat + 5.78s"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-gold-2.begin + 7.06s; p-gold-2.repeat + 7.06s"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-cyan-1.begin + 6.42s; p-cyan-1.repeat + 6.42s"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-cyan-2.begin + 8.99s; p-cyan-2.repeat + 8.99s"/>
           </g>
 
-          <!-- Nœud 4 : entre next1 et next2, sur le path -->
+          <!-- Nœud 4 : (-61, +300) -->
           <g transform="translate(-61, 300)">
-            <g>
-              <polygon points="0,-6.5 5.63,-3.25 5.63,3.25 0,6.5 -5.63,3.25 -5.63,-3.25"
-                       fill="none" stroke="#d4a544" stroke-width="0.8" stroke-linejoin="round">
-                <animate attributeName="opacity" values="0.45; 0.85; 0.45" dur="6s" begin="4.5s" repeatCount="indefinite"/>
-              </polygon>
-              <circle r="1.3" fill="#c8e6ff">
-                <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="4.5s" repeatCount="indefinite"/>
-              </circle>
-              <animateTransform attributeName="transform" type="scale"
-                                values="1; 1; 1.55; 1; 1; 1.55; 1; 1; 1.55; 1; 1; 1.55; 1"
-                                keyTimes="0; 0.06; 0.09; 0.12; 0.30; 0.33; 0.36; 0.55; 0.58; 0.61; 0.81; 0.84; 1"
-                                dur="12s" begin="9s" repeatCount="indefinite"/>
-            </g>
+            <polygon points="0,-6.5 5.63,-3.25 5.63,3.25 0,6.5 -5.63,3.25 -5.63,-3.25"
+                     fill="none" stroke="#d4a544" stroke-width="0.8" stroke-linejoin="round">
+              <animate attributeName="opacity" values="0.45; 0.85; 0.45" dur="6s" begin="4.5s" repeatCount="indefinite"/>
+            </polygon>
+            <circle r="1.3" fill="#c8e6ff">
+              <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="4.5s" repeatCount="indefinite"/>
+            </circle>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-gold-1.begin + 7.71s; p-gold-1.repeat + 7.71s"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-gold-2.begin + 9.43s; p-gold-2.repeat + 9.43s"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-cyan-1.begin + 8.57s; p-cyan-1.repeat + 8.57s"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1" keyTimes="0; 0.3; 1" dur="0.5s" additive="sum"
+                              begin="p-cyan-2.begin + 12.00s; p-cyan-2.repeat + 12.00s"/>
           </g>
 
         </g>

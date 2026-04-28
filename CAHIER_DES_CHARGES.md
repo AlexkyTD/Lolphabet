@@ -189,8 +189,8 @@ lolphabet/
 │   ├── overlay.css           ← styles du carrousel + options + formes
 │   ├── control.css           ← styles du panneau (cards, toggles, slider)
 │   └── themes/               ← un fichier CSS par thème visuel
-│       ├── hextech.css       ← thème Hextech / Piltover (or, halo, Hexstream)
-│       └── zaun.css          ← thème Zaun / Shimmer (toxique, pipe, bulles)
+│       ├── hextech.css       ← thème Hextech / Piltover (or + cœur cyan)
+│       └── zaun.css          ← thème Zaun / Shimmer (toxique + smog + goutte)
 ├── js/
 │   ├── data-dragon.js        ← fetch + cache champions Data Dragon
 │   ├── positions-data.js     ← mapping champion → poste
@@ -239,7 +239,7 @@ sans dégrader la lisibilité du cadre (option `blurUpcoming`).
 
 `.slot-aura` est rendue invisible par défaut (`opacity: 0`) ; les thèmes
 décoratifs (ex : `theme-hextech`) l'activent uniquement sur le slot central
-pour y appliquer une aura conique animée derrière l'icône.
+pour y appliquer un halo radial animé derrière l'icône.
 
 ### Système de thèmes visuels
 
@@ -251,6 +251,44 @@ seul le thème actif s'applique réellement.
 Cette architecture permet d'ajouter de nouveaux thèmes (Zaun, Summoner's Rift…)
 en créant un fichier CSS et en l'ajoutant à `Settings.ENUM_VALUES.theme` —
 aucune modification du code existant.
+
+### Effets décoratifs SVG (Hexstream et Smogstream)
+
+Deux SVG décoratifs sont définis dans `overlay.html` (`#hex-stream` et
+`#smog-stream`), positionnés en arrière-plan du carrousel et activés
+respectivement par les thèmes Hextech et Zaun via la classe `body.theme-X`.
+
+**Hexstream (Hextech)** :
+- Path `#hex-spine` : courbes Bézier quadratiques passant par les centres des
+  5 slots, avec extensions aux bouts pour le fade in/out.
+- 1 filament doré visible dessiné sur le path.
+- 4 particules (avec `id` SMIL) qui circulent : `p-gold-1`, `p-gold-2`
+  (le cadre métallique) et `p-cyan-1`, `p-cyan-2` (la magie qui circule).
+- 4 nœuds hexagonaux placés aux fractions calculées par arc length :
+  `0.143 / 0.359 / 0.642 / 0.857` du path → positions `(-61,-300)`,
+  `(-19,-120)`, `(-19,+120)`, `(-61,+300)`.
+- **Sparkle synchronisé** sur chaque nœud via `<animateTransform additive="sum">`
+  déclenché par `id.begin + Δs` et `id.repeat + Δs`, avec
+  Δ = `duration_particule × fraction_du_nœud`. Quand une particule **touche
+  réellement** un nœud, il scintille en temps réel (effet "checkpoint").
+- Lueur cyan à l'intérieur du cadre central : pseudo-élément `::after` sur
+  `.slot-frame-inner` avec radial-gradient cyan + `mix-blend-mode: screen`.
+  Fonctionne sur toutes les formes (rounded / hexagonal / circle) car héritage
+  du clipping du parent.
+
+**Smogstream (Zaun)** :
+- 5 nappes de smog environnemental (radial-gradients diffuses, grosses, animées
+  vers le haut avec dérive horizontale et croissance en taille). 4 vertes + 1
+  magenta Shimmer pour la touche de couleur signature.
+- 5 bulles avec relief 3D (radial-gradient interne simulant un point lumineux),
+  dispersées latéralement (offsets `-14, 0, +12, +28, +42`), wobble organique
+  via animation `cx` indépendante du mouvement le long du path. Durées en
+  nombres premiers entre eux (6, 7, 9, 11, 17 s) pour un mouvement réellement
+  chaotique.
+- Goutte qui tombe sous le cadre central : pseudo-élément `::after` sur `#slots`
+  avec keyframes en 5 phases (formation, dangle, élongation, chute, dispersion).
+- Vignettage interne : `box-shadow inset` vert sombre sur `.slot-frame-inner`
+  du slot central.
 
 ### Forme des cadres
 

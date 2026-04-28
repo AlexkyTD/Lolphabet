@@ -31,6 +31,7 @@
  *   State.setIndex(i)              -> fixe l'index de l'instance active
  *   State.resetCurrent()           -> reset l'instance du mode de tri actif
  *   State.SORT_MODES               -> liste des modes de tri valides
+ *   State.STORAGE_KEY              -> clé localStorage utilisée
  * -----------------------------------------------------------------
  */
 (function () {
@@ -158,6 +159,7 @@
   // --- Export --------------------------------------------------------------
 
   window.Lolphabet.State = {
+    STORAGE_KEY,
     SORT_MODES,
     load,
     save,

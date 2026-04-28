@@ -43,7 +43,7 @@
   let nameEl = null;
   let counterEl = null;
 
-  // Map championId -> { element, offset, badgeEl, championIndex }
+  // Map championId -> { element, offset, badgeEl }
   const slotPool = new Map();
 
   // --- Helpers -------------------------------------------------------------
@@ -267,7 +267,7 @@
     // échoue souvent.
     window.addEventListener('storage', (ev) => {
       if (!ev.key) return;
-      if (ev.key === 'lolphabet.state.v1' && ev.newValue) {
+      if (ev.key === State.STORAGE_KEY && ev.newValue) {
         const prevSortMode = State.getSortMode();
         State.load();
         if (State.getSortMode() !== prevSortMode) hardRefresh();
@@ -283,10 +283,10 @@
     // dans l'environnement (ex : OBS CEF en file:// avec certaines
     // politiques restrictives). Coût : deux lectures localStorage +
     // un compare, quasi nul.
-    let lastStateSig = signatureOfKey('lolphabet.state.v1');
+    let lastStateSig = signatureOfKey(State.STORAGE_KEY);
     let lastSettingsSig = signatureOfKey(Settings.STORAGE_KEY);
     setInterval(() => {
-      const stateSig = signatureOfKey('lolphabet.state.v1');
+      const stateSig = signatureOfKey(State.STORAGE_KEY);
       if (stateSig !== lastStateSig) {
         lastStateSig = stateSig;
         const prevSortMode = State.getSortMode();

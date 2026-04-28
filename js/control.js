@@ -3,10 +3,14 @@
  * -----------------------------------------------------------------
  * Logique du panneau de contrôle : affiche le champion actuel,
  * pilote l'index via les boutons Précédent / Suivant / Reset /
- * Sauter à, et permet de changer le mode de tri.
+ * Sauter à, le mode de tri, le thème, la forme des cadres et
+ * toutes les options d'affichage (numéros, flou, marquages,
+ * compteur global).
  *
- * Chaque changement d'état est persisté via State.save() (implicite)
+ * Chaque changement de progression est persisté via State.set*()
  * puis diffusé à l'overlay via Bus.publish("state-changed", ...).
+ * Chaque changement de préférence d'affichage est persisté via
+ * Settings.set() puis diffusé via Bus.publish("settings-changed", ...).
  * -----------------------------------------------------------------
  */
 (function () {

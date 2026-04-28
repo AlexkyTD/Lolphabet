@@ -30,7 +30,6 @@
 
   /* Épaisseur de la bordure (= inset du frame-inner par rapport au frame). */
   --frame-border: 3px;
-  --frame-border-current: 4px;
 
   /* Rayons pour le mode "carré arrondi". */
   --radius-outer: 12px;

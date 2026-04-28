@@ -23,8 +23,10 @@
  *                                       (cb reçoit le payload)
  *
  * Événements utilisés dans Lolphabet :
- *   - "state-changed" : l'overlay doit se rafraîchir
+ *   - "state-changed"     : la progression / mode de tri a changé
  *     payload = { sortMode, index, reason }
+ *   - "settings-changed"  : une préférence d'affichage a changé
+ *     payload = { key, value }
  * -----------------------------------------------------------------
  */
 (function () {

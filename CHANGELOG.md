@@ -6,6 +6,31 @@ Le projet suit (à peu près) le [versioning sémantique](https://semver.org/lan
 
 ---
 
+## [Unreleased]
+
+### ☣ Thème Zaun — peaufinage
+- **Trait de liaison entre icônes retiré** sur Zaun : la "pipe" industrielle dashée alourdissait l'identité visuelle, les bulles + le smog suffisent à porter le thème.
+- **Smog renforcé** : 2 nappes ajoutées sur le côté droit (jusque-là vide à cause du biais d'arc des icônes vers la gauche), opacités peak augmentées (~+0.10). Total 5 nappes avec durées en nombres premiers entre eux (19/22/26/29/35 s) → aucune synchronisation jamais.
+- **Bulles dispersées latéralement** : chaque bulle est enveloppée dans un `<g transform="translate(X, 0)">` avec X différent (0, +28, −14, +42, +12) → fini le "convoi" sur une seule ligne.
+- **Pop-in des nappes corrigé** : `opacity="0"` ajouté comme attribut par défaut sur tous les `<circle>` avec `begin > 0`, pour qu'ils ne soient pas rendus à pleine opacité sur leur position initiale entre `t=0` et `t=begin`.
+
+### ✨ Thème Hextech — identité Piltover renforcée
+- **Cœur magique cyan-bleu** ajouté (le gros oubli initial) : le thème était trop monochrome doré, alors que l'identité Hextech d'Arcane est un duo or (cadre métallique) + cyan (magie cristalline des hexgems).
+  - Aura interne : couche cœur passée de blanc-or à blanc-cyan (`#c8e6ff` → `#9ecbff`).
+  - **Lueur cyan visible à l'intérieur du cadre** : pseudo-élément `::after` sur `.slot-frame-inner` avec radial-gradient (transparent au centre, cyan aux bords) + `mix-blend-mode: screen`. Fonctionne sur **toutes les formes** (rounded / hexagonal / circle) car héritage du clip-path / border-radius du parent.
+  - 2 particules cyan ajoutées au Hexstream (`#c8e6ff` et `#9ecbff`) en plus des dorées.
+- **4 nœuds hexagonaux** placés EXACTEMENT sur le path (positions calculées par arc length) : `(-61,-300)`, `(-19,-120)`, `(-19,+120)`, `(-61,+300)`. Style "station de circuit" : hexagone d'or fin + gemme cyan-blanc au centre. Orientation cohérente avec `shape-hexagonal`.
+- **Sparkle synchronisé en temps réel** : chaque nœud reçoit 4 `<animateTransform type="scale">` avec `additive="sum"`, déclenchés via les événements SMIL `id.begin + Δs` et `id.repeat + Δs` où Δ = `duration_particule × fraction_du_path`. Quand une particule **touche réellement** un nœud, il scintille (scale 1 → 1.55 → 1 sur 0.5 s, keyTimes "0; 0.3; 1" pour effet "checkpoint hit").
+- **1 particule dorée retirée** du Hexstream (la plus petite, r=1.4) : 4 particules au total (2 dorées + 2 cyan) au lieu de 5, aération visuelle.
+
+### 🧹 Nettoyage du code
+- `--frame-border-current: 4px` (variable CSS jamais utilisée) supprimée.
+- `State.STORAGE_KEY` exposé (cohérence avec `Settings.STORAGE_KEY`) ; les références en dur dans `overlay.js` remplacées par la constante.
+- Headers JSDoc mis à jour : `bus.js` documente maintenant l'événement `settings-changed`, `control.js` reflète la portée actuelle (settings + apparence), `state.js` documente `STORAGE_KEY`.
+- Dossier `data/` vide (héritage du cahier des charges initial avant que `positions.json` devienne `js/positions-data.js`) supprimé.
+
+---
+
 ## [1.3.0] — 2026-04-27
 
 ### ☣ Refonte en profondeur du thème Zaun

@@ -111,11 +111,16 @@ Carte **"Apparence"** du panneau de contrôle, deux choix indépendants :
 Les deux options se combinent librement (ex. Hextech + Hexagonal pour un look pile inspiré d'Arcane, ou Classique + Hexagonal pour un look LoL plus sobre).
 
 ### Le thème **Hextech / Piltover ✨**
-Inspiré directement de l'univers visuel de la série Arcane : or chaud, cadres dorés, magie hextech. Au programme :
+Inspiré directement de l'univers visuel de la série Arcane : or chaud + magie cyan, comme les hexgems de Heimerdinger.
 - 💛 Cadre central en dégradé or (clair → sombre) façon métal poli Piltover
-- 🌟 Halo radial doré qui respire derrière le champion en cours
+- 🔵 **Cœur magique cyan-bleu** qui irradie depuis l'intérieur du cadre — le contraste or/cyan est la signature Hextech
+- 🌟 Halo radial qui respire derrière le champion (cœur cyan + halo or)
 - ✨ Glow volumétrique en pile de drop-shadow (1px crisp + couches diffuses)
-- 🪙 **Hexstream** : filament doré qui parcourt l'arc du carrousel, avec 3 particules qui dérivent de bas en haut
+- 🪙 **Hexstream** — circuit hextech qui parcourt l'arc du carrousel :
+  - Filament doré le long de la courbe
+  - 4 particules qui circulent (2 dorées = le cadre métallique, 2 cyan = la magie qui circule)
+  - 4 **nœuds hexagonaux** placés exactement sur le path entre les icônes (or + gemme cyan)
+  - **Sparkle synchronisé** : chaque nœud scintille brièvement quand une particule passe dessus (effet "checkpoint" en temps réel via syncbase events SMIL)
 
 ### Le thème **Zaun / Shimmer ☣**
 Les bas-fonds chimiques de Piltover, façon Singed / Twitch / Zac / Shimmer dans Arcane. Une vraie ambiance toxique et industrielle vivante :
@@ -123,11 +128,10 @@ Les bas-fonds chimiques de Piltover, façon Singed / Twitch / Zac / Shimmer dans
 - 💧 **Goutte qui tombe** sous le slot central — formation, dangle, chute, dispersion (cycle 5 s)
 - 🧪 Pulse instable avec **shift chromatique** vers le jaune-acide au pic (réaction chimique)
 - 💨 **Smogstream multi-couches** :
-  - Nappes de smog qui dérivent vers le haut (3 grosses radial gradients)
-  - Pipe industrielle qui fuit (dasharray irrégulier)
-  - 5 bulles avec **vrai relief 3D** (highlight interne via radial gradient), wobble organique (mouvement chaotique non périodique)
-  - 1 rare bulle **Shimmer magenta** qui passe toutes les ~17 s (événement visuel)
-- 💜 Champions joués marqués en **magenta Shimmer** (référence à la drogue d'Arcane)
+  - **5 nappes de smog** environnemental qui dérivent vers le haut (4 vertes + 1 magenta Shimmer)
+  - 5 **bulles** avec **vrai relief 3D** (highlight interne via radial gradient), dispersées latéralement, wobble organique (timings en nombres premiers entre eux → aucune périodicité)
+  - 1 rare **bulle Shimmer magenta** qui passe toutes les ~17 s (événement visuel récompensant l'attention)
+- 💜 Champions joués marqués en **magenta Shimmer** (référence à la drogue d'Arcane qui transforme les corps)
 - 🔆 Nom du champion en vert acide avec un **flicker très rare** type enseigne néon défectueuse
 
 > 💡 D'autres thèmes (Summoner's Rift) arriveront dans les prochaines versions. Si tu as une idée de thème, ouvre une issue !
