@@ -48,6 +48,18 @@ body.theme-hextech .slot.is-current .slot-frame {
   );
 }
 
+/* Inset glow CYAN-BLEU sur le frame-inner — simule la magie hextech
+   qui irradie depuis l'intérieur du cadre, comme la lumière d'un
+   hexgem encadré dans son support doré. C'est cet effet qui fait
+   "machine magique de Heimerdinger" plutôt que "cadre doré simple".
+   Double couche pour la profondeur : une lueur diffuse + un liseré
+   intérieur plus net. */
+body.theme-hextech .slot.is-current .slot-frame-inner {
+  box-shadow:
+    inset 0 0 18px rgba(108, 180, 255, 0.30),
+    inset 0 0 4px rgba(180, 220, 255, 0.25);
+}
+
 /* Pile de drop-shadow pour un glow volumétrique. La règle pro :
      - 1px crisp = définit le contour (l'œil "voit" la limite nette)
      - 6px close = éclairage proche, intense
@@ -97,14 +109,16 @@ body.theme-hextech .slot.is-current {
 body.theme-hextech .slot.is-current .slot-aura {
   opacity: 1;
   background:
-    /* Cœur lumineux, très petit, blanc-or chaud. */
+    /* Cœur magique CYAN-BLEU — la signature Hextech d'Arcane.
+       Sans ce cyan, le thème ressemble à du "doré générique".
+       Avec, on retrouve l'identité hexgem (cadre or + cœur cyan). */
     radial-gradient(
       circle at center,
-      rgba(255, 235, 180, 0.40) 0%,
-      rgba(255, 220, 130, 0.20) 12%,
+      rgba(200, 230, 255, 0.45) 0%,
+      rgba(150, 200, 255, 0.22) 12%,
       transparent 30%
     ),
-    /* Halo principal doré, resserré. */
+    /* Halo extérieur doré (le "métal" autour de la magie). */
     radial-gradient(
       circle at center,
       rgba(212, 165, 68, 0.25) 25%,
@@ -112,7 +126,7 @@ body.theme-hextech .slot.is-current .slot-aura {
       transparent 65%
     );
   animation: hextech-breath 4s ease-in-out infinite;
-  /* Mix-blend-mode "screen" : les pixels clairs s'additionnent à
+  /* mix-blend-mode "screen" : les pixels clairs s'additionnent à
      ce qu'il y a derrière, ce qui donne un effet "lumière émissive"
      plutôt qu'une couleur posée par-dessus. C'est ce que les VFX
      pros utilisent pour les glows. */

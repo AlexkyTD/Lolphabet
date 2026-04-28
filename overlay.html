@@ -100,6 +100,36 @@
                    keyTimes="0; 0.15; 0.85; 1"
                    dur="13s" begin="6s" repeatCount="indefinite"/>
         </circle>
+
+        <!-- Particules CYAN-BLEU : signature Hextech d'Arcane.
+             Les 3 particules dorées au-dessus représentent le cadre
+             métallique ; ces 2 cyan représentent la MAGIE qui circule
+             dans le circuit. Décalées latéralement (+18 et -12 px)
+             pour ne pas se superposer aux gold sur la même ligne. -->
+
+        <g transform="translate(18, 0)">
+          <circle r="2.0" fill="#c8e6ff" opacity="0" filter="url(#hex-glow)">
+            <animateMotion dur="10s" begin="1.5s" repeatCount="indefinite">
+              <mpath href="#hex-spine"/>
+            </animateMotion>
+            <animate attributeName="opacity"
+                     values="0; 0.85; 0.85; 0"
+                     keyTimes="0; 0.15; 0.85; 1"
+                     dur="10s" begin="1.5s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+
+        <g transform="translate(-12, 0)">
+          <circle r="1.5" fill="#9ecbff" opacity="0" filter="url(#hex-glow)">
+            <animateMotion dur="14s" begin="7s" repeatCount="indefinite">
+              <mpath href="#hex-spine"/>
+            </animateMotion>
+            <animate attributeName="opacity"
+                     values="0; 0.75; 0.75; 0"
+                     keyTimes="0; 0.15; 0.85; 1"
+                     dur="14s" begin="7s" repeatCount="indefinite"/>
+          </circle>
+        </g>
       </svg>
 
       <!-- Smogstream — Refonte v1.3 (vraiment Zaun, pas Hextech-en-vert).
