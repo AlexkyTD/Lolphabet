@@ -130,6 +130,69 @@
                      dur="14s" begin="7s" repeatCount="indefinite"/>
           </circle>
         </g>
+
+        <!-- ======================================================
+             NŒUDS HEXAGONAUX — stations du circuit Hextech
+             ======================================================
+             4 hexagones décoratifs aux midpoints entre les icônes.
+             Position : aux 4 gaps entre les 5 slots (y ≈ -300, -120,
+             +120, +300), légèrement décalés en x pour suivre la
+             courbure de l'arc. Style "station de circuit" : hexagone
+             d'or vide + gemme cyan-blanc au centre. Pulsation très
+             douce (cycle 6s) avec begins désynchronisés pour qu'aucun
+             nœud ne pulse en phase avec un autre.
+
+             Les hexagones reprennent l'orientation du slotShape
+             hexagonal (pointu en haut/bas, plat à gauche/droite)
+             pour cohérence visuelle si l'utilisateur active la
+             forme hexagonale des cadres. -->
+        <g class="hex-nodes" filter="url(#hex-glow)">
+
+          <!-- Nœud 1 : entre prev2 et prev1 -->
+          <g transform="translate(-57, -300)">
+            <polygon points="0,-6.5 5.63,-3.25 5.63,3.25 0,6.5 -5.63,3.25 -5.63,-3.25"
+                     fill="none" stroke="#d4a544" stroke-width="0.8" stroke-linejoin="round">
+              <animate attributeName="opacity" values="0.45; 0.85; 0.45" dur="6s" repeatCount="indefinite"/>
+            </polygon>
+            <circle r="1.3" fill="#c8e6ff">
+              <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+
+          <!-- Nœud 2 : entre prev1 et current -->
+          <g transform="translate(-17, -120)">
+            <polygon points="0,-6.5 5.63,-3.25 5.63,3.25 0,6.5 -5.63,3.25 -5.63,-3.25"
+                     fill="none" stroke="#d4a544" stroke-width="0.8" stroke-linejoin="round">
+              <animate attributeName="opacity" values="0.45; 0.85; 0.45" dur="6s" begin="1.5s" repeatCount="indefinite"/>
+            </polygon>
+            <circle r="1.3" fill="#c8e6ff">
+              <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="1.5s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+
+          <!-- Nœud 3 : entre current et next1 -->
+          <g transform="translate(-17, 120)">
+            <polygon points="0,-6.5 5.63,-3.25 5.63,3.25 0,6.5 -5.63,3.25 -5.63,-3.25"
+                     fill="none" stroke="#d4a544" stroke-width="0.8" stroke-linejoin="round">
+              <animate attributeName="opacity" values="0.45; 0.85; 0.45" dur="6s" begin="3s" repeatCount="indefinite"/>
+            </polygon>
+            <circle r="1.3" fill="#c8e6ff">
+              <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="3s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+
+          <!-- Nœud 4 : entre next1 et next2 -->
+          <g transform="translate(-57, 300)">
+            <polygon points="0,-6.5 5.63,-3.25 5.63,3.25 0,6.5 -5.63,3.25 -5.63,-3.25"
+                     fill="none" stroke="#d4a544" stroke-width="0.8" stroke-linejoin="round">
+              <animate attributeName="opacity" values="0.45; 0.85; 0.45" dur="6s" begin="4.5s" repeatCount="indefinite"/>
+            </polygon>
+            <circle r="1.3" fill="#c8e6ff">
+              <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="4.5s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+
+        </g>
       </svg>
 
       <!-- Smogstream — Refonte v1.3 (vraiment Zaun, pas Hextech-en-vert).
