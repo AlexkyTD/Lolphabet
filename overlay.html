@@ -190,23 +190,44 @@
              diffuse, pas de "balle". Une des nappes est en
              magenta Shimmer pour imprégner discrètement le décor. -->
         <g filter="url(#smoke-heavy-blur)">
+          <!-- Nappe 1 — verte, bas-gauche → haut-gauche, large -->
           <circle cx="-65" cy="380" r="22" fill="url(#smoke-cloud-grad)">
             <animate attributeName="cy" values="380; -420" dur="22s" repeatCount="indefinite"/>
             <animate attributeName="cx" values="-65; -82; -70; -90" dur="22s" repeatCount="indefinite"/>
             <animate attributeName="r"  values="20; 26; 32; 28" dur="22s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0; 0.55; 0.40; 0" keyTimes="0; 0.25; 0.75; 1" dur="22s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.70; 0.55; 0" keyTimes="0; 0.25; 0.75; 1" dur="22s" repeatCount="indefinite"/>
           </circle>
+          <!-- Nappe 2 — verte, milieu-gauche → haut-droit -->
           <circle cx="-95" cy="200" r="18" fill="url(#smoke-cloud-grad)">
             <animate attributeName="cy" values="200; -420" dur="29s" begin="6s" repeatCount="indefinite"/>
             <animate attributeName="cx" values="-95; -75; -98; -65" dur="29s" begin="6s" repeatCount="indefinite"/>
             <animate attributeName="r"  values="16; 22; 28" dur="29s" begin="6s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0; 0.50; 0.35; 0" keyTimes="0; 0.25; 0.75; 1" dur="29s" begin="6s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.65; 0.50; 0" keyTimes="0; 0.25; 0.75; 1" dur="29s" begin="6s" repeatCount="indefinite"/>
           </circle>
+          <!-- Nappe 3 — magenta Shimmer, bas-centre → haut-gauche, lente -->
           <circle cx="-50" cy="0" r="20" fill="url(#shimmer-cloud-grad)">
             <animate attributeName="cy" values="0; -420" dur="35s" begin="13s" repeatCount="indefinite"/>
             <animate attributeName="cx" values="-50; -70; -55; -80" dur="35s" begin="13s" repeatCount="indefinite"/>
             <animate attributeName="r"  values="18; 24; 30" dur="35s" begin="13s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0; 0.40; 0.25; 0" keyTimes="0; 0.25; 0.75; 1" dur="35s" begin="13s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.55; 0.40; 0" keyTimes="0; 0.25; 0.75; 1" dur="35s" begin="13s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Nappe 4 — verte (NOUVEAU), côté droit pour aérer le côté
+               opposé à l'arc des icônes. Démarre milieu-droit, monte
+               en dérivant. -->
+          <circle cx="55" cy="280" r="17" fill="url(#smoke-cloud-grad)">
+            <animate attributeName="cy" values="280; -420" dur="26s" begin="3s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="55; 70; 50; 80" dur="26s" begin="3s" repeatCount="indefinite"/>
+            <animate attributeName="r"  values="15; 22; 28; 24" dur="26s" begin="3s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.60; 0.45; 0" keyTimes="0; 0.25; 0.75; 1" dur="26s" begin="3s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Nappe 5 — verte (NOUVEAU), petite et plus rapide pour
+               créer un peu plus de mouvement perceptible. Démarre
+               bas-droit. -->
+          <circle cx="40" cy="420" r="14" fill="url(#smoke-cloud-grad)">
+            <animate attributeName="cy" values="420; -420" dur="19s" begin="9s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="40; 60; 35; 55" dur="19s" begin="9s" repeatCount="indefinite"/>
+            <animate attributeName="r"  values="12; 18; 22" dur="19s" begin="9s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.55; 0.40; 0" keyTimes="0; 0.25; 0.75; 1" dur="19s" begin="9s" repeatCount="indefinite"/>
           </circle>
         </g>
 
