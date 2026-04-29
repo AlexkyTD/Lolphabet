@@ -8,6 +8,20 @@ Le projet suit (à peu près) le [versioning sémantique](https://semver.org/lan
 
 ## [Unreleased]
 
+> Notes pour la prochaine release (probablement **v1.4.0**) : grosse refonte
+> visuelle du thème Hextech (cœur cyan, nœuds hexagonaux, sparkle synchronisé)
+> et peaufinage Zaun (smog, bulles dispersées, pipe retirée).
+
+### Corrigé
+- **Sparkles des nœuds Hextech qui s'arrêtaient après quelques cycles.**
+  Cause : l'événement SMIL `id.repeat` est mal supporté en continu dans
+  Chrome / OBS CEF — il fire correctement quelques fois puis stoppe.
+  Solution : chaque sparkle a maintenant **sa propre période** (`dur` =
+  durée de la particule qui le déclenche) avec `repeatCount="indefinite"`,
+  et un `begin` offset qui aligne le peak sur le moment où la particule
+  passe au nœud. Plus aucune dépendance sur `id.repeat` → fiable
+  indéfiniment.
+
 ### ☣ Thème Zaun — peaufinage
 - **Trait de liaison entre icônes retiré** sur Zaun : la "pipe" industrielle dashée alourdissait l'identité visuelle, les bulles + le smog suffisent à porter le thème.
 - **Smog renforcé** : 2 nappes ajoutées sur le côté droit (jusque-là vide à cause du biais d'arc des icônes vers la gauche), opacités peak augmentées (~+0.10). Total 5 nappes avec durées en nombres premiers entre eux (19/22/26/29/35 s) → aucune synchronisation jamais.
