@@ -12,6 +12,17 @@ Le projet suit (à peu près) le [versioning sémantique](https://semver.org/lan
 > visuelle du thème Hextech (cœur cyan, nœuds hexagonaux, sparkle synchronisé)
 > et peaufinage Zaun (smog, bulles dispersées, pipe retirée).
 
+### Modifié
+- **Vitesse des particules réduite (~×1.4 plus lent)** sur les deux thèmes
+  pour un mouvement plus contemplatif. Les durées restent **coprimes 2-à-2**
+  pour préserver le mouvement chaotique sans synchronisation perçue :
+  - **Hextech** : `p-gold-1` 9s→13s, `p-gold-2` 11s→17s, `p-cyan-1` 10s→15s,
+    `p-cyan-2` 14s→19s.
+  - **Zaun** : Bulle 1 11s→17s, Bulle 2 7s→11s, Bulle 3 6s→9s, Bulle 4 9s→13s,
+    Bulle 5 (Shimmer) 17s→23s.
+  - Les `begin` offsets des 16 sparkles Hextech ont été **recalculés** en
+    conséquence (`particle_begin + duration × fraction_du_path`).
+
 ### Corrigé
 - **Sparkles des nœuds Hextech qui s'arrêtaient après quelques cycles.**
   Cause : l'événement SMIL `id.repeat` est mal supporté en continu dans

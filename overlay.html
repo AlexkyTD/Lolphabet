@@ -74,34 +74,34 @@
 
         <!-- p-gold-1 : la plus grosse (cadre métallique) -->
         <circle r="2.4" fill="#ffeb9d" filter="url(#hex-glow)">
-          <animateMotion id="p-gold-1" dur="9s" repeatCount="indefinite">
+          <animateMotion id="p-gold-1" dur="13s" repeatCount="indefinite">
             <mpath href="#hex-spine"/>
           </animateMotion>
-          <animate attributeName="opacity" values="0; 0.95; 0.95; 0" keyTimes="0; 0.15; 0.85; 1" dur="9s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.95; 0.95; 0" keyTimes="0; 0.15; 0.85; 1" dur="13s" repeatCount="indefinite"/>
         </circle>
 
         <!-- p-gold-2 : moyenne (cadre métallique) -->
         <circle r="1.7" fill="#f5dfa8" opacity="0" filter="url(#hex-glow)">
-          <animateMotion id="p-gold-2" dur="11s" begin="3s" repeatCount="indefinite">
+          <animateMotion id="p-gold-2" dur="17s" begin="3s" repeatCount="indefinite">
             <mpath href="#hex-spine"/>
           </animateMotion>
-          <animate attributeName="opacity" values="0; 0.75; 0.75; 0" keyTimes="0; 0.15; 0.85; 1" dur="11s" begin="3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.75; 0.75; 0" keyTimes="0; 0.15; 0.85; 1" dur="17s" begin="3s" repeatCount="indefinite"/>
         </circle>
 
         <!-- p-cyan-1 : signature magie hextech -->
         <circle r="2.0" fill="#c8e6ff" opacity="0" filter="url(#hex-glow)">
-          <animateMotion id="p-cyan-1" dur="10s" begin="1.5s" repeatCount="indefinite">
+          <animateMotion id="p-cyan-1" dur="15s" begin="1.5s" repeatCount="indefinite">
             <mpath href="#hex-spine"/>
           </animateMotion>
-          <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="10s" begin="1.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="15s" begin="1.5s" repeatCount="indefinite"/>
         </circle>
 
         <!-- p-cyan-2 : signature, plus petite -->
         <circle r="1.5" fill="#9ecbff" opacity="0" filter="url(#hex-glow)">
-          <animateMotion id="p-cyan-2" dur="14s" begin="7s" repeatCount="indefinite">
+          <animateMotion id="p-cyan-2" dur="19s" begin="7s" repeatCount="indefinite">
             <mpath href="#hex-spine"/>
           </animateMotion>
-          <animate attributeName="opacity" values="0; 0.75; 0.75; 0" keyTimes="0; 0.15; 0.85; 1" dur="14s" begin="7s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0; 0.75; 0.75; 0" keyTimes="0; 0.15; 0.85; 1" dur="19s" begin="7s" repeatCount="indefinite"/>
         </circle>
 
         <!-- ============= NŒUDS HEXAGONAUX (stations) =============
@@ -129,11 +129,12 @@
              même nœud simultanément, les scales se composent par
              multiplication. Jamais de jitter.
 
-             Calculs des begin offsets (particle_begin + D × f) :
-               Node 1 (f=0.143)  gold-1: 1.29  gold-2: 4.57  cyan-1: 2.93  cyan-2: 9.00
-               Node 2 (f=0.359)  gold-1: 3.23  gold-2: 6.95  cyan-1: 5.09  cyan-2: 12.03
-               Node 3 (f=0.642)  gold-1: 5.78  gold-2: 10.06 cyan-1: 7.92  cyan-2: 15.99
-               Node 4 (f=0.857)  gold-1: 7.71  gold-2: 12.43 cyan-1: 10.07 cyan-2: 19.00
+             Calculs des begin offsets (particle_begin + D × f),
+             avec D = 13 / 17 / 15 / 19 s respectivement :
+               Node 1 (f=0.143)  gold-1: 1.86  gold-2: 5.43   cyan-1: 3.65   cyan-2: 9.72
+               Node 2 (f=0.359)  gold-1: 4.67  gold-2: 9.10   cyan-1: 6.89   cyan-2: 13.82
+               Node 3 (f=0.642)  gold-1: 8.35  gold-2: 13.91  cyan-1: 11.13  cyan-2: 19.20
+               Node 4 (f=0.857)  gold-1: 11.14 gold-2: 17.57  cyan-1: 14.36  cyan-2: 23.28
 
              Sparkle keyTimes "0; 0.02; 0.04; 1" + values "1; 1.55; 1; 1"
              → peak bref de ~0.04 du cycle (≈ 0.36-0.56s selon dur),
@@ -149,10 +150,10 @@
             <circle r="1.3" fill="#c8e6ff">
               <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" repeatCount="indefinite"/>
             </circle>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="9s"  begin="1.29s" repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="11s" begin="4.57s" repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="10s" begin="2.93s" repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="14s" begin="9.00s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="13s" begin="1.86s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="17s" begin="5.43s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="15s" begin="3.65s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="19s" begin="9.72s" repeatCount="indefinite" additive="sum"/>
           </g>
 
           <!-- Nœud 2 : (-19, -120) -->
@@ -164,10 +165,10 @@
             <circle r="1.3" fill="#c8e6ff">
               <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="1.5s" repeatCount="indefinite"/>
             </circle>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="9s"  begin="3.23s"  repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="11s" begin="6.95s"  repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="10s" begin="5.09s"  repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="14s" begin="12.03s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="13s" begin="4.67s"  repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="17s" begin="9.10s"  repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="15s" begin="6.89s"  repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="19s" begin="13.82s" repeatCount="indefinite" additive="sum"/>
           </g>
 
           <!-- Nœud 3 : (-19, +120) -->
@@ -179,10 +180,10 @@
             <circle r="1.3" fill="#c8e6ff">
               <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="3s" repeatCount="indefinite"/>
             </circle>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="9s"  begin="5.78s"  repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="11s" begin="10.06s" repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="10s" begin="7.92s"  repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="14s" begin="15.99s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="13s" begin="8.35s"  repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="17s" begin="13.91s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="15s" begin="11.13s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="19s" begin="19.20s" repeatCount="indefinite" additive="sum"/>
           </g>
 
           <!-- Nœud 4 : (-61, +300) -->
@@ -194,10 +195,10 @@
             <circle r="1.3" fill="#c8e6ff">
               <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="4.5s" repeatCount="indefinite"/>
             </circle>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="9s"  begin="7.71s"  repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="11s" begin="12.43s" repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="10s" begin="10.07s" repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="14s" begin="19.00s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="13s" begin="11.14s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="17s" begin="17.57s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="15s" begin="14.36s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="19s" begin="23.28s" repeatCount="indefinite" additive="sum"/>
           </g>
 
         </g>
@@ -376,12 +377,12 @@
           <circle r="2.8" fill="url(#bubble-green-grad)"
                   stroke="rgba(158, 255, 95, 0.85)" stroke-width="0.4"
                   opacity="0" filter="url(#bubble-glow)">
-            <animateMotion dur="11s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
+            <animateMotion dur="17s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
               <mpath href="#smog-spine"/>
             </animateMotion>
             <animate attributeName="cx" values="0; 2.5; -1.5; 1.8; 0" dur="2.7s" repeatCount="indefinite"/>
             <animate attributeName="r"  values="2.6; 3.1; 2.6; 2.9; 2.6" dur="3.1s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="11s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="17s" repeatCount="indefinite"/>
           </circle>
         </g>
 
@@ -390,12 +391,12 @@
           <circle r="1.6" fill="url(#bubble-green-grad)"
                   stroke="rgba(158, 255, 95, 0.75)" stroke-width="0.3"
                   opacity="0" filter="url(#bubble-glow)">
-            <animateMotion dur="7s" begin="2s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
+            <animateMotion dur="11s" begin="2s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
               <mpath href="#smog-spine"/>
             </animateMotion>
             <animate attributeName="cx" values="0; -1.6; 2; -1; 0" dur="1.9s" begin="2s" repeatCount="indefinite"/>
             <animate attributeName="r"  values="1.4; 1.9; 1.4" dur="2.3s" begin="2s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0; 0.78; 0.78; 0" keyTimes="0; 0.15; 0.85; 1" dur="7s" begin="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.78; 0.78; 0" keyTimes="0; 0.15; 0.85; 1" dur="11s" begin="2s" repeatCount="indefinite"/>
           </circle>
         </g>
 
@@ -404,11 +405,11 @@
           <circle r="1.0" fill="url(#bubble-green-grad)"
                   stroke="rgba(158, 255, 95, 0.6)" stroke-width="0.2"
                   opacity="0" filter="url(#bubble-glow)">
-            <animateMotion dur="6s" begin="4s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
+            <animateMotion dur="9s" begin="4s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
               <mpath href="#smog-spine"/>
             </animateMotion>
             <animate attributeName="cx" values="0; 2; -1; 1.5; 0" dur="1.7s" begin="4s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="6s" begin="4s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="9s" begin="4s" repeatCount="indefinite"/>
           </circle>
         </g>
 
@@ -418,12 +419,12 @@
           <circle r="2.2" fill="url(#bubble-green-grad)"
                   stroke="rgba(158, 255, 95, 0.85)" stroke-width="0.35"
                   opacity="0" filter="url(#bubble-glow)">
-            <animateMotion dur="9s" begin="3.5s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
+            <animateMotion dur="13s" begin="3.5s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
               <mpath href="#smog-spine"/>
             </animateMotion>
             <animate attributeName="cx" values="0; -2.2; 1.2; -1.5; 0" dur="2.3s" begin="3.5s" repeatCount="indefinite"/>
             <animate attributeName="r"  values="2.0; 2.5; 2.0" dur="2.6s" begin="3.5s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0; 0.80; 0.80; 0" keyTimes="0; 0.15; 0.85; 1" dur="9s" begin="3.5s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.80; 0.80; 0" keyTimes="0; 0.15; 0.85; 1" dur="13s" begin="3.5s" repeatCount="indefinite"/>
           </circle>
         </g>
 
@@ -432,12 +433,12 @@
           <circle r="2.0" fill="url(#bubble-shimmer-grad)"
                   stroke="rgba(237, 148, 212, 0.85)" stroke-width="0.4"
                   opacity="0" filter="url(#bubble-glow)">
-            <animateMotion dur="17s" begin="9s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
+            <animateMotion dur="23s" begin="9s" keyPoints="1;0" keyTimes="0;1" repeatCount="indefinite">
               <mpath href="#smog-spine"/>
             </animateMotion>
             <animate attributeName="cx" values="0; 1.8; -2; 0.8; 0" dur="2.5s" begin="9s" repeatCount="indefinite"/>
             <animate attributeName="r"  values="1.8; 2.4; 1.8" dur="2.9s" begin="9s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.18; 0.82; 1" dur="17s" begin="9s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.18; 0.82; 1" dur="23s" begin="9s" repeatCount="indefinite"/>
           </circle>
         </g>
       </svg>
