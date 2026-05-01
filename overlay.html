@@ -55,19 +55,18 @@
           <!-- 3 paths parallèles formant un "câble Hextech à 3 brins"
                qui suit l'arc du carrousel. La bande CENTRALE
                (#hex-spine) passe par les centres des 5 slots ; les
-               bandes gauche et droite sont décalées de ±6 px en X.
-               Les particules sont distribuées sur les 3 bandes pour
-               un effet "circuit Hextech à voies multiples". Seules
-               les particules sur la bande centrale déclenchent les
-               sparkles des nœuds checkpoint (placés sur cette bande). -->
+               bandes gauche et droite sont décalées de ±10 px en X.
+               Cet écart est calibré pour que les bandes latérales
+               passent JUSTE À CÔTÉ des nœuds checkpoint (~13 px de
+               large, ~17 px en pulse) sans les toucher. -->
           <path id="hex-spine"
                 d="M -80,-420 Q -80,-385 -80,-360 Q -55,-285 -35,-210 Q -15,-105 0,0 Q -15,105 -35,210 Q -55,285 -80,360 Q -80,385 -80,420"
                 fill="none"/>
           <path id="hex-spine-left"
-                d="M -86,-420 Q -86,-385 -86,-360 Q -61,-285 -41,-210 Q -21,-105 -6,0 Q -21,105 -41,210 Q -61,285 -86,360 Q -86,385 -86,420"
+                d="M -90,-420 Q -90,-385 -90,-360 Q -65,-285 -45,-210 Q -25,-105 -10,0 Q -25,105 -45,210 Q -65,285 -90,360 Q -90,385 -90,420"
                 fill="none"/>
           <path id="hex-spine-right"
-                d="M -74,-420 Q -74,-385 -74,-360 Q -49,-285 -29,-210 Q -9,-105 6,0 Q -9,105 -29,210 Q -49,285 -74,360 Q -74,385 -74,420"
+                d="M -70,-420 Q -70,-385 -70,-360 Q -45,-285 -25,-210 Q -5,-105 10,0 Q -5,105 -25,210 Q -45,285 -70,360 Q -70,385 -70,420"
                 fill="none"/>
         </defs>
 
