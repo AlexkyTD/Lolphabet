@@ -6,13 +6,18 @@ Le projet suit (à peu près) le [versioning sémantique](https://semver.org/lan
 
 ---
 
-## [Unreleased]
+## [1.4.0] — 2026-04-28
 
-> Notes pour la prochaine release (probablement **v1.4.0**) : grosse refonte
-> visuelle du thème Hextech (cœur cyan, nœuds hexagonaux, sparkle synchronisé)
-> et peaufinage Zaun (smog, bulles dispersées, pipe retirée).
+### 🎨 Refonte majeure du thème Hextech (identité Piltover renforcée) + peaufinage Zaun + nettoyage code
 
-### ✨ Thème Hextech — refonte continue (suite des étapes #2, #3, #4)
+Cette version transforme Hextech d'un thème "doré générique" en une véritable
+ambiance Piltover avec son duo signature **or (cadre) + cyan (magie hextech)**,
+un câblage à 3 brins, des nœuds checkpoint synchronisés en temps réel avec
+les particules, des ornements aux coins et un anneau hexagonal qui tourne.
+Côté Zaun, peaufinage du smog et des bulles. Côté code, audit complet et
+nettoyage.
+
+### ✨ Thème Hextech — refonte continue (étapes #2, #3, #4 du plan d'origine)
 - **Câble Hextech à 3 brins** : le filament unique est remplacé par
   **3 bandes parallèles** (gauche, centrale, droite) décalées de ±6 px
   en X. La bande centrale est légèrement plus marquée (stroke 1.1)
@@ -286,6 +291,7 @@ Toutes les fonctionnalités des versions antérieures sont conservées sans chan
 - Synchro overlay ↔ contrôle via triple mécanisme (BroadcastChannel + storage event + polling 500 ms) pour garantir que ça marche dans tous les contextes (file://, OBS CEF, etc.).
 - README, LICENSE (MIT), .gitignore, CAHIER_DES_CHARGES.
 
+[1.4.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.4.0
 [1.3.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.3.0
 [1.2.1]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.2.1
 [1.2.0]: https://github.com/AlexkyTD/Lolphabet/releases/tag/v1.2.0
