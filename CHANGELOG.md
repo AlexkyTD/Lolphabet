@@ -12,6 +12,36 @@ Le projet suit (à peu près) le [versioning sémantique](https://semver.org/lan
 > visuelle du thème Hextech (cœur cyan, nœuds hexagonaux, sparkle synchronisé)
 > et peaufinage Zaun (smog, bulles dispersées, pipe retirée).
 
+### ✨ Thème Hextech — refonte continue (suite des étapes #2, #3, #4)
+- **Câble Hextech à 3 brins** : le filament unique est remplacé par
+  **3 bandes parallèles** (gauche, centrale, droite) décalées de ±6 px
+  en X. La bande centrale est légèrement plus marquée (stroke 1.1)
+  que les latérales (0.9) pour une hiérarchie visuelle subtile.
+  Effet "circuit Hextech à voies multiples" — câblage signature
+  Piltover.
+- **Particules distribuées sur les 3 bandes** :
+  - `p-gold-1` → bande centrale
+  - `p-gold-2` → bande gauche
+  - `p-cyan-1` → bande centrale
+  - `p-cyan-2` → bande droite
+  → Au moins 3 bandes utilisées en simultané, jamais toutes les
+  particules sur la même.
+- **Sparkles checkpoint réduits à 2 par nœud** : seules les particules
+  sur la bande centrale (qui passent réellement sur les nœuds)
+  déclenchent les sparkles. 2 par nœud × 4 nœuds = 8 sparkles total
+  (au lieu de 16). Plus cohérent visuellement (les particules
+  latérales passent à côté des nœuds, donc ne les activent pas).
+- **Filigrane décoratif aux 4 coins du slot central** : 4 petits "L"
+  en or fin (style "repères de précision Piltover" type cadrage
+  d'instrument) positionnés à ±105 px du centre, à l'extérieur du
+  slot. Stroke 1.2 px, opacité 0.55, glow doux.
+- **Anneau hexagonal rotatif** autour du slot central : hexagone
+  vertical (cohérent avec `shape-hexagonal`) en outline doré fin
+  (stroke 0.7, opacité 0.30), rayon 110 px, qui tourne en **60 s**
+  par tour — très subtil, juste perceptible. Effet "horloge
+  mécanique Hextech" qui ajoute du mouvement perpétuel autour du
+  champion central sans distraire.
+
 ### Modifié
 - **Vitesse des particules réduite (~×1.4 plus lent)** sur les deux thèmes
   pour un mouvement plus contemplatif. Les durées restent **coprimes 2-à-2**

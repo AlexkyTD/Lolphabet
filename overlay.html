@@ -52,27 +52,51 @@
             </feMerge>
           </filter>
 
-          <!-- Path partagé : courbes Bézier quadratiques passant par
-               les centres des 5 slots, prolongé aux bouts pour le
-               fade in/out des particules dans le vide. -->
+          <!-- 3 paths parallèles formant un "câble Hextech à 3 brins"
+               qui suit l'arc du carrousel. La bande CENTRALE
+               (#hex-spine) passe par les centres des 5 slots ; les
+               bandes gauche et droite sont décalées de ±6 px en X.
+               Les particules sont distribuées sur les 3 bandes pour
+               un effet "circuit Hextech à voies multiples". Seules
+               les particules sur la bande centrale déclenchent les
+               sparkles des nœuds checkpoint (placés sur cette bande). -->
           <path id="hex-spine"
                 d="M -80,-420 Q -80,-385 -80,-360 Q -55,-285 -35,-210 Q -15,-105 0,0 Q -15,105 -35,210 Q -55,285 -80,360 Q -80,385 -80,420"
                 fill="none"/>
+          <path id="hex-spine-left"
+                d="M -86,-420 Q -86,-385 -86,-360 Q -61,-285 -41,-210 Q -21,-105 -6,0 Q -21,105 -41,210 Q -61,285 -86,360 Q -86,385 -86,420"
+                fill="none"/>
+          <path id="hex-spine-right"
+                d="M -74,-420 Q -74,-385 -74,-360 Q -49,-285 -29,-210 Q -9,-105 6,0 Q -9,105 -29,210 Q -49,285 -74,360 Q -74,385 -74,420"
+                fill="none"/>
         </defs>
 
-        <!-- Filament visible -->
+        <!-- 3 filaments visibles : "câble Hextech à 3 brins". Bandes
+             latérales un poil plus fines que la centrale → hiérarchie
+             visuelle légère, la centrale guide l'œil. -->
+        <use href="#hex-spine-left"
+             stroke="url(#hex-spine-grad)" stroke-width="0.9"
+             stroke-linecap="round" fill="none" filter="url(#hex-glow)"/>
         <use href="#hex-spine"
-             stroke="url(#hex-spine-grad)"
-             stroke-width="1.4"
-             stroke-linecap="round"
-             fill="none"
-             filter="url(#hex-glow)"/>
+             stroke="url(#hex-spine-grad)" stroke-width="1.1"
+             stroke-linecap="round" fill="none" filter="url(#hex-glow)"/>
+        <use href="#hex-spine-right"
+             stroke="url(#hex-spine-grad)" stroke-width="0.9"
+             stroke-linecap="round" fill="none" filter="url(#hex-glow)"/>
 
         <!-- ============= PARTICULES (4 au total, avec ids) =============
              Chaque animateMotion porte un id pour servir de source de
              sync aux sparkles des nœuds. -->
 
-        <!-- p-gold-1 : la plus grosse (cadre métallique) -->
+        <!-- Distribution des 4 particules sur les 3 bandes :
+               * p-gold-1 → bande CENTRALE (passe sur les nœuds)
+               * p-gold-2 → bande gauche
+               * p-cyan-1 → bande CENTRALE (passe sur les nœuds, magie)
+               * p-cyan-2 → bande droite
+             Au moins 3 bandes utilisées en simultané, jamais toutes
+             les particules sur la même bande. -->
+
+        <!-- p-gold-1 : la plus grosse (cadre métallique), bande CENTRALE -->
         <circle r="2.4" fill="#ffeb9d" filter="url(#hex-glow)">
           <animateMotion id="p-gold-1" dur="13s" repeatCount="indefinite">
             <mpath href="#hex-spine"/>
@@ -80,15 +104,15 @@
           <animate attributeName="opacity" values="0; 0.95; 0.95; 0" keyTimes="0; 0.15; 0.85; 1" dur="13s" repeatCount="indefinite"/>
         </circle>
 
-        <!-- p-gold-2 : moyenne (cadre métallique) -->
+        <!-- p-gold-2 : moyenne (cadre métallique), bande GAUCHE -->
         <circle r="1.7" fill="#f5dfa8" opacity="0" filter="url(#hex-glow)">
           <animateMotion id="p-gold-2" dur="17s" begin="3s" repeatCount="indefinite">
-            <mpath href="#hex-spine"/>
+            <mpath href="#hex-spine-left"/>
           </animateMotion>
           <animate attributeName="opacity" values="0; 0.75; 0.75; 0" keyTimes="0; 0.15; 0.85; 1" dur="17s" begin="3s" repeatCount="indefinite"/>
         </circle>
 
-        <!-- p-cyan-1 : signature magie hextech -->
+        <!-- p-cyan-1 : signature magie hextech, bande CENTRALE -->
         <circle r="2.0" fill="#c8e6ff" opacity="0" filter="url(#hex-glow)">
           <animateMotion id="p-cyan-1" dur="15s" begin="1.5s" repeatCount="indefinite">
             <mpath href="#hex-spine"/>
@@ -96,10 +120,10 @@
           <animate attributeName="opacity" values="0; 0.85; 0.85; 0" keyTimes="0; 0.15; 0.85; 1" dur="15s" begin="1.5s" repeatCount="indefinite"/>
         </circle>
 
-        <!-- p-cyan-2 : signature, plus petite -->
+        <!-- p-cyan-2 : signature, plus petite, bande DROITE -->
         <circle r="1.5" fill="#9ecbff" opacity="0" filter="url(#hex-glow)">
           <animateMotion id="p-cyan-2" dur="19s" begin="7s" repeatCount="indefinite">
-            <mpath href="#hex-spine"/>
+            <mpath href="#hex-spine-right"/>
           </animateMotion>
           <animate attributeName="opacity" values="0; 0.75; 0.75; 0" keyTimes="0; 0.15; 0.85; 1" dur="19s" begin="7s" repeatCount="indefinite"/>
         </circle>
@@ -112,33 +136,36 @@
                Nœud 3 (-19, +120)  fraction 0.642
                Nœud 4 (-61, +300)  fraction 0.857
 
-             SPARKLE SYNCHRONISÉ : chaque nœud a 4 <animateTransform>
-             scale, un par particule. Chacun a SA PROPRE période
-             matchant celle de sa particule (dur=9/11/10/14s) et un
-             begin offset = particle_begin + duration × fraction.
-             keyTimes positionnent le peak (scale 1.55, durée ~0.4s)
-             au TOUT DÉBUT du cycle → premier peak au bon moment,
-             puis re-peak chaque dur secondes par repeatCount=indef.
+             SPARKLE SYNCHRONISÉ : chaque nœud a 2 <animateTransform>
+             scale, un par particule SUR LA BANDE CENTRALE
+             (p-gold-1 et p-cyan-1). Les particules sur les bandes
+             latérales ne touchent PAS les nœuds (situés sur la
+             bande centrale), donc ne déclenchent pas de sparkle.
+
+             Chaque sparkle a sa propre période matchant celle de
+             la particule (dur=13s pour gold-1, 15s pour cyan-1) et
+             un begin offset = particle_begin + duration × fraction.
+             keyTimes positionnent le peak (scale 1.55, ~0.4s) au
+             tout début du cycle → premier peak au bon moment, puis
+             re-peak chaque dur secondes par repeatCount=indef.
 
              Cette approche est ROBUSTE car elle n'utilise PAS
              l'événement SMIL "id.repeat" (mal supporté en continu
-             dans Chrome/CEF — il fire quelques fois puis stop, ce
-             qui faisait que les checkpoints arrêtaient).
+             dans Chrome/CEF).
 
-             additive="sum" → si plusieurs particules touchent le
-             même nœud simultanément, les scales se composent par
+             additive="sum" → si les 2 particules centrales touchent
+             le même nœud simultanément, les scales se composent par
              multiplication. Jamais de jitter.
 
-             Calculs des begin offsets (particle_begin + D × f),
-             avec D = 13 / 17 / 15 / 19 s respectivement :
-               Node 1 (f=0.143)  gold-1: 1.86  gold-2: 5.43   cyan-1: 3.65   cyan-2: 9.72
-               Node 2 (f=0.359)  gold-1: 4.67  gold-2: 9.10   cyan-1: 6.89   cyan-2: 13.82
-               Node 3 (f=0.642)  gold-1: 8.35  gold-2: 13.91  cyan-1: 11.13  cyan-2: 19.20
-               Node 4 (f=0.857)  gold-1: 11.14 gold-2: 17.57  cyan-1: 14.36  cyan-2: 23.28
+             Begin offsets (particle_begin + D × f) :
+               Node 1 (f=0.143)  gold-1 (D=13): 1.86  cyan-1 (D=15): 3.65
+               Node 2 (f=0.359)  gold-1: 4.67          cyan-1: 6.89
+               Node 3 (f=0.642)  gold-1: 8.35          cyan-1: 11.13
+               Node 4 (f=0.857)  gold-1: 11.14         cyan-1: 14.36
 
              Sparkle keyTimes "0; 0.02; 0.04; 1" + values "1; 1.55; 1; 1"
-             → peak bref de ~0.04 du cycle (≈ 0.36-0.56s selon dur),
-             puis scale=1 stable jusqu'à la prochaine répétition. -->
+             → peak bref de ~0.04 du cycle (≈ 0.5s), puis scale=1
+             stable jusqu'à la prochaine répétition. -->
         <g class="hex-nodes" filter="url(#hex-glow)">
 
           <!-- Nœud 1 : (-61, -300) -->
@@ -151,9 +178,7 @@
               <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" repeatCount="indefinite"/>
             </circle>
             <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="13s" begin="1.86s" repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="17s" begin="5.43s" repeatCount="indefinite" additive="sum"/>
             <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="15s" begin="3.65s" repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="19s" begin="9.72s" repeatCount="indefinite" additive="sum"/>
           </g>
 
           <!-- Nœud 2 : (-19, -120) -->
@@ -165,10 +190,8 @@
             <circle r="1.3" fill="#c8e6ff">
               <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="1.5s" repeatCount="indefinite"/>
             </circle>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="13s" begin="4.67s"  repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="17s" begin="9.10s"  repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="15s" begin="6.89s"  repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="19s" begin="13.82s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="13s" begin="4.67s" repeatCount="indefinite" additive="sum"/>
+            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="15s" begin="6.89s" repeatCount="indefinite" additive="sum"/>
           </g>
 
           <!-- Nœud 3 : (-19, +120) -->
@@ -181,9 +204,7 @@
               <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="3s" repeatCount="indefinite"/>
             </circle>
             <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="13s" begin="8.35s"  repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="17s" begin="13.91s" repeatCount="indefinite" additive="sum"/>
             <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="15s" begin="11.13s" repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="19s" begin="19.20s" repeatCount="indefinite" additive="sum"/>
           </g>
 
           <!-- Nœud 4 : (-61, +300) -->
@@ -196,11 +217,40 @@
               <animate attributeName="opacity" values="0.55; 1; 0.55" dur="6s" begin="4.5s" repeatCount="indefinite"/>
             </circle>
             <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="13s" begin="11.14s" repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="17s" begin="17.57s" repeatCount="indefinite" additive="sum"/>
             <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="15s" begin="14.36s" repeatCount="indefinite" additive="sum"/>
-            <animateTransform attributeName="transform" type="scale" values="1; 1.55; 1; 1" keyTimes="0; 0.02; 0.04; 1" dur="19s" begin="23.28s" repeatCount="indefinite" additive="sum"/>
           </g>
 
+        </g>
+
+        <!-- ============= FILIGRANE AUX 4 COINS DU SLOT CENTRAL =============
+             Petits "L" en or aux 4 coins extérieurs du slot central
+             (à ±105 px du centre). Style "repères de précision /
+             instrument de mesure Piltover", très Heimerdinger. Posés
+             à l'extérieur du slot (qui fait ±90 px) pour ne pas
+             masquer l'icône. Cachés derrière les slots dans le DOM,
+             mais visibles puisque positionnés en zone vide. -->
+        <g class="hex-corner-marks" stroke="#d4a544" stroke-width="1.2" fill="none" opacity="0.55" filter="url(#hex-glow)">
+          <path d="M -105,-95 L -105,-105 L -95,-105"/>
+          <path d="M  105,-95 L  105,-105 L  95,-105"/>
+          <path d="M -105, 95 L -105, 105 L -95, 105"/>
+          <path d="M  105, 95 L  105, 105 L  95, 105"/>
+        </g>
+
+        <!-- ============= ANNEAU HEXAGONAL ROTATIF =============
+             Anneau hexagonal vertical (pointu haut/bas, cohérent avec
+             shape-hexagonal) tournant TRÈS lentement (60s/tour) autour
+             du slot central. Rayon 110 → légèrement plus grand que le
+             slot (90 px), donc on voit ~20 px d'anneau qui dépassent
+             autour du slot. Stroke fin et opacité basse pour rester
+             subtil — c'est un effet d'ambiance "horloge mécanique
+             Hextech", pas un élément qui attire l'œil. -->
+        <g class="hex-rotating-ring" filter="url(#hex-glow)">
+          <polygon points="0,-110 95.26,-55 95.26,55 0,110 -95.26,55 -95.26,-55"
+                   fill="none" stroke="#d4a544" stroke-width="0.7" opacity="0.30">
+            <animateTransform attributeName="transform" type="rotate"
+                              from="0 0 0" to="360 0 0"
+                              dur="60s" repeatCount="indefinite"/>
+          </polygon>
         </g>
       </svg>
 
